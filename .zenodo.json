@@ -1,0 +1,57 @@
+{
+    "description": "<p><strong>ATLAS FARMACIA</strong><br>\nTechnical notes and documentation on the common data model of the project &quot;Variations in the prescription, consumption and expenditure of antibiotics and opioids by basic health area in the National Health System&quot;.</p>\n\n<p>This publication corresponds to the Common Data Model (CDM) specification for the implementation of a federated network analysis of variations in the prescription, consumption and expenditure of antibiotics and opioids by basic health area in the National Health System.</p>\n\n<p><strong>Aims</strong></p>\n\n<ul>\n\t<li><strong>General aim</strong>:<strong>&nbsp;</strong>To estimate the rates of consumption, pharmaceutical expenditure and number of patients treated in a series of drug groups (specifically, opioids and antibiotics) and certain therapeutic subgroups of them according to the <a href=\"https://www.whocc.no/atc_ddd_index/\">ATC code</a>&nbsp;in the basic health areas (BHA) of the participating Autonomous Communities and to analyze whether the possible variations detected are systematic or explainable by chance.</li>\n\t<li><strong>Main specific aim</strong>:\n\t<ul>\n\t\t<li>To describe and map (geographical analysis) consumption rates and pharmaceutical expenditure by basic health zones.</li>\n\t\t<li>To analyze the possible existence of differences between zones using small area analysis.</li>\n\t\t<li>To analyze the existence of associations between consumption rates of different therapeutic subgroups.</li>\n\t</ul>\n\t</li>\n\t<li><strong>Study Design</strong>:&nbsp;It is a observational, retrospective, longitudinal and ecological study of standardized rates of consumption and pharmaceutical expenditure in 2 therapeutic groups (antimicrobials and opioids) and therapeutic subgroups. These rates were estimated as Defined Daily Dose (DDD) per 1000 inhabitants per day in each basic health area.</li>\n\t<li><strong>Cohort definition opioids</strong>: All Dispensations of opioid drugs in the participating Autonomous Communities at the basic health area level in the study period.\n\t<ul>\n\t\t<li><strong>Inclusion criteria</strong>: Over 14 years of age with a health card with an active prescription for an opioid drug and dispensing/billing of at least one package of this drug in the study period.</li>\n\t\t<li><strong>Exclusion criteria</strong>: Patients 14 years or younger, patients without an active health card, and patients without dispensing/billing for an opioid drug.</li>\n\t\t<li><a href=\"https://github.com/cienciadedatosysalud/atlas-farmacia/blob/main/atlas_opioides/README.md\">Atlas VPM Farmacia - Opioides (README)</a>&nbsp;</li>\n\t</ul>\n\t</li>\n\t<li><strong>Cohort definition antibiotics</strong>:&nbsp;All Dispensations of antibiotic drugs in the participating Autonomous Communities at the basic health area level in the study period.\n\t<ul>\n\t\t<li><strong>Inclusion criteria</strong>: All patients with a health card with an active prescription for an antibiotic drug and dispensing/billing of at least one package of this drug in the study period.</li>\n\t\t<li><strong>Exclusion criteria</strong>: Patients without an active health card, and patients without dispensing/billing for an antibiotic drug.</li>\n\t\t<li><a href=\"https://github.com/cienciadedatosysalud/atlas-farmacia/blob/main/atlas_antibioticos/README.md\">Atlas VPM Farmacia - Antibi&oacute;ticos (README)</a></li>\n\t</ul>\n\t</li>\n</ul>", 
+    "license": "CC-BY-4.0", 
+    "title": "cienciadedatosysalud/atlas-farmacia", 
+    "version": "1.0.3", 
+    "upload_type": "software", 
+    "publication_date": "2023-07-27", 
+    "creators": [
+        {
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS), Instituto de Investigaci\u00f3n Sanitaria de Arag\u00f3n (IIS)", 
+            "name": "Grupo de Investigaci\u00f3n en Ciencia de Datos para Servicios y Pol\u00edticas de Salud"
+        }, 
+        {
+            "orcid": "0000-0002-9586-7955", 
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)", 
+            "name": "Mart\u00ednez-Lizaga, Natalia"
+        }, 
+        {
+            "orcid": "0000-0002-6285-8120", 
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)", 
+            "name": "Estupi\u00f1an-Romero, Francisco"
+        }, 
+        {
+            "orcid": "0000-0001-7837-5759", 
+            "affiliation": "Instituto de Investigaci\u00f3n Sanitaria de Arag\u00f3n (IIS)", 
+            "name": "Ridao-L\u00f3pez, Manuel"
+        }, 
+        {
+            "orcid": "0000-0002-8783-5478", 
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)", 
+            "name": "Gonz\u00e1lez-Galindo, Javier"
+        }, 
+        {
+            "orcid": "0000-0002-0048-4370", 
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)", 
+            "name": "Royo-Sierra, Santiago"
+        }, 
+        {
+            "orcid": "0000-0002-0961-3298", 
+            "affiliation": "Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)", 
+            "name": "Bernal-Delgado, Enrique"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/cienciadedatosysalud/atlas-farmacia/tree/1.0.3", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.8189758", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
