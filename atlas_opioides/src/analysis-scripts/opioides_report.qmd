@@ -1,0 +1,1294 @@
+---
+title: "ATLAS farmacia: Variaciones en el consumo y gasto de fármacos opioides por zona básica de salud en el Sistema Nacional de Salud"
+lang: es
+author: Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud, Instituto Aragonés de Ciencias de la Salud (IACS), Instituto de Investigación Sanitaria de Aragón (IIS). 
+#date: 
+bibliography:
+  - referencias.bib
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 4
+    highlight-style: pygments
+    code-fold: true
+    html-math-method: katex
+echo: false
+message: false
+warning: false
+error: false
+---
+
+
+```{r}
+#| label: cargar paquetes
+
+library(ggplot2)
+library(dplyr)
+library(sf)
+library(Hmisc) 
+library(sjmisc)
+library(DBI)
+library(gt)
+library(logger)
+library(epoxy)
+library(cowplot)
+library(plotly)
+library(ggalluvial)
+library(ggrepel)
+library(scales)
+
+```
+
+
+
+
+```{r, output = FALSE}
+#| label: tabla nomenclator y poblacion 
+
+
+database_path <- '../../inputs/data.duckdb'
+
+con = dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+log_info('Cargando nomenclator común')
+
+nomenclator_df <- read.csv(file = 'nomenclator_opioides.csv', sep = '|')
+
+dbExecute(con, "CREATE OR REPLACE TABLE nomenclator (
+            codigo_nacional_farmaco_cd VARCHAR,
+            codigo_descripcion VARCHAR,
+          	atc_farmaco_dispensado_cd VARCHAR,
+          	ddd_nomenclator_nm DOUBLE,
+          	ddd_por_envase DOUBLE,
+          	pvp_nomenclator_nm DOUBLE,
+          	precio_por_envase_nm DOUBLE);")
+
+dbWriteTable(con, "nomenclator", nomenclator_df, append = TRUE)
+
+
+log_info('Cargando poblaciones')
+
+poblaciones_ine_df <- read.csv(file = 'datos_nivel_zona_basica_ine.csv', sep = '|')
+
+dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_ine (
+            año_cd VARCHAR,
+          	ccaa_cd VARCHAR,
+          	codatzbs VARCHAR,
+          	sexo_cd BIGINT,
+          	grupo_edad_cd BIGINT,
+          	n_poblacion BIGINT);")
+
+dbWriteTable(con, "zona_basica_ine", poblaciones_ine_df, append = TRUE)
+
+poblaciones_tarjeta_df <- read.csv(file = 'datos_nivel_zona_basica_tarjeta.csv', sep = '|')
+
+dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_tarjeta (
+            año_cd VARCHAR,
+          	ccaa_cd VARCHAR,
+          	sexo_cd BIGINT,
+            zbs_residencia_cd VARCHAR,
+          	grupo_edad_cd BIGINT,
+            tsi_cd VARCHAR,
+          	n_poblacion BIGINT);")
+
+dbWriteTable(con, "zona_basica_tarjeta", poblaciones_tarjeta_df, append = TRUE)
+
+relaciones_df <- read.csv(file = 'relacion_zbs_codatzbs_atlasfarmacia.csv', sep = '|')
+
+dbExecute(con, "CREATE OR REPLACE TABLE zbs_residencia_codatzbs (
+            zbs_residencia_cd VARCHAR,
+          	ccaa_cd VARCHAR,
+            n_zbs VARCHAR,
+          	codatzbs VARCHAR);")
+
+dbWriteTable(con, "zbs_residencia_codatzbs", relaciones_df, append = TRUE)
+
+dbExecute(con, 'CREATE OR REPLACE VIEW envase_dispensado_view AS SELECT envase_id, fecha_dispensacion_dt, paciente_id, edad_nm, sexo_cd, tsi_cd, zbs_residencia_cd, ccaa_cd, a.codigo_nacional_farmaco_cd,n.atc_farmaco_dispensado_cd
+, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm  FROM main.envase_dispensado a
+ LEFT JOIN main.nomenclator n
+ ON a.codigo_nacional_farmaco_cd = n.codigo_nacional_farmaco_cd
+ where n.codigo_nacional_farmaco_cd is not null')
+
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+
+
+```{r, output=FALSE}
+#| label: cargar scripts
+log_info('Calculando tasas estandarizadas e indicadores estadísticos para ATC 4 caracteres')
+source('./farmacia_standardized_opioides4.R')
+rm(list=ls())
+log_info('Calculando tasas estandarizadas e indicadores estadísticos para ATC 5 caracteres')
+source('./farmacia_standardized_opioides5.R')
+rm(list=ls())
+```
+
+
+```{r, output = FALSE}
+#| label: eliminar y crear nuevos csvs
+
+#### estadisticos ####
+outputs_path <- '../../outputs/'
+names_files_est <- list.files(path=outputs_path, pattern = '[4-5]_estadisticosobs', full.names=TRUE)
+df_names_files_est <- data.frame(names_files = names_files_est,
+                             variable = c('ddd','pvp','ddd','pvp'))
+df <- data.frame()
+for(file in names_files_est){
+  data <- read.csv(file, sep = ",")
+  df_names_files_est_filter <- df_names_files_est %>%
+    filter(names_files == file)
+  data$variable <- df_names_files_est_filter$variable
+  df <- rbind(df,data)
+}
+# eliminar los archivos
+file.remove(names_files_est)
+write.csv(df, file = paste0(outputs_path,"opioides_estadisticosobs.csv"),
+            row.names = FALSE)
+
+
+
+#### Tasas ####
+
+names_files_te <- list.files(path=outputs_path, pattern = '[4-5]_indicators_rates', full.names=TRUE)
+df_names_files_te <- data.frame(names_files = names_files_te,
+                             variable = c('ddd','pvp','ddd','pvp'))
+df <- data.frame()
+for(file in names_files_te){
+  data <- read.csv(file, sep = ",")
+  df_names_files_te_filter <- df_names_files_te %>%
+    filter(names_files == file)
+  data$variable <- df_names_files_te_filter$variable
+  df <- rbind(df,data)
+}
+# eliminar ficheros
+file.remove(names_files_te)
+write.csv(df, file = paste0(outputs_path,"opioides_indicators_rates.csv"),
+            row.names = FALSE)
+
+
+```
+
+
+
+
+```{r}
+#| label: nomenclator_fail
+database_path <- '../../inputs/data.duckdb'
+
+con = dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+nomenclator_fail <- dbGetQuery(conn = con, '
+   SELECT envase_id, fecha_dispensacion_dt, paciente_id, edad_nm, sexo_cd, tsi_cd, zbs_residencia_cd, ccaa_cd, a.codigo_nacional_farmaco_cd,n.atc_farmaco_dispensado_cd
+, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm  FROM main.envase_dispensado a
+ LEFT JOIN main.nomenclator n
+ ON a.codigo_nacional_farmaco_cd = n.codigo_nacional_farmaco_cd
+ where n.codigo_nacional_farmaco_cd is null 
+	')
+nomenclator_fail[is.na(nomenclator_fail)] <- 0
+total <- dbGetQuery(conn = con, '
+   SELECT COUNT(*) as total FROM main.envase_dispensado
+	')
+
+registros_zbs_null <- dbGetQuery(conn = con,'
+                                 select
+	sum(n_pacientes) as total_pacientes,
+	sum(n_envases) as total_envases
+from
+	(
+	select
+		ccaa_cd,
+		zbs_residencia_cd,
+		year(fecha_dispensacion_dt) as año_dt,
+		count(DISTINCT envase_id) as n_envases,
+		count(DISTINCT paciente_id) as n_pacientes
+	from
+		main.envase_dispensado_view
+	group by
+		ccaa_cd,
+		zbs_residencia_cd,
+		year(fecha_dispensacion_dt)) main_table
+left join(
+	SELECT
+		DISTINCT año_cd, ccaa_cd ,
+		zbs_residencia_cd
+	from
+		main.zona_basica_tarjeta) pop_table 
+on
+	main_table.ccaa_cd = pop_table.ccaa_cd and 
+	main_table.zbs_residencia_cd = pop_table.zbs_residencia_cd and 
+	main_table.año_dt = pop_table.año_cd 
+where pop_table.zbs_residencia_cd is NULL')
+
+registros_zbs_null[is.na(registros_zbs_null)] <- 0
+
+registros_zbs_total_fail <- dbGetQuery(conn = con, '
+                                       with partial_df as (
+select
+	envase_id,
+	isoyear(fecha_dispensacion_dt) as año_cd,
+	paciente_id,
+	CASE
+		WHEN edad_nm >= 0
+		and edad_nm <= 4 THEN 1
+		WHEN edad_nm >= 5
+		and edad_nm <= 9 THEN 2
+		WHEN edad_nm >= 10
+		and edad_nm <= 14 THEN 3
+		WHEN edad_nm >= 15
+		and edad_nm <= 19 THEN 4
+		WHEN edad_nm >= 20
+		and edad_nm <= 24 THEN 5
+		WHEN edad_nm >= 25
+		and edad_nm <= 29 THEN 6
+		WHEN edad_nm >= 30
+		and edad_nm <= 34 THEN 7
+		WHEN edad_nm >= 35
+		and edad_nm <= 39 THEN 8
+		WHEN edad_nm >= 40
+		and edad_nm <= 44 THEN 9
+		WHEN edad_nm >= 45
+		and edad_nm <= 49 THEN 10
+		WHEN edad_nm >= 50
+		and edad_nm <= 54 THEN 11
+		WHEN edad_nm >= 55
+		and edad_nm <= 59 THEN 12
+		WHEN edad_nm >= 60
+		and edad_nm <= 64 THEN 13
+		WHEN edad_nm >= 65
+		and edad_nm <= 69 THEN 14
+		WHEN edad_nm >= 70
+		and edad_nm <= 74 THEN 15
+		WHEN edad_nm >= 75
+		and edad_nm <= 79 THEN 16
+		WHEN edad_nm >= 80
+		and edad_nm <= 84 THEN 17
+		WHEN edad_nm >= 85 THEN 18
+		ELSE NULL
+	END as grupo_edad_cd,
+	sexo_cd,
+	zbs_residencia_cd,
+	ccaa_cd
+from
+	main.envase_dispensado_view) 
+select sum(n_pacientes) as total_paciente, sum(n_envases) as total_envases from (select ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, año_cd,
+count(DISTINCT envase_id) as n_envases,
+count(DISTINCT paciente_id) as n_pacientes
+from partial_df group by ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, año_cd) a 
+left join (select ccaa_cd, año_cd, zbs_residencia_cd ,sexo_cd ,grupo_edad_cd, sum(n_poblacion) as n_poblacion from main.zona_basica_tarjeta GROUP BY ccaa_cd, año_cd, zbs_residencia_cd ,sexo_cd ,grupo_edad_cd) b 
+on a.ccaa_cd = b.ccaa_cd and a.zbs_residencia_cd = b.zbs_residencia_cd and a.sexo_cd =b.sexo_cd and a.grupo_edad_cd = b.grupo_edad_cd and a.año_cd = b.año_cd
+where n_poblacion is NULL')
+registros_zbs_total_fail[is.na(registros_zbs_total_fail)]<-0
+dbDisconnect(con, shutdown=TRUE)
+
+
+```
+
+
+
+```{r}
+#| label: crear query
+
+
+database_path <- '../../inputs/data.duckdb'
+
+con = dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+tabla1 <- dbGetQuery(conn = con, '
+  select  
+	ccaa_cd,
+  COUNT(envase_id) as n_envases,
+	count(DISTINCT paciente_id) as n_personas_dispensadas,
+	sum(ddd_por_envase) as consumo_ddd,
+	sum(pvp_nomenclator_nm) as gasto_pvp,
+	sum(precio_por_envase_nm) as gasto_p_envase,
+--	(gasto_pvp / n_envases) as gasto_medio_dispensacion,
+--	(gasto_p_envase / n_envases) as gasto_medio_dispensacion_real
+FROM
+	(
+	SELECT
+		envase_id,
+    paciente_id,
+		ddd_nomenclator_nm,
+		pvp_nomenclator_nm,
+		precio_por_envase_nm,
+    ddd_por_envase,
+		ccaa_cd,
+	from
+		main.envase_dispensado_view) a
+group by 
+	ccaa_cd
+	')
+
+
+
+list_ccaa <- unique(tabla1$ccaa_cd)
+
+
+tabla2 <- dbGetQuery(conn = con, '
+  select  
+	año_cd,
+	ccaa_cd ,
+  COUNT(envase_id) as n_envases,
+	count(DISTINCT paciente_id) as n_personas_dispensadas,
+	sum(ddd_por_envase) as consumo_ddd,
+	sum(pvp_nomenclator_nm) as gasto_pvp,
+	sum(precio_por_envase_nm) as gasto_p_envase,
+--	(gasto_pvp / n_envases) as gasto_medio_dispensacion,
+--	(gasto_p_envase / n_envases) as gasto_medio_dispensacion_real
+FROM
+	(
+	SELECT
+		envase_id,
+    paciente_id,
+		ddd_nomenclator_nm,
+		pvp_nomenclator_nm,
+		precio_por_envase_nm,
+    ddd_por_envase,
+		year(fecha_dispensacion_dt) as año_cd,
+		ccaa_cd,
+	from
+		main.envase_dispensado_view) a
+group by 
+	año_cd,
+	ccaa_cd,
+order by 
+    año_cd
+	')
+
+
+tabla3<- dbGetQuery(conn = con, '
+  select
+	año_cd,
+	ccaa_cd ,
+	zbs_residencia_cd,
+	COUNT(envase_id) as n_envases,
+	count(DISTINCT paciente_id) as n_personas_dispensadas,
+	sum(ddd_por_envase) as consumo_ddd,
+	sum(pvp_nomenclator_nm) as gasto_pvp,
+	sum(precio_por_envase_nm) as gasto_p_envase,
+--	(gasto_pvp / n_envases) as gasto_medio_dispensacion,
+--	(gasto_p_envase / n_envases) as gasto_medio_dispensacion_real
+FROM
+	(
+	SELECT
+		envase_id,
+		ddd_nomenclator_nm,
+    ddd_por_envase,
+		pvp_nomenclator_nm,
+		precio_por_envase_nm,
+		atc_farmaco_dispensado_cd,
+		paciente_id,
+		year(fecha_dispensacion_dt) as año_cd,
+		zbs_residencia_cd,
+		ccaa_cd,
+	from
+		main.envase_dispensado_view) a
+group by
+	año_cd,
+	zbs_residencia_cd,
+	ccaa_cd
+order by
+    año_cd,
+    zbs_residencia_cd
+	')
+
+tabla_envases_año <- dbGetQuery(conn=con,
+                  " SELECT
+	año_cd, 
+	atc_farmaco_dispensado_short,
+	count(DISTINCT paciente_id) as pacientes_nm,
+  count(DISTINCT envase_id) as n_envases,
+	sum(ddd_por_envase) as consumo_ddd,
+	sum(pvp_nomenclator_nm) as gasto_pvp
+from
+	(
+	select
+		isoyear(fecha_dispensacion_dt) as año_cd,
+		paciente_id,
+    envase_id,
+		atc_farmaco_dispensado_cd[1:5] as atc_farmaco_dispensado_short,
+		ddd_nomenclator_nm,
+    ddd_por_envase,
+		pvp_nomenclator_nm
+	from
+		main.envase_dispensado_view WHERE atc_farmaco_dispensado_short in ('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE')
+	)
+GROUP BY
+	año_cd,
+	atc_farmaco_dispensado_short
+")
+
+
+pobla_tsi <- dbGetQuery(conn = con,
+                  paste0("SELECT * FROM main.zona_basica_tarjeta where ccaa_cd = '",list_ccaa,"' and sexo_cd IN (1,2)")
+)
+
+evolucion_temporal_tsi <- dbGetQuery(conn=con,
+                  " SELECT
+	año_cd, 
+	atc_farmaco_dispensado_short,
+	tsi_cd,
+	count(DISTINCT paciente_id) as pacientes_nm,
+  count(DISTINCT envase_id) as n_envases,
+	sum(ddd_por_envase) as consumo_ddd,
+	sum(pvp_nomenclator_nm) as gasto_pvp
+from
+	(
+	select
+		isoyear(fecha_dispensacion_dt) as año_cd,
+		paciente_id,
+    envase_id,
+		atc_farmaco_dispensado_cd[1:5] as atc_farmaco_dispensado_short,
+		ddd_nomenclator_nm,
+    ddd_por_envase,
+		pvp_nomenclator_nm,
+    tsi_cd
+	from
+		main.envase_dispensado_view WHERE atc_farmaco_dispensado_short in ('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE')
+	)
+GROUP BY
+	año_cd,
+	atc_farmaco_dispensado_short,
+  tsi_cd
+")
+
+
+aggregated_output <- dbGetQuery(conn = con, 
+                  "with partial_df as (
+select
+	envase_id,
+	isoyear(fecha_dispensacion_dt) as año_cd,
+	month(fecha_dispensacion_dt) as mes_cd,
+	paciente_id,
+	CASE
+		WHEN edad_nm >= 0
+		and edad_nm <= 4 THEN 1
+		WHEN edad_nm >= 5
+		and edad_nm <= 9 THEN 2
+		WHEN edad_nm >= 10
+		and edad_nm <= 14 THEN 3
+		WHEN edad_nm >= 15
+		and edad_nm <= 19 THEN 4
+		WHEN edad_nm >= 20
+		and edad_nm <= 24 THEN 5
+		WHEN edad_nm >= 25
+		and edad_nm <= 29 THEN 6
+		WHEN edad_nm >= 30
+		and edad_nm <= 34 THEN 7
+		WHEN edad_nm >= 35
+		and edad_nm <= 39 THEN 8
+		WHEN edad_nm >= 40
+		and edad_nm <= 44 THEN 9
+		WHEN edad_nm >= 45
+		and edad_nm <= 49 THEN 10
+		WHEN edad_nm >= 50
+		and edad_nm <= 54 THEN 11
+		WHEN edad_nm >= 55
+		and edad_nm <= 59 THEN 12
+		WHEN edad_nm >= 60
+		and edad_nm <= 64 THEN 13
+		WHEN edad_nm >= 65
+		and edad_nm <= 69 THEN 14
+		WHEN edad_nm >= 70
+		and edad_nm <= 74 THEN 15
+		WHEN edad_nm >= 75
+		and edad_nm <= 79 THEN 16
+		WHEN edad_nm >= 80
+		and edad_nm <= 84 THEN 17
+		WHEN edad_nm >= 85 THEN 18
+		ELSE NULL
+	END as grupo_edad_cd,
+	sexo_cd,
+	tsi_cd,
+	zbs_residencia_cd,
+	ccaa_cd, 
+	atc_farmaco_dispensado_cd[1:7] as atc_farmaco_dispensado_7,
+	ddd_nomenclator_nm,
+	ddd_por_envase,
+	pvp_nomenclator_nm,
+	precio_por_envase_nm
+from
+	main.envase_dispensado_view)
+select
+	a.*,
+	n_poblacion
+from
+	(
+	select
+		atc_farmaco_dispensado_7 as atc_farmaco_dispensado ,
+		año_cd,
+		mes_cd,
+		ccaa_cd,
+		zbs_residencia_cd ,
+		sexo_cd,
+		grupo_edad_cd,
+		tsi_cd ,
+		sum(ddd_por_envase) as consumo_ddd_por_envase,
+		sum(pvp_nomenclator_nm) as gasto_pvp_nomenclator_nm,
+		sum(precio_por_envase_nm) as gasto_precio_por_envase_nm,
+		count(DISTINCT paciente_id) as pacientes_nm,
+		count(DISTINCT envase_id) as n_envases,
+	from
+		partial_df
+	where
+		sexo_cd in (1, 2)
+	group by
+		atc_farmaco_dispensado_7 ,
+		ccaa_cd,
+		mes_cd,
+		zbs_residencia_cd ,
+		sexo_cd,
+		grupo_edad_cd,
+		tsi_cd,
+		año_cd) a
+left join main.zona_basica_tarjeta b 
+on
+	a.año_cd = b.año_cd and 
+	a.ccaa_cd = b.ccaa_cd
+	and a.zbs_residencia_cd = b.zbs_residencia_cd
+	and a.sexo_cd = b.sexo_cd
+	and a.grupo_edad_cd = b.grupo_edad_cd
+	and a.tsi_cd = b.tsi_cd   
+ 
+	")
+
+write.table(aggregated_output,'../../outputs/aggregated_outputs.csv', sep = '|', row.names = FALSE)
+rm(aggregated_output)
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+# Antecedentes y justificación
+
+::: {.justify}
+
+La cantidad y el tipo de medicamentos que una población o un individuo consume puede variar enormemente dependiendo del lugar dónde viva. La utilización de los medicamentos, como sucede con otras tecnologías sanitarias, está sujeta a una gran variabilidad. El conocimiento de las *variaciones en la práctica médica*, entendidas como las variaciones sistemáticas --no aleatorias- en las tasas estandarizadas de un procedimiento sanitario a un determinado nivel de agregación de la población, es indispensable para identificar problemas de política y gestión sanitaria y orientar la toma de decisiones sobre los servicios de salud. En nuestro país, el grupo de Variaciones en la Práctica Médica del Sistema Nacional de Salud (Grupo VPM-SNS) publica el Atlas de Variaciones en la Práctica Médica en el Sistema Nacional de Salud con interesantes contribuciones empíricas al conocimiento de la utilización hospitalaria (ingresos e intervenciones quirúrgicas) en el Sistema Nacional de Salud (SNS) [@angulo_pueyo_atlas_2022].
+
+Las variaciones poblacionales en los patrones de prescripción suponen un desafío importante para todos los Sistemas de Salud. Este proyecto de investigación pretende, esencialmente, aportar información empírica sobre la variabilidad en los patrones de consumo de medicamentos, siendo sus objetivos describir la variabilidad en dosis dispensadas (DDD por 1000 habitantes y día) y gasto farmacéutico en la dispensación de opioides  entre las zonas básicas de salud participantes y  analizar, las relaciones entre las tasas de dispensación  de los diversos grupos terapéuticos.
+
+:::
+
+# Hipótesis
+
+::: {.justify}
+
+El proyecto tiene un componente básico de carácter descriptivo sobre el que se formulan las siguientes hipótesis operativas:
+
+1. Respecto a la evaluación de las diferencias entre las tasas de consumo y gasto farmacéutico se parte de la hipótesis nula de no existencia de diferencias entre zonas básicas de salud, una vez estandarizadas las tasas por la estructura de edad y sexo de cada área.
+
+2. Respecto a la relación de las tasas de consumo entre sí, se parte de la hipótesis de que existirán asociaciones entre los consumos de los subgrupos terapéuticos utilizados para las mismas patologías.
+
+:::
+# Objetivos
+
+::: {.justify}
+
+
+El objetivo principal de este estudio es describir el número de envases dispensados y el número de pacientes tratados además de estimar el consumo, y el gasto farmacéutico estandarizado en un grupo de fármacos (en concreto, opioides) para determinados subgrupos terapéuticos de ellos en función del código ATC [@ATC_2023] en las zonas básicas de salud (ZBS) de las comunidades autónomas (CCAA) participantes y analizar si las posibles variaciones detectadas son sistemáticas o explicables por el azar.
+
+
+:::
+## Objetivos específicos
+::: {.justify}
+
+1. Describir y cartografiar (análisis geográfico) el consumo (DHD) y el gasto farmacéutico por zonas básicas de salud (ZBS).
+
+2. Analizar la posible existencia de diferencias entre zonas usando el análisis de áreas pequeñas.
+
+3. Analizar la existencia de asociaciones entre las tasas de consumo de los diferentes subgrupos terapéuticos.
+
+:::
+# Metodología 
+
+## Diseño
+::: {.justify}
+
+Estudio observacional, retrospectivo, longitudinal y ecológico del consumo y gasto farmacéutico estandarizado en opioides. El consumo se calculará como Dosis por mil Habitantes Día (DHD) y el gasto se calculará como sumatorio de precio de venta al público (PVP) por grupo de edad y sexo en cada zona básica de salud (ZBS).
+
+:::
+## Fuentes de información
+::: {.justify}
+
+
+El origen de la información se corresponde con las bases de datos de medicamentos prescritos en receta oficial del Sistema Nacional de Salud (SNS), también conocido como receta electrónica. Los datos utilizados son los datos de envases dispensados desde el 1 de Enero de 2013 al 31 de Diciembre de 2022 para los ATC seleccionados, registrados por los Servicios de Farmacia de las CCAA participantes. 
+
+### Nomenclator
+
+::: {.callout-warning appearance="simple"}
+
+El nomenclator usado como referencia para todos los años es el nomenclator del Ministerio de Sanidad (Junio 2022) para todas las CCAA en el que se han modificado los DDD de los fármacos combinados para especificar el DDD del fármaco de interés (opioides). 
+Se aplica todos años para poder comparar y no atribuir cambios a cambios de precios. 
+
+```{epoxy}
+Existen {length(unique(nomenclator_fail$codigo_nacional_farmaco_cd))} códigos nacionales de fármaco que no cruzan con el nomenclator. Se pierden {nrow(nomenclator_fail)} registros de {total$total}.
+
+```
+
+:::
+
+:::
+## Población estudiada
+
+::: {.justify}
+
+La unidad de análisis es la Zona Básica de Salud (ZBS). Las CCAA que participan son: Aragón, Islas Baleares, Canarias, Cantabria, Castilla y León, Cataluña, Comunidad de Madrid, Comunidad Foral de Navarra, Comunidad Valenciana, País Vasco y Principado de Asturias. Estas ZBS engloban a las poblaciones de cada ZBS distribuidas en función de su modalidad de copago identificado a partir de las categorías de Tarjeta Sanitaria (TSI - Tarjeta Sanitaria Individual). Existen 8 categorías de TSI:
+
+
+- 0 = "TSI 000 sin aseguramiento", 
+
+- 1 = "TSI 001 farmacia gratuita", 
+
+- 2 = "TSI 002-01 pensionistas tipo i", 
+
+- 3 = "TSI 002-02 pensionistas tipo ii", 
+
+- 4 = "TSI 003 activos tipo i", 
+
+- 5 = "TSI 004 activos tipo ii", 
+
+- 6 = "TSI 005 activos tipo máximo", 
+
+- 7 = "TSI 005-03 pensionistas tipo máximo" y 
+
+- 8 = "TSI 006 mutualistas". 
+
+Quedan por lo tanto excluidos los habitantes sin derecho a la prestación farmacéutica, esencialmente los adscritos a las mutualidades de funcionarios que usan su propio sistema de recetas.
+:::
+
+
+### Población de tarjeta sanitaria por zona básica de salud (ZBS)
+
+::: {.callout-warning appearance="simple"}
+
+```{epoxy}
+Existen {registros_zbs_null$total_envases} registros ({registros_zbs_null$total_pacientes} pacientes) para los que su zona básica de salud es nula en los datos. Hay un total de {registros_zbs_total_fail$total_envases - registros_zbs_null$total_envases} registros ({registros_zbs_total_fail$total_paciente - registros_zbs_null$total_pacientes} pacientes) que se pierden por que no hay población para su zona básica de salud, edad y sexo, por tanto, se pierden se pierden para la @sec-variaciones_zbs {registros_zbs_total_fail$total_envases} de un total de {total$total} registros.
+
+```
+
+:::
+
+
+
+## Indicadores
+
+::: {.justify}
+
+Se estudiarán los subgrupos de opiodes en función del ATC (5 dígitos) del fármaco que se corresponden con:
+
+
+- Alcaloides naturales del opio (*N02AA*), 
+
+- Derivados de fenilpiperidina (*N02AB*), 
+
+- Otros opioides (*N02AX*), 
+
+- Opioides en combinación con analgésicos no opioides (*N02AJ*), 
+
+- Derivados de oripavina (*N02AE*).
+
+:::
+
+
+
+## Variables calculadas
+::: {.justify}
+- Dosis por mil Habitantes Día (DHD): se calcula siguiendo la siguiente expresión: $$DHD = ((Nº DDD * 1000_{habitantes})/ (población * 365_{días}))$$ 
+siendo *Nº DDD* el sumatorio de DDD por envase y *población* la población en cada uno de las categorías de edad y sexo para cada año.
+
+- Gasto PVP por habitante: es el sumatorio del gasto (tomando el PVP como precio de referencia) dividido entre la población en cada uno de las categorías de edad y sexo para cada año.
+
+- Nº de envases dispensados por habitante: es el sumatorio del número de envases dividido entre la población en cada uno de las categorías de edad y sexo para cada año.
+:::
+
+
+# Resultados del Análisis local (CCAA) 
+
+## Descriptivo
+::: {.justify}
+
+En primer lugar, las tres tablas a continuación muestran los acumulados de número de envases dispensados, número de personas dispensadas, dosis diaria definida (DDD) y precio de venta al público del fármaco dispensado (PVP) en distintos niveles de agregación:
+
+- Tabla 1: Totales (todos los años)
+
+- Tabla 2: Totales por año
+
+- Tabla 3: Totales por ZBS y año 
+:::
+
+### Tabla 1
+```{r}
+#| label: tbl-table_1
+#| tbl-cap: Tabla 1
+
+tabla1 %>% dplyr::select(!c(ccaa_cd,gasto_p_envase)) %>% 
+  gt() %>% 
+  tab_options(
+    column_labels.font.size = 10,
+  ) %>% 
+    tab_header(
+    title = "Tabla de datos crudos totales para el Nº de envases dispensados, Nº de personas dispensadas, acumulado DDD y acumulado PVP") %>% 
+  fmt_number(decimals = 2,
+             sep_mark = '.',
+             dec_mark=',') %>% 
+    cols_label(
+    n_envases = 'Nº de envases dispensados',
+    n_personas_dispensadas = 'Nº de personas dispensadas',
+    consumo_ddd = "Acumulado DDD (#)",
+    gasto_pvp = 'Acumulado PVP (€)'
+  ) %>% 
+  fmt_currency(
+    columns = c('gasto_pvp'),
+    currency = "euro",
+     placement = "right",
+                 sep_mark = '.',
+             dec_mark=','
+  ) %>% 
+  fmt_number(columns = c('n_envases','n_personas_dispensadas'),
+             decimals = 0,
+             use_seps = FALSE) %>%
+  cols_align(
+  align =  "center",
+  columns = everything()
+) %>% 
+  opt_interactive(use_filters = TRUE,
+                  use_compact_mode = TRUE,
+                  use_resizers = TRUE)
+
+
+```
+
+
+### Tabla 2
+
+```{r}
+#| label: tbl-table_2
+#| tbl-cap: Tabla 2
+
+tabla2 %>% dplyr::select(!c(ccaa_cd,gasto_p_envase)) %>% 
+  gt() %>% 
+      tab_header(
+    title = "Tabla de datos crudos por año para el Nº de envases dispensados, Nº de personas dispensadas, acumulado DDD y acumulado PVP") %>% 
+  tab_options(
+    column_labels.font.size = 10,
+  ) %>% 
+  fmt_number(decimals = 2,
+             sep_mark = '.',
+             dec_mark=',')%>% 
+    cols_label(
+    año_cd = "Año",
+    n_envases = 'Nº de envases dispensados',
+    n_personas_dispensadas = 'Nº de personas dispensadas',
+    consumo_ddd = "Acumulado DDD (#)",
+    gasto_pvp = 'Acumulado PVP (€)'
+  ) %>% 
+  fmt_currency(
+    columns = c('gasto_pvp'),
+    currency = "euro",
+     placement = "right",
+                 sep_mark = '.',
+             dec_mark=','
+  ) %>% 
+    cols_align(
+  align =  "center",
+  columns = everything()
+) %>% 
+    fmt_number(columns = c('año_cd','n_envases','n_personas_dispensadas'),
+             decimals = 0,
+             use_seps = FALSE) %>% 
+  opt_interactive(use_filters = TRUE,
+                  use_compact_mode = TRUE,
+                  use_resizers = TRUE)
+
+
+ 
+```
+
+
+
+Se presentan como diagrama de barras horizontal los resultados de la anterior tabla
+
+::: {.panel-tabset}
+### Acumulado DDD (#)
+
+```{r}
+
+plot1 <- ggplot(data = tabla2, aes(x = factor(año_cd), y = consumo_ddd)) + 
+  geom_bar(width = 0.9, stat="identity", fill = '#1C317F') +
+      labs(title = 'Acumulado DDD por año (#)', 
+         x = 'Año',
+         y = 'Acumulado DDD') +
+      theme(title = element_text(size = 20), panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.title = element_text(size = 14),
+          axis.text = element_text(size = 14),  
+          legend.text = element_text(size = 12), legend.title = element_text(size = 12), 
+          axis.ticks = element_blank()) +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = ' M', accuracy=1))  +
+  coord_flip()
+
+ggplotly(plot1)
+
+
+```
+
+### Acumulado PVP (€)
+
+```{r}
+plot2 <- ggplot(data = tabla2, aes(x = factor(año_cd), y = gasto_pvp)) + 
+  geom_bar(width = 0.9, stat="identity", fill = '#1C317F') +
+      labs(title = 'Acumulado PVP por año (€)', 
+         x = 'Año',
+         y = 'Acumulado PVP') +
+      theme(title = element_text(size = 20), panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.title = element_text(size = 14),
+          axis.text = element_text(size = 14), 
+          legend.text = element_text(size = 12), legend.title = element_text(size = 12), 
+          axis.ticks = element_blank()) + 
+  scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = ' M', accuracy=1)) +
+  coord_flip()
+
+ggplotly(plot2)
+
+```
+
+:::
+
+### Tabla 3
+
+```{r}
+#| label: tbl-table_3
+#| tbl-cap: Tabla 3
+
+tabla3 %>% dplyr::select(!c(ccaa_cd,gasto_p_envase)) %>% 
+  gt() %>%
+  tab_options(
+    column_labels.font.size = 10,
+  ) %>%
+        tab_header(
+    title = "Tabla de datos crudos por año y zona básica de salud para el Nº de envases dispensados, Nº de personas dispensadas, acumulado DDD y acumulado PVP") %>% 
+  fmt_number(decimals = 2,
+             sep_mark = '.',
+             dec_mark=',') %>% 
+    cols_label(
+    año_cd = "Año",
+    zbs_residencia_cd = 'ZBS',
+    n_envases = 'Nº de envases dispensados',
+    n_personas_dispensadas = 'Nº de personas dispensadas',
+    consumo_ddd = "Acumulado DDD (#)",
+    gasto_pvp = 'Acumulado PVP (€)'
+  ) %>%
+  fmt_currency(
+    columns = c('gasto_pvp'),
+    currency = "euro",
+     placement = "right",
+                 sep_mark = '.',
+             dec_mark=','
+  ) %>% 
+    cols_align(
+  align =  "center",
+  columns = everything()
+) %>% 
+    fmt_number(columns = c('año_cd', 'n_personas_dispensadas', 'n_envases'),
+             decimals = 0,
+             use_seps = FALSE) %>% 
+  opt_interactive(use_filters = TRUE,
+                  use_compact_mode = TRUE,
+                  use_resizers = TRUE)
+
+```
+
+:::
+
+
+
+## Evolución del número de envases dispensados por año
+
+::: {.justify}
+Se muestra el número de envases dispensados por año para cada grupo de opioides.
+:::
+
+```{r}
+
+df_list_indicators <- data.frame(indicators = c('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE'),
+                                 descr = c('Alcaloides naturales del opio', 'Derivados de fenilpiperidina', 'Otros opioides',
+                                           'Opioides en combinación con analgésicos no opioides','Derivados de oripavina'))
+tabla_envases_año$año_cd <- factor(tabla_envases_año$año_cd)
+p <- list()
+plot_nenv_per_year <- function(ind){
+
+
+    data_filter <- tabla_envases_año %>% filter(atc_farmaco_dispensado_short %in% ind)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    
+    plot <- ggplot(data_filter,aes(x = año_cd, y=n_envases)) + 
+  geom_bar(fill = '#d1a949',stat = 'identity') +
+    labs(title = 'Nº de envases dipensados por año',
+       subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
+       y = 'Nº de envases dispensados',
+       x = 'Año') +
+  theme_minimal() 
+    plot <- ggplotly(plot) %>% 
+  layout(title = list(text = paste0('Nº de envases dispensados por año',
+                                    '<br>',
+                                    '<sup>',
+                                     df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')','</sup>')))
+    p[[ind]] <- plot
+  
+  return(p)
+}
+
+
+plot_n_env <- lapply(df_list_indicators$indicators, plot_nenv_per_year)
+
+
+```
+
+
+
+::: {.panel-tabset}
+
+### Alcaloides naturales del opio (N02AA)
+
+```{r}
+
+
+plot_n_env[[1]]$N02AA
+```
+
+### Derivados de fenilpiperidina (N02AB)
+
+```{r}
+plot_n_env[[2]]$N02AB
+```
+
+### Otros opioides (N02AX)
+
+```{r}
+plot_n_env[[3]]$N02AX
+```
+
+### Opioides en combinación con analgésicos no opioides (N02AJ)
+
+```{r}
+plot_n_env[[4]]$N02AJ
+```
+
+
+### Derivados de oripavina (N02AE)
+
+```{r}
+plot_n_env[[5]]$N02AE
+```
+
+:::
+
+
+
+## Evolución temporal del porcentaje de envases dispensados por ATC
+
+::: {.justify}
+Se muestra el porcentaje de envases dispensados de cada grupo de opioides respecto al total de envases dispensados para cada año de estudio.
+:::
+
+```{r}
+tabla_envases_año$atc_farmaco_dispensado_short <- factor(tabla_envases_año$atc_farmaco_dispensado_short)
+df_ <- tabla_envases_año %>% group_by(año_cd,) %>% 
+  mutate(total =(sum(n_envases,na.rm=TRUE))) 
+df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),2))
+df_ <- df_[order(df_$año_cd,df_$percent_envases, df_$atc_farmaco_dispensado_short),]
+
+plot <- ggplot(df_,
+       aes(x = factor(año_cd), stratum = atc_farmaco_dispensado_short, alluvium = atc_farmaco_dispensado_short,
+           y = percent_envases,
+           fill = atc_farmaco_dispensado_short)) +
+  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", '#e78ac3', '#a6d854')) +
+  geom_flow(stat = "alluvium", lode.guidance = "frontback",
+            color = "darkgray", width = 0.6) +
+  geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
+    geom_text(stat = "stratum", aes(label = percent_envases), size=2.7)+ 
+      labs(title = 'Evolución temporal del porcentaje de envases dispensados por ATC',
+       y = 'Porcentaje de envases dispensados',
+       x = 'Año') +
+  theme_minimal() +
+  guides(fill=guide_legend(title="ATC fármaco"))
+
+
+plot
+```
+
+
+
+## Evolución temporal por categoría TSI
+
+::: {.justify}
+Se observa la evolución temporal de las siguientes tres variables según categoría de TSI:
+:::
+
+```{r}
+evolucion_temporal_tsi <- evolucion_temporal_tsi %>% filter(!is.na(tsi_cd))
+evolucion_temporal_tsi$año_cd <- as.integer(evolucion_temporal_tsi$año_cd)
+pobla_tsi <- pobla_tsi %>% filter(!is.na(tsi_cd))
+pobla_tsi <- pobla_tsi %>% group_by(año_cd,tsi_cd) %>% summarise(n_poblacion=sum(n_poblacion,na.rm=TRUE))
+pobla_tsi$año_cd <- as.integer(pobla_tsi$año_cd)
+
+evolucion_temporal_tsi <- left_join(x=evolucion_temporal_tsi, y=pobla_tsi, by = c('año_cd','tsi_cd'))
+
+evolucion_temporal_tsi_ <- evolucion_temporal_tsi %>% group_by(año_cd,tsi_cd,atc_farmaco_dispensado_short) %>% 
+  summarise(DHD_milhab=round((1000*consumo_ddd)/(365*n_poblacion),2),
+         PVP_hab=round((gasto_pvp/n_poblacion),2),
+         env_hab = round((n_envases/n_poblacion),2))
+evolucion_temporal_tsi_$atc_farmaco_dispensado_short <- factor(evolucion_temporal_tsi_$atc_farmaco_dispensado_short)
+evolucion_temporal_tsi_$año_cd <- factor(evolucion_temporal_tsi_$año_cd)
+
+list_tsi <- unique(evolucion_temporal_tsi_$tsi_cd) %>% sort()
+
+df_variables <- data.frame(variables = c('DHD_milhab','PVP_hab','env_hab'),
+                           descrip = c('Consumo (DHD)','Gasto (PVP) por habitante',
+                                       'Nº de envases dispensados por habitante'))
+
+p <-list()
+plot_evo_tsi <- function(tsi){
+  evolucion_temporal_tsi_filter <- evolucion_temporal_tsi_ %>% filter(tsi_cd %in% tsi)
+  for(var in df_variables$variables){
+    df_variables_ <- df_variables %>% filter(variables %in% var)
+    evolucion_temporal_tsi_filter_ <- evolucion_temporal_tsi_filter %>% dplyr::select(año_cd,tsi_cd,
+                                                                                      atc_farmaco_dispensado_short,
+                                                                                      all_of(var)) %>% 
+      dplyr::rename(var_estudio = var)
+  plot <- ggplot(evolucion_temporal_tsi_filter_,
+       aes(x = factor(año_cd), stratum = atc_farmaco_dispensado_short, alluvium = atc_farmaco_dispensado_short,
+           y = var_estudio,
+           fill = atc_farmaco_dispensado_short)) +
+  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", '#e78ac3', '#a6d854')) +
+  geom_flow(stat = "alluvium", lode.guidance = "frontback",
+            color = "darkgray", width = 0.6) +
+  geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
+    geom_text(stat = "stratum", aes(label = var_estudio), size=2.7)+ 
+      labs(title = paste0('Evolución temporal de ',df_variables_$descrip,' por ATC'),
+       y = df_variables_$descrip,
+       x = 'Año') +
+  theme_minimal() +
+  guides(fill=guide_legend(title="ATC fármaco"))
+    p[[var]] <- plot
+  
+}
+  return(p)
+}
+
+
+plot_evo_tsi <- lapply(list_tsi, plot_evo_tsi)
+
+
+```
+
+
+### Consumo (DHD) 
+
+```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
+cat("::: {.panel-tabset} \n")
+for (i in 1:length(plot_evo_tsi)){
+  cat("#### TSI ", list_tsi[i], "\n")
+  cat("\n")
+  print(plot_evo_tsi[[i]]$DHD_milhab)
+  cat("\n")
+}
+ cat(":::")
+
+```
+
+
+### Gasto (PVP)
+
+```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
+cat("::: {.panel-tabset} \n")
+for (i in 1:length(plot_evo_tsi)){
+  cat("#### TSI ", list_tsi[i], "\n")
+  cat("\n")
+  print(plot_evo_tsi[[i]]$PVP_hab)
+  cat("\n")
+}
+
+ cat(":::")
+```
+
+
+
+### Nº envases dispensados 
+
+```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
+cat("::: {.panel-tabset} \n")
+for (i in 1:length(plot_evo_tsi)){
+  cat("#### TSI ", list_tsi[i], "\n")
+  cat("\n")
+  print(plot_evo_tsi[[i]]$env_hab)
+  cat("\n")
+}
+
+ cat(":::")
+```
+
+
+## Evolución de las variaciones por zona básica de salud (ZBS) {#sec-variaciones_zbs}
+
+::: {.justify}
+
+A continuación se muestra la distribución del consumo (DHD) y el gasto (PVP) estandarizado en cada ZBS por grupo de edad y sexo cada grupo de opioides por año. Se ha realizado una estandarización directa usando la población por grupo de edad quinquenal y sexo de cada ZBS usando la población INE de cada año como población de referencia.
+
+:::
+
+```{r}
+#| label: funcion para plotear violines
+data <- read.csv('../../outputs/opioides_indicators_rates.csv', sep = ",",colClasses=c("codatzbs"="character"))
+data$variable[data$variable=='ddd'] <- 'dhd'
+data <- data %>% filter(indicator %nin% 'N02A')
+ 
+df_list_indicators <- data.frame(indicators = c('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE'),
+                                 descr = c('Alcaloides naturales del opio', 'Derivados de fenilpiperidina', 'Otros opioides',
+                                           'Opioides en combinación con analgésicos no opioides','Derivados de oripavina'))
+list_variables <- unique(data$variable)
+
+
+df_names_var_te <- data.frame(variable = c('dhd', 'pvp'),
+                              title = c('Consumo (DHD)', 'Gasto (PVP)'))
+
+
+
+# data_csv <- data %>% dplyr::select(te,año,variable,indicator) %>%  group_by(año,variable,indicator) %>% mutate(P50_año = median(te,na.rm=TRUE)) %>% 
+#   group_by(variable,indicator) %>% 
+#   mutate(P50_total = median(te,na.rm=TRUE)) %>% 
+#   dplyr::select(año,variable,indicator,P50_año,P50_total)
+# data_csv <- data_csv[!duplicated(data_csv$P50_año),]
+# 
+# write.table(data_csv,'../../outputs/variaciones_zona_basica_de_salud_intracomunitarias_y_temporal_tabla.csv',row.names = FALSE,sep = '|')
+  
+
+p <- list()
+plot_te_per_year <- function(var){
+
+  #names_files <- list.files(path="../../outputs", pattern = pattern, full.names=TRUE)
+ #for(file in names_files){
+  for(ind in df_list_indicators$indicators){
+    data_filter <- data %>% filter(variable %in% var, indicator %in% ind)
+    df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    
+    plot <- ggplot(data=data_filter, aes(x=año, y=te, group = año)) +
+      geom_violin(trim = FALSE, alpha = 0.1, color = 'grey80') + 
+      stat_summary(fun = "median",
+               geom = "crossbar", 
+               linewidth = 0.3,
+               colour = "black") +
+      geom_jitter(position=position_jitter(0.2), size=0.3) +
+      labs(title = paste0(df_names_var_te_$title),
+           subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
+           x = 'Año',
+           y = df_names_var_te_$title) +
+      scale_x_continuous(limits = c(2012, 2023), breaks = seq(2013, 2022, by = 1)) +
+      theme_minimal_hgrid() + 
+      geom_hline(data=data_filter, mapping=aes(yintercept=median(te,na.rm = TRUE)), color="red") +
+      geom_text(x=2023, y=max(data_filter$te,na.rm=TRUE), label="P50 (2013-2022)", color = 'red', size=4,hjust=1) + 
+      geom_text(x=2023, y=median(data_filter$te,na.rm = TRUE), label=paste0('                ',round(median(data_filter$te,na.rm = TRUE),2)), color = 'red', size=4) +
+      geom_text(x=2022.5, y=max(data_filter$te,na.rm=TRUE), label="P50 año", color = 'black',hjust=1) + 
+      coord_flip()
+    p[[ind]] <- plot
+  }
+  return(p)
+}
+
+
+plot_te <- lapply(list_variables, plot_te_per_year)
+
+
+
+
+
+
+```
+
+
+###  Consumo (DHD)
+
+::: {.panel-tabset}
+
+### Alcaloides naturales del opio (N02AA)
+
+```{r}
+
+
+plot_te[[1]]$N02AA
+```
+
+### Derivados de fenilpiperidina (N02AB)
+
+```{r}
+plot_te[[1]]$N02AB
+```
+
+### Otros opioides (N02AX)
+
+```{r}
+plot_te[[1]]$N02AX
+```
+
+### Opioides en combinación con analgésicos no opioides (N02AJ)
+
+```{r}
+plot_te[[1]]$N02AJ
+```
+
+### Derivados de oripavina (N02AE)
+
+```{r}
+plot_te[[1]]$N02AE
+```
+
+:::
+
+
+### Gasto (PVP)
+
+::: {.panel-tabset}
+
+### Alcaloides naturales del opio (N02AA)
+
+```{r}
+
+
+plot_te[[2]]$N02AA
+```
+
+### Derivados de fenilpiperidina (N02AB)
+
+```{r}
+plot_te[[2]]$N02AB
+```
+
+### Otros opioides (N02AX)
+
+```{r}
+plot_te[[2]]$N02AX
+```
+
+### Opioides en combinación con analgésicos no opioides (N02AJ)
+
+```{r}
+plot_te[[2]]$N02AJ
+```
+
+### Derivados de oripavina (N02AE)
+
+```{r}
+plot_te[[2]]$N02AE
+```
+:::
+
+:::
+
+
+

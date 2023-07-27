@@ -1,0 +1,58 @@
+classification_system,code_4dig,code_5dig,description_family,code_7dig,description,ddd_o,ddd_p,ddd_r,ddd_s,ddd_sl,ddd_td,"DDD, U, Adm.R",Note,source
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA01,morfina,"0,1g",30mg,30mg,,,,"0,1 g  O; 30 mg P; 30 mg R",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA02,opio,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA03,hidromorfona,20mg ,4mg,4mg,,,,20 mg O; 4 mg P; 4 mg R,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA04,nicomorfina,30mg,30mg,30mg,,,,30 mg O; 30 mg P; 30 mg R,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA05,oxicodona,75mg,30mg,,,,,75 mg O; 30 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA08,dihidrocodeína,"0,15g",,,,,,"0,15 g  O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA10,papaveretum,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA11,oximorfona,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA51,"morfina, combinaciones",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA53,hidromorfona y naloxona,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA55,oxicodona y naloxona,75mg,,,,,,75 mg O,Refers to oxycodone,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA56,oxicodona y naltrexona,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA58,"dihidrocodeína, combinaciones",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA59,"codeína, combinaciones excluyendo psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AA,Alcaloides naturales del opio,N02AA79,"codeína, combinaciones con psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AB,Derivados de fenilpiperidina,N02AB01,cetobemidona,50mg,50mg,,,,,50 mg O; 50 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AB,Derivados de fenilpiperidina,N02AB02,petidina,"0,4g","0,4mg","0,4mg",,,,"0,4 g  O; 0,4 mg P; 0,4 mg R",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AB,Derivados de fenilpiperidina,N02AB03,fentanilo,,,,"0,6mg","0,6mg","1,2mg","0,6 mg  S; 0,6 mg SL; 1,2 mg TD",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AB,Derivados de fenilpiperidina,N02AB52,"petidina, combinaciones excluyendo psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AB,Derivados de fenilpiperidina,N02AB72,"petidina, combinaciones con psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC01,dextromoramida,20mg ,20mg,40mg,,,,20 mg O; 20 mg P; 40 mg R,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC03,piritramida,,45mg,,,,,45 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC04,dextropropoxifeno,"0,2g",,,,,,"0,2 g O; 0,3 g O",chloride;napsylate,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC05,bezitramida,15mg,,,,,,15 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC52,"metadona, combinaciones excluyendo psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC54,"dextropropoxifeno, combinaciones excluyendo psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AC,Derivados de la difenilpropilamina,N02AC74,"dextropropoxifeno, combinaciones con psicolépticos",,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AD,Derivados del benzomorfano,N02AD01,pentazocina,"0,2g","0,2g",,,,,"0,2 g O; 0,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AD,Derivados del benzomorfano,N02AD02,fenazocina,,3mg,,,,,3 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AE,Derivados de la oripavina,N02AE01,buprenorfina,,,,"1,2mg","1,2mg","1,2mg","1,2 mg  S; 1,2 mg SL; 1,2 mg TD",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AF,Derivados del morfinano,N02AF01,butorfanol,,12mg,,,,,12 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AF,Derivados del morfinano,N02AF02,nalbufina,,80mg,,,,,80 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AG,Opioids in combination with antispasmodics,N02AG01,morfina y antiespasmódicos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AG,Opioids in combination with antispasmodics,N02AG02,ketobemidona y antiespasmódicos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AG,Opioids in combination with antispasmodics,N02AG03,petidina y antiespasmódicos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AG,Opioids in combination with antispasmodics,N02AG04,hidromorfona y antiespasmódicos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ01,dihidrocodeína y paracetamol,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ02,dihidrocodeína y ácido acetilsalicílico,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ03,dihidrocodeína y otros analgésicos no opiáceos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ06,codeína y paracetamol,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ07,codeína y ácido acetilsalicílico,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ08,codeína e ibuprofeno,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ09,codeína y otros analgésicos no opiáceos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ13,tramadol y paracetamol,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ14,tramadol y dexketoprofeno,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ15,tramadol y otros analgésicos no opiáceos,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ16,tramadol y celecoxib,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ17,oxicodona y paracetamol,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ18,oxicodona y ácido acetilsalicílico,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AJ,Opioide en combinación con analgésicos no opioides,N02AJ19,oxicodona e ibuprofeno,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX01,tilidina,"0,2g","0,2g",,,,,"0,2 g O; 0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX02,tramadol,,,,,,,"0,3 g O; 0,3 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX03,dezocina,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX05,meptazinol,"1,2g","1,2g",,,,,"1,2 g O; 1,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX06,tapentadol,"0,4g",,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX07,oliceridina,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N02A,N02AX,Otros opioides,N02AX51,tilidina y naloxona,,,,,,,,,https://www.whocc.no/atc_ddd_index

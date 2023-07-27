@@ -1,0 +1,277 @@
+classification_system,code _3dig,code_4dig,description_group,code_5dig,description_family,code_7dig,description,ddd_o,ddd_p,ddd_r,ddd_s,ddd_sl,ddd_td,ddd_inh,"DDD, U, Adm.R",Note,source
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA01,demeclociclina,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA02,doxiciclina,"0,1g","0,1g",,,,,,"0,1 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA03,clortetraciclina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA04,limeciclina,"0,6g","0,6g",,,,,,"0,6 g O; 0,6 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA05,metaciclina,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA06,oxitetraciclina,1g,1g,,,,,,1 g O; 1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA07,tetraciclina,1g,1g,,,,,,1 g O; 1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA08,minociclina,"0,2g","0,2g",,,,,,"0,2 g O; 0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA09,rolitetraciclina,,"0,35g",,,,,,"0,35 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA10,penimepiciclina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA11,clomociclina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA12,tigeciclina,,"0,1g",,,,,,"0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA13,eravaciclina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA14,sareciclina,"0,1g",,,,,,,"0,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA15,omadaciclina,"0,3g","0,1g",,,,,,"0,3 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA20,combinaciones de tetraciclinas,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01A,Tetraciclinas,J01AA,Tetraciclinas,J01AA56,"oxitetraciclina, combinaciones",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01B,Anfenicoles,J01BA,Anfenicoles,J01BA01,cloranfenicol,3g,3g,,,,,,3 g O; 3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01B,Anfenicoles,J01BA,Anfenicoles,J01BA02,tiamfenicol,"1,5g","1,5g",,,,,,"1,5 g O; 1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01B,Anfenicoles,J01BA,Anfenicoles,J01BA52,"tiamfenicol, combinaciones",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA01,ampicilina,2g,6g,2g,,,,,2 g O; 6 g P; 2 g R,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA02,pivampicilina,"1,05g",,,,,,,"1,05 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA03,carbenicilina,,12g,,,,,,12 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA04,amoxicilina,"1,5g",3g,,,,,,"1,5 g O; 3 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA05,carindacilina,4g,,,,,,,4 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA06,bacampicilina,"1,2g",,,,,,,"1,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA07,epicilina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA08,pivmecillinam,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA09,azlocilina,,12g,,,,,,12 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA10,mezlocilina,,6g,,,,,,6 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA11,mecillinam,,"1,2g",,,,,,"1,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA12,piperacilina,,14g,,,,,,14 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA13,ticarcilina,,15g,,,,,,15 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA14,metampicilina,"1,5g","1,5g",,,,,,"1,5 g O; 1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA15,talampicilina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA16,sulbenicilina,,15g,,,,,,15 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA17,temocilina,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA18,hetacilina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA19,aspoxicilina,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA20,combinaciones,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CA,Penicilinas con espectro amplio,J01CA51,"ampicilina, combinaciones",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE01,bencilpenicilina,,"3,6g",,,,,,"3,6 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE02,fenoximetilpenicilina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE03,propicilina,"0,9g",,,,,,,"0,9 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE04,azidocilina,"1,5g",,,,,,,"1,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE05,feneticilina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE06,penamecilina,"1,05g",,,,,,,"1,05 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE07,clometocilina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE08,bencilpenicilina benzatnica,,"3,6g",,,,,,"3,6 g P",Expressed as benzylpenicillin,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE09,bencilpenicilina procana,,"0,6g",,,,,,"0,6 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE10,fenoximetilpenicilina benzatina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CE,Penicilinas sensibles a betalactamasa,J01CE30,combinaciones,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF01,dicloxacilina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF02,cloxacilina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF03,meticilina,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF04,oxacilina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF05,flucloxacilina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CF,Penicilinas resistentes a betalactamasa,J01CF06,nafcilina,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CG,Inhibidores de betalactamasa,J01CG01,sulbactam,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CG,Inhibidores de betalactamasa,J01CG02,tazobactam,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR01,ampicilina e inhibidor de la betalactamasa,,6g,,,,,,6 g P,Refers to ampicillin,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR02,amoxicilina e inhibidor de la betalactamasa,"1,5g",3g,,,,,,"1,5 g O; 3 g P",Refers to amoxicillin,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR03,ticarcilina e inhibidor de la betalactamasa,,15g,,,,,,15 g P,Refers to ticarcillin,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR04,sultamicilina,"1,5g",,,,,,,"1,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR05,piperacilina e inhibidor de la betalactamasa,,14g,,,,,,14 g P,Refers to piperacillin,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01C,"Antibacterianos Betalactmicos, Penicilinas",J01CR,"Combinaciones de penicilinas, incluyendo inhibidores de la betalactamasa",J01CR50,combinaciones de penicilinas,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB01,cefalexina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB02,cefaloridina,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB03,cefalotina,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB04,cefazolina,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB05,cefadroxil,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB06,cefazedona,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB07,cefatrizina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB08,cefapirina,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB09,cefradina,2g,2g,,,,,,2 g O; 2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB10,cefacetrilo,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB11,cefroxadina,"2,1g",,,,,,,"2,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DB,Cefalosporina de primera generacin,J01DB12,ceftezol,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC01,cefoxitina,,6g,,,,,,6 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC02,cefuroxima,"0,5g",3g,,,,,,"0,5 g O; 3 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC03,cefamandole,,6g,,,,,,6 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC04,cefaclor,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC05,cefotetan,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC06,cefonicid,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC07,cefotiam,"1,2g",4g,,,,,,"1,2 g O; 4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC08,loracarbef,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC09,cefmetazol,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC10,cefprozil,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC11,ceforanida,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC12,cefminox,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC13,cefbuperazona,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DC,Cefalosporina de segunda generacin,J01DC14,flomoxef,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD01,cefotaxima,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD02,ceftazidima,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD03,cefsulodin,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD04,ceftriaxona,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD05,cefmenoxima,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD06,latamoxef,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD07,ceftizoxime,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD08,cefixima,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD09,cefodizima,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD10,cefetamet,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD11,cefpiramida,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD12,cefoperazona,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD13,cefpodoxima,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD14,ceftibuten,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD15,cefdinir,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD16,cefditoren,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD17,cefcapeno,"0,45g",,,,,,,"0,45 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD18,cefteram,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD51,cefotaxima e inhibidor de betalactamasas,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD52,ceftazidima e inhibidor de betalactamasas,,6g,,,,,,6 g P,Refers to ceftazidime,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD54,"ceftriaxona, combinaciones",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD62,cefoperazona e inhibidor de betalactamasas,,4g,,,,,,4 g P,Refers to cefoperazone,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD63,ceftriaxona e inhibidor de betalactamasas,,2g,,,,,,2 g P,Refers to ceftriaxone,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DD,Cefalosporina de tercera generacin,J01DD64,cefpodoxima e inhibidor de la betalactamasa,"0,4g",,,,,,,"0,4 g O",Refers to cefpodoxime,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DE,Cefalosporinas de cuarta generacin,J01DE01,cefepima,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DE,Cefalosporinas de cuarta generacin,J01DE02,cefpirome,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DE,Cefalosporinas de cuarta generacin,J01DE03,cefozopran,,4g,,,,,,4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DF,Monobactmicos,J01DF01,aztreonam,,4g,,,,,"0,225g","0,225 g Inhal.solution; 4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DF,Monobactmicos,J01DF02,carumonam,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH02,meropenem,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH03,ertapenem,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH04,doripenem,,"1,5g",,,,,,"1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH05,biapenem,,"1,2g",,,,,,"1,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH06,tebipenem pivoxil,"0,56g",,,,,,,"0,56 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH51,imipenem y cilastatina,,2g,,,,,,2 g P,Refers to imipenem,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH52,meropenem y vaborbactam,,3g,,,,,,3 g P,Refers to meropenem,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH55,panipenem y betamipron,,2g,,,,,,2 g P,Refers to panipenem,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DH,Derivados de carbapenem,J01DH56,"imipenem, cilastatina y relebactam",,2g,,,,,,2 g P,Refers to imipenem,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DI,Otras cefalosporinas,J01DI01,ceftobiprole medocaril,,"1,5g",,,,,,"1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DI,Otras cefalosporinas,J01DI02,ceftarolina fosamil,,"1,2g",,,,,,"1,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DI,Otras cefalosporinas,J01DI03,faropenem,"0,75g",,,,,,,"0,75 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DI,Otras cefalosporinas,J01DI04,cefiderocol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01D,Otros Antibacterianos Betalactmicos,J01DI,Otras cefalosporinas,J01DI54,ceftolozane e inhibidor de betalactamasas,,3g,,,,,,3 g P,Refers to ceftolozane,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EA,Trimetoprima y derivados,J01EA01,trimetoprima,"0,4g","0,4g",,,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EA,Trimetoprima y derivados,J01EA02,brodimoprim,"0,2g",,,,,,,"0,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EA,Trimetoprima y derivados,J01EA03,iclaprim,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB01,sulfaisodimidina,4g,4g,,,,,,4 g O; 4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB02,sulfamethizole,4g,,,,,,,4 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB03,sulfadimidina,4g,,,,,,,4 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB04,sulfapiridina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB05,sulfafurazol,4g,4g,,,,,,4 g O; 4 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB06,sulfanilamida,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB07,sulfatiazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB08,sulfatiourea,6g,,,,,,,6 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EB,Sulfonamidas de accin corta,J01EB20,combinaciones,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EC,Sulfonamidas de accin intermedia,J01EC01,sulfametoxazol,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EC,Sulfonamidas de accin intermedia,J01EC02,sulfadiazina,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EC,Sulfonamidas de accin intermedia,J01EC03,sulfamoxol,1g,1g,,,,,,1 g O; 1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EC,Sulfonamidas de accin intermedia,J01EC20,combinaciones,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED01,sulfadimetoxina,"0,5g",,,,,,,"0,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED02,sulfaleno,"0,1g",,,,,,,"0,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED03,sulfametomidina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED04,sulfametoxidiazina,"0,5g",,,,,,,"0,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED05,sulfametoxipiridazina,"0,5g",,,,,,,"0,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED06,sulfaperina,"0,5g",,,,,,,"0,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED07,sulfamerazina,3g,,,,,,,3 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED08,sulfafenazol,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED09,sulfamazona,"1,5g",,"1,5g",,,,,"1,5 g O; 1,5 g R",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01ED,Sulfonamidas de accin larga,J01ED20,combinaciones,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE01,sulfametoxazol y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE02,sulfadiazina y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE03,sulfametrol y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE04,sulfamoxol y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE05,sulfadimidina y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE06,sulfadiazina y tetroxoprim,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01E,Sulfamidas y Trimetropina,J01EE,"Combinaciones de sulfonamidas y trimetoprima, incluyendo derivados",J01EE07,sulfamerazina y trimetoprima,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA01,eritromicina,1g,1g,,,,,,1 g O; 2 g O; 1 g P,erythromycin ethylsuccinate tablets,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA02,espiramicina,3g,,,,,,,3 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA03,midecamicina,"1,2g",1g,,,,,,"1,2 g O; 1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA05,oleandomicina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA06,roxitromicina,"0,3g",,,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA07,josamicina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA08,troleandomicina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA09,claritromicina,"0,5g",1g,,,,,,"0,5 g O; 1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA10,azitromicina,"0,3g","0,5g",,,,,,"0,3 g O; 0,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA11,miocamicina,"1,2g",,,,,,,"1,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA12,rokitamicina,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA13,diritromicina,"0,5g",,,,,,,"0,5 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA14,fluritromicina,"0,75g",,,,,,,"0,75 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA15,telitromicina,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FA,Macrlidos,J01FA16,solitromicina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FF,Lincosamidas,J01FF01,clindamicina,"1,2g","1,8g",,,,,,"1,2 g O; 1,8 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FF,Lincosamidas,J01FF02,lincomicina,"1,8g","1,8g",,,,,,"1,8 g O; 1,8 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FG,Estreptograminas,J01FG01,pristinamicina,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01F,"Macrlidos, Lincosamidas y Estreptograminas",J01FG,Estreptograminas,J01FG02,quinupristina/dalfopristina,,"1,5g",,,,,,"1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GA,Estreptomicinas,J01GA01,estreptomicina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GA,Estreptomicinas,J01GA02,estreptoduocina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB01,tobramicina,,"0,24g",,,,,"0,112g","0,112 g Inhal.powder; 0,3 g Inhal.solution; 0,24 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB03,gentamicina,,"0,24g",,,,,,"0,24 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB04,kanamicina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB05,neomicina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB06,amikacina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB07,netilmicina,"0,35g","0,35g",,,,,,"0,35 g O; 0,35 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB08,sisomicina,,"0,24g",,,,,,"0,24 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB09,dibekacina,,"0,14g",,,,,,"0,14 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB10,ribostamicina,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB11,isepamicina,,"0,4g",,,,,,"0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB12,arbekacin,,"0,2g",,,,,,"0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB13,bekanamicina,,"0,6g",,,,,,"0,6 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01G,Aminoglucsidos Antibacterianos,J01GB,Otros aminoglucsidos,J01GB14,plazomicina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA01,ofloxacina,"0,4g","0,4g",,,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA02,ciprofloxacina,1g,"0,8g",,,,,,"1 g O; 0,8 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA03,pefloxacina,"0,8g","0,8g",,,,,,"0,8 g O; 0,8 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA04,enoxacina,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA05,temafloxacina,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA06,norfloxacina,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA07,lomefloxacino,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA08,fleroxacina,"0,4g","0,4g",,,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA09,esparfloxacino,"0,2g",,,,,,,"0,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA10,rufloxacino,"0,2g",,,,,,,"0,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA11,grepafloxacino,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA12,levofloxacino,"0,5g","0,5g",,,,,"0,24g","0,24 g Inhal. Solution; 0,5 g O; 0,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA13,trovafloxacino,"0,2g","0,2g",,,,,,"0,2 g O; 0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA14,moxifloxacino,"0,4g","0,4g",,,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA15,gemifloxacino,"0,32g","0,2g",,,,,,"0,32 g O; 0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA16,gatifloxacino,"0,4g","0,4g",,,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA17,prulifloxacino,"0,6g",,,,,,,"0,6 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA18,pazufloxacino,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA19,garenoxacina,"0,4g",,,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA21,sitafloxacino,"0,1g",,,,,,,"0,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA22,tosufloxacino,"0,45g",,,,,,,"0,45 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA23,delafloxacina,"0,9g","0,6g",,,,,,"0,9 g O; 0,6 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA24,levonadifloxacino,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MA,Fluoroquinolonas,J01MA25,lascufloxacino,75mg,,,,,,,75 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB01,rosoxacina,"0,3g",,,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB02,cido nalidxico,4g,,,,,,,4 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB03,cido piromdico,2g,,,,,,,2 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB04,cido pipemdico,"0,8g",,,,,,,"0,8 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB05,cido oxolnico,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB06,cinoxacina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB07,flumequina,"1,2g",,,,,,,"1,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01M,Quinolonas Antibacterianas,J01MB,Otras quinolonas,J01MB08,nemonoxacina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA01,"penicilinas, combinaciones con otros antibacterianos",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA02,"sulfonamidas, combinaciones con otros antibacterianos (excluida la trimetoprima)",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA03,cefuroxima y metronidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA04,espiramicina y metronidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA05,levofloxacina y ornidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA06,cefepima y amikacina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA07,"azitromicina, fluconazol y secnidazol",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA08,tetraciclina y oleandomicina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA09,ofloxacina y ornidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA10,ciprofloxacina y metronidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA11,ciprofloxacino y tinidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA12,ciprofloxacino y ornidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA13,norfloxacino y tinidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA14,norfloxacina y metronidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01R,Combinaciones de Antibacterianos,J01RA,Combinaciones de antibacterianos,J01RA15,cefixima y ornidazol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XA,Glicopptidos antibacterianos,J01XA01,vancomicina,,2g,,,,,,2 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XA,Glicopptidos antibacterianos,J01XA02,teicoplanina,,"0,4g",,,,,,"0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XA,Glicopptidos antibacterianos,J01XA03,telavancina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XA,Glicopptidos antibacterianos,J01XA04,dalbavancin,,"1,5g",,,,,,"1,5 g P",course dose,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XA,Glicopptidos antibacterianos,J01XA05,oritavancina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XB,Poliximinas,J01XB01,colistina,,9MU,,,,,3MU,3 MU Inhal.powder; 3 MU Inhal.solution; 9 MU P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XB,Poliximinas,J01XB02,polimixina B,,"1,5g",,,,,,"0,15 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XC,Esteroides antibacterianos,J01XC01,cido fusdico,"1,5g","1,5g",,,,,,"1,5 g O; 1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XD,Derivados Imidazlicos,J01XD01,metronidazol,,"1,5g",,,,,,"1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XD,Derivados Imidazlicos,J01XD02,tinidazol,,"1,5g",,,,,,"1,5 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XD,Derivados Imidazlicos,J01XD03,ornidazol,,1g,,,,,,1 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XE,Derivados del nitrofurano,J01XE01,nitrofurantona,"0,2g",,,,,,,"0,2 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XE,Derivados del nitrofurano,J01XE02,nifurtoinol,"0,16g",,,,,,,"0,16 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XE,Derivados del nitrofurano,J01XE03,furazidina,"0,3g",,,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XE,Derivados del nitrofurano,J01XE51,"nitrofurantona, combinaciones",,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX01,fosfomicina,3g,8g,,,,,,3 g O; 8 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX02,xibornol,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX03,clofoctol,,,"1,5g",,,,,"1,5 g R",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX04,espectinomicina,,3g,,,,,,3 g P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX05,metenamina,2g,3g,,,,,,2 g O; 3 g O,hippurate; mandelate,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX06,cido mandlico,12g,,,,,,,12 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX07,nitroxolina,1g,,,,,,,1 g O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX08,linezolid,"1,2g","1,2g",,,,,,"1,2 g O; 1,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX09,daptomicina,,"0,28g",,,,,,"0,28 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX10,bacitracina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX11,tedizolid,"0,2g","0,2g",,,,,,"0,2 g O; 0,2 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,J01,J01X,Otros Antibacterianos,J01XX,Otros antibacterianos,J01XX12,lefamulina,,,,,,,,,,https://www.whocc.no/atc_ddd_index
