@@ -62,3 +62,7 @@ Follow the steps below.
   3. Go to the "OUTPUTS" tab and download the results.
 
 ## MINIMUM REQUIREMENTS FOR DEPLOYMENT
+
+
+[![DOI](https://zenodo.org/badge/671438742.svg)](https://zenodo.org/badge/latestdoi/671438742)
+<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" ><img src="https://img.shields.io/badge/license-CC--BY%204.0-lightgrey" alt="License: CC-BY 4.0"></a>
