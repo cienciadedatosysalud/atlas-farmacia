@@ -1,2 +1,6 @@
 **/docs/CDM/hashed_files_list.json
 **/inputs/data.duckdb
+
+atlas_opioides/src/analysis-scripts/.Rhistory
+
+atlas_antibioticos/src/analysis-scripts/.Rhistory
