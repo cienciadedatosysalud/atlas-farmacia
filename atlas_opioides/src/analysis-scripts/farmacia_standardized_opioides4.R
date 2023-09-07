@@ -65,7 +65,7 @@ leerDataAño4 <- function(año){
 with partial_df as (
 select
 	envase_id,
-	isoyear(fecha_dispensacion_dt) as año,
+	year(fecha_dispensacion_dt) as año,
 	paciente_id,
 	CASE
 		WHEN edad_nm >= 0

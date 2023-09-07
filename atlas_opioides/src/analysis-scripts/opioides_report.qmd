@@ -236,7 +236,7 @@ registros_zbs_total_fail <- dbGetQuery(conn = con, '
                                        with partial_df as (
 select
 	envase_id,
-	isoyear(fecha_dispensacion_dt) as año_cd,
+	year(fecha_dispensacion_dt) as año_cd,
 	paciente_id,
 	CASE
 		WHEN edad_nm >= 0
@@ -414,7 +414,7 @@ tabla_envases_año <- dbGetQuery(conn=con,
 from
 	(
 	select
-		isoyear(fecha_dispensacion_dt) as año_cd,
+		year(fecha_dispensacion_dt) as año_cd,
 		paciente_id,
     envase_id,
 		atc_farmaco_dispensado_cd[1:5] as atc_farmaco_dispensado_short,
@@ -446,7 +446,7 @@ evolucion_temporal_tsi <- dbGetQuery(conn=con,
 from
 	(
 	select
-		isoyear(fecha_dispensacion_dt) as año_cd,
+		year(fecha_dispensacion_dt) as año_cd,
 		paciente_id,
     envase_id,
 		atc_farmaco_dispensado_cd[1:5] as atc_farmaco_dispensado_short,
@@ -468,7 +468,7 @@ aggregated_output <- dbGetQuery(conn = con,
                   "with partial_df as (
 select
 	envase_id,
-	isoyear(fecha_dispensacion_dt) as año_cd,
+	year(fecha_dispensacion_dt) as año_cd,
 	month(fecha_dispensacion_dt) as mes_cd,
 	paciente_id,
 	CASE
@@ -569,7 +569,7 @@ rm(aggregated_output)
 
 evolucion_temporal_envases_atc <- dbGetQuery(conn=con,
                   " SELECT
-	isoyear(fecha_dispensacion_dt) as año_cd,
+	year(fecha_dispensacion_dt) as año_cd,
 	atc_farmaco_dispensado_cd[1:7] as atc_farmaco_dispensado_short,
   count(DISTINCT envase_id) as n_envases,
 	sum(ddd_por_envase) as consumo_ddd,
@@ -583,7 +583,7 @@ GROUP BY
 
 df_piramide <- dbGetQuery(conn=con,
                   "SELECT
-  isoyear(fecha_dispensacion_dt) as año_cd,
+  year(fecha_dispensacion_dt) as año_cd,
 	sexo_cd,
 		CASE
 		WHEN edad_nm >= 0
@@ -635,7 +635,7 @@ df_piramide <- df_piramide %>% filter(año_cd %in% max(año_cd,na.rm=TRUE))
 
 consumo_zbs_total <- dbGetQuery(conn=con,
   " SELECT
-  isoyear(fecha_dispensacion_dt) as año_cd,
+  year(fecha_dispensacion_dt) as año_cd,
 	atc_farmaco_dispensado_cd[1:7] as atc_farmaco_dispensado_short,
   zbs_residencia_cd,
 	count(DISTINCT paciente_id) as pacientes_nm,
@@ -665,7 +665,7 @@ distri_zbs_atc <- dbGetQuery(conn=con,
 from
 	(
 	select
-		isoyear(fecha_dispensacion_dt) as año_cd,
+		year(fecha_dispensacion_dt) as año_cd,
     zbs_residencia_cd,
 		paciente_id,
     envase_id,
@@ -1338,7 +1338,7 @@ plot_evo_temp_atc <- function(ind){
     data_filter <- evolucion_temporal_envases_atc %>% filter(grepl(ind, atc_farmaco_dispensado_short))
     list_atc_4_ <- list_atc_4 %>% filter(codigo %in% ind)
     
-    plot <- ggplot(data_filter,aes(x = año_cd, y=n_envases, group = descripcion,  text = paste("Año:", año_cd, "\nNº envases:", n_envases))) + 
+    plot <- ggplot(data_filter,aes(x = año_cd, y=n_envases, group = descripcion,  text = paste("Año:", año_cd, "\nNº envases:", n_envases))) + geom_point(aes(color = descripcion),size=0.5) +
   geom_line(aes(color = descripcion)) +
     labs(title = 'Evolución temporal del Nº de envases dispensados por año',
        subtitle = list_atc_4_$descripcion,
@@ -1418,7 +1418,7 @@ La siguiente figura que se muestra es interactiva. Colocando el cursor sobre cad
 ```{r}
 #| label: Consumo ZBS total
 
-pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% max(año_cd)) %>% 
+pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% max(consumo_zbs_total$año_cd,na.rm=TRUE)) %>% 
   group_by(año_cd,zbs_residencia_cd) %>% summarise(n_poblacion = sum(n_poblacion,na.rm=TRUE))
 pobla_tsi_$año_cd <- as.numeric(pobla_tsi_$año_cd)
 
