@@ -1845,7 +1845,7 @@ list_variables <- unique(data$variable)
 
 
 df_names_var_te <- data.frame(variable = c('dhd', 'pvp'),
-                              title = c('Consumo (DHD) mg', 'Gasto (PVP) €'))
+                              title = c('Consumo (DHD) mg', 'Gasto (PVP) € por habitante'))
 
 
 

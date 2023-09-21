@@ -1800,7 +1800,7 @@ list_variables <- unique(data$variable)
 
 
 df_names_var_te <- data.frame(variable = c('dhd', 'pvp'),
-                              title = c('Consumo (DHD) mg', 'Gasto (PVP) €'))
+                              title = c('Consumo (DHD) mg', 'Gasto (PVP) € por habitante'))
 # data_csv <- data %>% dplyr::select(te,año,variable,indicator) %>%  group_by(año,variable,indicator) %>% mutate(P50_año = median(te,na.rm=TRUE)) %>% 
 #   group_by(variable,indicator) %>% 
 #   mutate(P50_total = median(te,na.rm=TRUE)) %>% 
