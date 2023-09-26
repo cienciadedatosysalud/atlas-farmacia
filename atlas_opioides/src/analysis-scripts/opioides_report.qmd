@@ -632,7 +632,7 @@ GROUP BY
   sexo_cd,
   año_cd")
 df_piramide <- df_piramide %>% filter(año_cd %in% max(año_cd,na.rm=TRUE))
-
+df_piramide <- df_piramide %>% filter(sexo_cd %in% c(1,2))
 consumo_zbs_total <- dbGetQuery(conn=con,
   " SELECT
   year(fecha_dispensacion_dt) as año_cd,
