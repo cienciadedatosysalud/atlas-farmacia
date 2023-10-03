@@ -587,9 +587,9 @@ df_piramide <- dbGetQuery(conn=con,
 	sexo_cd,
 		CASE
 		WHEN edad_nm >= 0
-		and edad_nm <= 4 THEN '0-4 años'
+		and edad_nm <= 4 THEN '00-04 años'
 		WHEN edad_nm >= 5
-		and edad_nm <= 9 THEN '5-9 años'
+		and edad_nm <= 9 THEN '05-09 años'
 		WHEN edad_nm >= 10
 		and edad_nm <= 14 THEN '10-14 años'
 		WHEN edad_nm >= 15
@@ -1761,6 +1761,7 @@ plot_evo_tsi <- function(tsi){
        y = df_variables_$descrip,
        x = 'Año') +
   theme_minimal() +
+  theme(plot.title = element_text(size=12)) +  
   guides(fill=guide_legend(title="ATC fármaco"))
     p[[var]] <- plot
   
