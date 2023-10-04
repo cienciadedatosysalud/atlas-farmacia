@@ -39,7 +39,8 @@ Patients without an active health card, and patients without dispensing/billing 
 ### Study period: 
 From 01-01-2013 until 31-12-2022 (or the more recent date available)
 
-## HOW TO RUN
+## IN ORDER TO RUN THE DOCKER AND ANTIBIOTICS OR OPIOIDS ANALYSIS, FOLLOW THE 3 NEXT STEPS
+## 1-HOW TO RUN THE DOCKER
 Use the following code snippet to create the container.
 ```bash
 docker pull ghcr.io/cienciadedatosysalud/atlas-farmacia:latest
@@ -49,13 +50,13 @@ docker run -d -p 127.0.0.1:3000:3000 --name atlas-farmacia-aspire ghcr.io/cienci
 # Open your web browser at http://localhost:3000.
 ```
 
-## Run the analysis of variations in the consumption of antibiotics.
+## 2-Run the analysis of variations in the consumption of antibiotics.
 Follow the steps below.
   1. Map your data in the "MAP DATA" tab.
   2. If everything has worked well, in the "RUN ANALYSIS" tab, select the project "Variaciones en el consumo de antibióticos por ZBS (y CCAA)" and select the script "**antibioticos_report.qmd**"
   3. Go to the "OUTPUTS" tab and download the results.
 
-## Run the analysis of variations in the consumption of opioids.
+## 3-Run the analysis of variations in the consumption of opioids.
 Follow the steps below.
   1. Map your data in the "MAP DATA" tab.
   2. If everything has worked well, in the "RUN ANALYSIS" tab, select the project "Variaciones en el consumo de opioides por ZBS (y CCAA)" and select the script "**opioides_report.qmd**"
