@@ -42,9 +42,8 @@ library(plotly)
 library(ggalluvial)
 library(ggrepel)
 library(scales)
-## new
-#library(gtExtras)
 
+options(scipen = 999)
 ```
 
 
@@ -127,10 +126,10 @@ dbDisconnect(con, shutdown=TRUE)
 ```{r, output=FALSE}
 #| label: cargar scripts
 log_info('Calculando tasas estandarizadas e indicadores estadísticos para ATC 4 caracteres')
-source('./farmacia_standardized_opioides4.R')
+source('./auxiliar_scripts/farmacia_standardized_opioides4.R')
 rm(list=ls())
 log_info('Calculando tasas estandarizadas e indicadores estadísticos para ATC 5 caracteres')
-source('./farmacia_standardized_opioides5.R')
+source('./auxiliar_scripts/farmacia_standardized_opioides5.R')
 rm(list=ls())
 ```
 
@@ -153,8 +152,9 @@ for(file in names_files_est){
 }
 # eliminar los archivos
 file.remove(names_files_est)
-write.csv(df, file = paste0(outputs_path,"opioides_estadisticosobs.csv"),
-            row.names = FALSE)
+df <- df %>% rename(year = año)
+write.table(df, file = paste0(outputs_path,"opioides_estadisticosobs.csv"),
+            row.names = FALSE, sep = '|')
 
 
 
@@ -173,8 +173,9 @@ for(file in names_files_te){
 }
 # eliminar ficheros
 file.remove(names_files_te)
-write.csv(df, file = paste0(outputs_path,"opioides_indicators_rates.csv"),
-            row.names = FALSE)
+df <- df %>% rename(std_rate = te, cum_var = total, year = año)
+write.table(df, file = paste0(outputs_path,"opioides_indicators_rates.csv"),
+            row.names = FALSE,  sep = '|')
 
 
 ```
@@ -930,7 +931,7 @@ siendo *Nº DDD* el sumatorio de DDD por envase y *población* la población en 
 :::
 
 
-# Resultados del Análisis local (CCAA) 
+# Resultados del Análisis local (CCAA: `r list_ccaa`)
 
 ## Descriptivo
 ::: {.justify}
@@ -1287,6 +1288,8 @@ Las siguientes figuras que se muestran son interactivas. Colocando el cursor a l
 
 ```{r}
 ## label: Evolución temporal del número de envases de cada ATC dentro de los grupos mayores
+
+
 list_atc_4 <- data.frame(codigo = c("N02AA",
              'N02AB',
              'N02AX',
@@ -1345,7 +1348,7 @@ plot_evo_temp_atc <- function(ind){
        y = 'Nº de envases dispensados',
        x = 'Año',
        color=NULL) +
-  theme_minimal_hgrid() +
+  theme_minimal_hgrid() +  scale_y_continuous(trans = 'log10') +
       theme(legend.position = 'bottom', legend.text = element_text(size=10))
         plot <- ggplotly(plot, tooltip = 'text') %>% 
   layout(title = list(text = paste0('Nº de envases dispensados por año',
@@ -1361,6 +1364,7 @@ plot_evo_temp_atc <- function(ind){
 
 plot_evo_temp_atc_nenv <- lapply(list_atc_4$codigo, plot_evo_temp_atc)
 rm(evolucion_temporal_envases_atc)
+
 ```
 
 ::: {.panel-tabset}
@@ -1835,10 +1839,10 @@ A continuación, se muestra la distribución del consumo (DHD) y el gasto (PVP) 
 
 ```{r}
 #| label: funcion para plotear violines
-data <- read.csv('../../outputs/opioides_indicators_rates.csv', sep = ",",colClasses=c("codatzbs"="character"))
+data <- read.csv('../../outputs/opioides_indicators_rates.csv', sep = "|",colClasses=c("codatzbs"="character"))
 data$variable[data$variable=='ddd'] <- 'dhd'
 data <- data %>% filter(indicator %nin% 'N02A')
- 
+
 df_list_indicators <- data.frame(indicators = c('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE'),
                                  descr = c('Alcaloides naturales del opio', 'Derivados de fenilpiperidina', 'Otros opioides',
                                            'Opioides en combinación con analgésicos no opioides','Derivados de oripavina'))
@@ -1869,7 +1873,7 @@ plot_te_per_year <- function(var){
     df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
     df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
     
-    plot <- ggplot(data=data_filter, aes(x=año, y=te, group = año)) +
+    plot <- ggplot(data=data_filter, aes(x=year, y=std_rate, group = year)) +
       geom_violin(trim = FALSE, color = 'black', alpha = 0.4) + 
       stat_summary(fun = "median",
                geom = "crossbar", 
@@ -1882,10 +1886,10 @@ plot_te_per_year <- function(var){
            y = df_names_var_te_$title) +
       scale_x_continuous(limits = c(2012, 2023), breaks = seq(2013, 2022, by = 1)) +
       theme_minimal_hgrid() + 
-      geom_hline(data=data_filter, mapping=aes(yintercept=median(te,na.rm = TRUE)), color="red") +
-      geom_text(x=2023, y=max(data_filter$te,na.rm=TRUE), label="| P50 (2013-2022)", color = 'red', size=4,hjust=1) + 
-      geom_text(x=2023, y=median(data_filter$te,na.rm = TRUE), label=paste0('                ',round(median(data_filter$te,na.rm = TRUE),2)), color = 'red', size=4) +
-      geom_text(x=2022.5, y=max(data_filter$te,na.rm=TRUE), label="| P50 año", color = 'black',hjust=1) + 
+      geom_hline(data=data_filter, mapping=aes(yintercept=median(std_rate,na.rm = TRUE)), color="red") +
+      geom_text(x=2023, y=max(data_filter$std_rate,na.rm=TRUE), label="| P50 (2013-2022)", color = 'red', size=4,hjust=1) + 
+      geom_text(x=2023, y=median(data_filter$std_rate,na.rm = TRUE), label=paste0('                ',round(median(data_filter$std_rate,na.rm = TRUE),2)), color = 'red', size=4) +
+      geom_text(x=2022.5, y=max(data_filter$std_rate,na.rm=TRUE), label="| P50 año", color = 'black',hjust=1) + 
       coord_flip()
     p[[ind]] <- plot
   }
