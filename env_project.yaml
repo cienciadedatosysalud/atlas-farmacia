@@ -2,6 +2,7 @@ name: aspire
 channels:
  - conda-forge
 dependencies:
+- chardet==5.2.0
 - r-base=4.2.3
 - r-knitr=1.42
 - r-rmarkdown=2.23

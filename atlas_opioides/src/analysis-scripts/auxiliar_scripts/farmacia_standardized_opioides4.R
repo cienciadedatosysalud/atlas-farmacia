@@ -15,6 +15,7 @@ leerPoblacionAño <- function(año,data){
                                               GROUP BY año_cd,ccaa_cd,zbs_residencia_cd,grupo_edad_cd,sexo_cd")) %>%
     rename(sexo = sexo_cd,
            gqe = grupo_edad_cd)
+
   comb_zbs <- population$zbs_residencia_cd %>% unique()
   comb_gqe <- seq(1,18)
   comb_sexo <- seq(1,2)
@@ -29,6 +30,8 @@ leerPoblacionAño <- function(año,data){
   
   population <- merge(x=comb_total,y=population,all.x = TRUE)
   population$ccaa_cd <- ccaa_cd
+  
+
   
   dbDisconnect(con, shutdown=TRUE)
   log_info('Disconnect to population database')
@@ -53,7 +56,6 @@ getPoblacionRef <- function(año){
   dbDisconnect(con, shutdown=TRUE)
   return(poblacion_ref)
 }
-
 
 leerDataAño4 <- function(año){
   log_info(paste0('Connect to database  (',año,')'))
@@ -117,14 +119,14 @@ select
 	precio_por_envase_nm
 from
 	main.envase_dispensado_view)
-select a.* from (select atc_farmaco_dispensado_5 as atc_farmaco_dispensado ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd , 
+select a.* from (select atc_farmaco_dispensado_4 as atc_farmaco_dispensado ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd , 
 sum(ddd_nomenclator_nm) as ddd_nomenclator_nm, 
 sum(ddd_por_envase) as ddd_por_envase,
 sum(pvp_nomenclator_nm) as pvp_nomenclator_nm,
 sum(precio_por_envase_nm) as precio_por_envase_nm,
 count(DISTINCT paciente_id) as pacientes_nm,
 count(DISTINCT envase_id) as n_envases,
-from partial_df where año = ",año," and sexo_cd in (1,2) group by atc_farmaco_dispensado_5 ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd) a 
+from partial_df where año = ",año," and sexo_cd in (1,2) group by atc_farmaco_dispensado_4 ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd) a 
 "
   )) %>% 
     rename(sexo = sexo_cd,
@@ -144,7 +146,6 @@ from partial_df where año = ",año," and sexo_cd in (1,2) group by atc_farmaco_
   dbDisconnect(con, shutdown=TRUE)
   log_info('Disconnect to database')
   return(indicador_)
-  
 }
 
 leer_asignar_relaciones_zbs <- function(data){
@@ -181,10 +182,11 @@ getRatesByIndicator <- function(data,population_ref,population_aux){
     data_clean <- data_clean %>% mutate(rate = ((1000*casos)/(365*n_poblacion)))
     rate_dsr <- data_clean %>% group_by(codatzbs) %>% summarise(te = round(sum(st_pop * rate),4),
                                                                 casos= sum(casos,na.rm=TRUE),
-                                                                n_poblacion = sum(365*n_poblacion,na.rm=TRUE))
+                                                                n_poblacion = sum(n_poblacion,na.rm=TRUE))
     
     
   }else{
+    
     p <- data %>% group_by(codatzbs,gqe,sexo) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
     population_aux_ <- population_aux %>% group_by(codatzbs,gqe,sexo) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
     population_ref_ <- population_ref %>% ungroup() %>% mutate(total = sum(pop))
@@ -222,17 +224,9 @@ getRates <- function(indicator,data,patient_variables,population,population_ref,
   return(rates)
 }
 
-writeResults <- function(indicators_rates, estadisticosobs,year,variable_indicator_name){
-  write.csv(indicators_rates, file = paste0(outputs_path,"opioides5_indicators_rates_",as.character(variable_indicator_name),".csv"), 
-            row.names = FALSE)
-  write.csv(estadisticosobs, file = paste0(outputs_path,"opioides5_estadisticosobs_",as.character(variable_indicator_name),".csv"), 
-            row.names = FALSE)
-}
-
 
 writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
   indicator_name <- indicators_list[1]
-
   values <- indicators_rates[indicators_rates$indicator == indicator_name,
                              c("codatzbs","population","casos","te","n_zbs")]
   
@@ -241,7 +235,7 @@ writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
   
   names(objeto) <- c(indicator_name)
   
-  for(i in 2:length(indicators_list)){
+  for(i in 1:length(indicators_list)){
     indicator_name <- indicators_list[i]
     values <- indicators_rates[indicators_rates$indicator == indicators_list[i],c("codatzbs","population","casos","te","n_zbs")]
     objeto[[i]] <- values
@@ -272,12 +266,14 @@ writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
     cvp<-sqrt(sum(((te-mean(te))^2)*population)/(sum(population)-1))/sum(te*population/sum(population))
     cvp95<-sqrt(sum(((te[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95, na.rm = TRUE)]-mean(te[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95, na.rm = TRUE)]))^2)*population[te>quantile(te, 0.05,na.rm = TRUE)& te<quantile(te, 0.95,na.rm = TRUE)])/(sum(population[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95,na.rm = TRUE)])-1))/sum(te[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95, na.rm = TRUE)]*population[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95, na.rm = TRUE)]/sum(population[te>quantile(te, 0.05, na.rm = TRUE)& te<quantile(te, 0.95, na.rm = TRUE)]))
     
+    
     estadisticosobs[i,1:7]<-round(cbind(rv, rv95,rv75, cv, cv95, cvp, cvp95),3)
     detach(2)
   }
   
   
   estadisticosobs<-data.frame(estadisticosobs, row.names=names(objeto))
+
   names(estadisticosobs)<-c("rv", "rv95", "rv75", "cv", "cv95", "cvp", "cvp95")
   t(round(estadisticosobs,2))
   
@@ -311,29 +307,23 @@ for(variable_indicator in c('ddd_por_envase','pvp_nomenclator_nm')){
       pop$n_poblacion[is.na(pop$n_poblacion)] <- 0
       population_ref <- getPoblacionRef(año)
       patient_variables <- c("zbs","gqe","sexo","tsi","codatzbs","n_zbs")
-    
-    indicators_list <- c('N02AA',
-                         'N02AB',
-                         'N02AX',
-                         'N02AJ',
-                         'N02AE'
-    )
+      indicators_list <- c('N02A')
     
     
-    indicators_rates <- lapply(indicators_list, getRates,
+      indicators_rates <- lapply(indicators_list, getRates,
                                data=data,
                                patient_variables=patient_variables,
                                population=pop,
                                population_ref=population_ref,
                                variable_indicator=variable_indicator) %>% bind_rows()
     
-    writeResults2(indicators_rates,indicators_list, variable_indicator_)
-    
+      writeResults2(indicators_rates,indicators_list, variable_indicator_)
+
     }
   }
-  write.csv(indicators_rates_total, file = paste0(outputs_path,"opioides5_indicators_rates_",as.character(variable_indicator_),".csv"), 
+  write.csv(indicators_rates_total, file = paste0(outputs_path,"opioides4_indicators_rates_",as.character(variable_indicator_),".csv"), 
             row.names = FALSE)
-  write.csv(estadisticosobs_total, file = paste0(outputs_path,"opioides5_estadisticosobs_",as.character(variable_indicator_),".csv"), 
+  write.csv(estadisticosobs_total, file = paste0(outputs_path,"opioides4_estadisticosobs_",as.character(variable_indicator_),".csv"), 
             row.names = FALSE)
 }
 
