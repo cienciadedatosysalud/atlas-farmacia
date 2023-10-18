@@ -160,7 +160,7 @@ write.table(df, file = paste0(outputs_path,"antibioticos_estadisticosobs.csv"),
 
 
 
-#### Tasas ####
+#### std_values ####
 
 names_files_te <- list.files(path=outputs_path, pattern = '[3-4]_indicators_rates', full.names=TRUE)
 df_names_files_te <- data.frame(names_files = names_files_te,
@@ -181,7 +181,17 @@ df <- df %>% dplyr::select(year, codatzbs, n_zbs, indicator, cum_var, population
 write.table(df, file = paste0(outputs_path,"antibioticos_dhd_pvp_population_values.csv"),
             row.names = FALSE, sep = '|')
 
-
+df_ <- df %>% group_by(year, indicator, variable) %>% 
+  summarise(mean_std_value = round(mean(std_value, na.rm=TRUE),2),
+            sd_std_value = round(sd(std_value, na.rm = TRUE),2),
+            p_05_std_value = round(quantile(std_value, 0.05, na.rm=TRUE),2),
+            p_25_std_value = round(quantile(std_value, 0.25, na.rm=TRUE),2),
+            p_50_std_value = round(quantile(std_value, 0.50, na.rm=TRUE),2),
+            p_75_std_value = round(quantile(std_value, 0.75, na.rm=TRUE),2),
+            p_95_std_value = round(quantile(std_value, 0.95, na.rm=TRUE),2)
+            )
+write.table(df_, file = paste0(outputs_path,"antibioticos_dhd_pvp_resumen_anual.csv"),
+            row.names = FALSE,  sep = '|')
 ```
 
 
