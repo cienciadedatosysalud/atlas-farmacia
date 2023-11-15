@@ -181,7 +181,7 @@ getRatesByIndicator <- function(data,population_ref,population_aux){
     data_clean <- data_clean %>% mutate(rate = ((1000*casos)/(365*n_poblacion)))
     rate_dsr <- data_clean %>% group_by(codatzbs) %>% summarise(te = round(sum(st_pop * rate),4),
                                                                 casos= sum(casos,na.rm=TRUE),
-                                                                n_poblacion = sum(365*n_poblacion,na.rm=TRUE))
+                                                                n_poblacion = sum(n_poblacion,na.rm=TRUE))
     
     
   }else{
