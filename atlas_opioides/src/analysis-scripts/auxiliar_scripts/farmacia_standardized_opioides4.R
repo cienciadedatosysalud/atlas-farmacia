@@ -168,7 +168,9 @@ getRatesByIndicator <- function(data,population_ref,population_aux){
                     y=population_ref[,c("gqe","sexo","pop")],
                     by=c("gqe","sexo"))
   
-  
+  data <- data %>% filter(gqe>=4)
+  population_aux <- population_aux %>% filter(gqe>=4)
+  population_ref <- population_ref %>% filter(gqe>=4)
   #####  
   if(variable_indicator_ == 'ddd'){
     

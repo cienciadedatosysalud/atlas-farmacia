@@ -190,7 +190,6 @@ df_ <- df %>% group_by(year, indicator, variable) %>%
             )
 write.table(df_, file = paste0(outputs_path,"opioides_dhd_pvp_resumen_anual.csv"),
             row.names = FALSE,  sep = '|')
-
 ```
 
 
@@ -650,7 +649,6 @@ df_piramide <- df_piramide %>% filter(sexo_cd %in% c(1,2))
 consumo_zbs_total <- dbGetQuery(conn=con,
   " SELECT
   year(fecha_dispensacion_dt) as año_cd,
-	atc_farmaco_dispensado_cd[1:7] as atc_farmaco_dispensado_short,
   zbs_residencia_cd,
 	count(DISTINCT paciente_id) as pacientes_nm,
   count(DISTINCT envase_id) as n_envases,
@@ -660,8 +658,7 @@ from
 		main.envase_dispensado_view
 GROUP BY 
   año_cd,
-  zbs_residencia_cd,
-  atc_farmaco_dispensado_short 
+  zbs_residencia_cd
 ")
 consumo_zbs_total <- consumo_zbs_total %>% filter(año_cd %in% max(año_cd,na.rm=TRUE))
 
@@ -1424,7 +1421,7 @@ plot_evo_temp_atc_nenv[[5]]$N02AE
 
 ## Consumo (DHD) por ZBS en el último año disponible 
 ::: {.justify}
-Se muestra el consumo (DHD) por ZBS en el último año disponible, ordenados de menor a mayor y coloreados por quintiles.
+Se muestra el consumo (DHD) para el grupo mayor N02A por ZBS en el último año disponible, ordenados de menor a mayor y coloreados por quintiles.
 :::
 ::: {.callout-tip}
 ## Nota informativa
@@ -1435,33 +1432,24 @@ La siguiente figura que se muestra es interactiva. Colocando el cursor sobre cad
 ```{r}
 #| label: Consumo ZBS total
 
-pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% max(consumo_zbs_total$año_cd,na.rm=TRUE)) %>% 
-  group_by(año_cd,zbs_residencia_cd) %>% summarise(n_poblacion = sum(n_poblacion,na.rm=TRUE))
-pobla_tsi_$año_cd <- as.numeric(pobla_tsi_$año_cd)
-
-consumo_zbs_total_ <- left_join(x=consumo_zbs_total , y = rel_zbs_codatzbs[c('zbs_residencia_cd','n_zbs')], by = c('zbs_residencia_cd'))
-consumo_zbs_total_ <- left_join(x=consumo_zbs_total_, y=pobla_tsi_, by = c('año_cd',"zbs_residencia_cd"))
-consumo_zbs_total_ <- consumo_zbs_total_ %>% group_by(n_zbs,año_cd) %>% summarise(consumo_ddd = sum(consumo_ddd, na.rm=TRUE),
-                                                                                n_poblacion = sum(n_poblacion,na.rm=TRUE))
-
-
-consumo_zbs_total_ <- consumo_zbs_total_ %>% mutate(DHD_milhab=round((1000*consumo_ddd)/(365*n_poblacion),2))
-
-
-# consumo_zbs_total_$Quintil[consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 0.2, na.rm=TRUE)] <- "#ffffb2"
+# pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% max(consumo_zbs_total$año_cd,na.rm=TRUE)) %>% 
+#   group_by(año_cd,zbs_residencia_cd) %>% summarise(n_poblacion = sum(n_poblacion,na.rm=TRUE))
+# pobla_tsi_$año_cd <- as.numeric(pobla_tsi_$año_cd)
 # 
-# consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.2, na.rm=TRUE) < consumo_zbs_total_$DHD_milhab &
-#              consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 0.4, na.rm=TRUE)] <- "#fecc5c"
+# consumo_zbs_total_ <- left_join(x=consumo_zbs_total , y = rel_zbs_codatzbs[c('zbs_residencia_cd','n_zbs')], by = c('zbs_residencia_cd'))
+# consumo_zbs_total_ <- left_join(x=consumo_zbs_total_, y=pobla_tsi_, by = c('año_cd',"zbs_residencia_cd"))
+# consumo_zbs_total_ <- consumo_zbs_total_ %>% group_by(n_zbs,año_cd) %>% summarise(consumo_ddd = sum(consumo_ddd, na.rm=TRUE),
+#                                                                                 n_poblacion = sum(n_poblacion,na.rm=TRUE))
 # 
-# consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.4, na.rm=TRUE) < consumo_zbs_total_$DHD_milhab &
-#              consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 0.6, na.rm=TRUE)] <- "#fd8d3c"
 # 
-# consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.6, na.rm=TRUE) < consumo_zbs_total_$DHD_milhab &
-#              consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 0.8, na.rm=TRUE)] <- "#f03b20"
-# 
-# consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.8, na.rm=TRUE) < consumo_zbs_total_$DHD_milhab &
-#              consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 1, na.rm=TRUE)] <- "#b30000"
-# 
+# consumo_zbs_total_ <- consumo_zbs_total_ %>% mutate(DHD_milhab=round((1000*consumo_ddd)/(365*n_poblacion),2))
+
+
+consumo_zbs_total_ <- read.csv('../../outputs/opioides_dhd_pvp_population_values.csv', sep = '|')
+consumo_zbs_total_ <- consumo_zbs_total_ %>% filter(year %in% max(year,na.rm=TRUE))
+consumo_zbs_total_ <- consumo_zbs_total_ %>% filter(variable %in% 'dhd', indicator %in% 'N02A')
+consumo_zbs_total_$DHD_milhab <- round(consumo_zbs_total_$std_value,2)
+
 consumo_zbs_total_$Quintil[consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 0.2, na.rm=TRUE)] <- "quintil 1"
 
 consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.2, na.rm=TRUE) < consumo_zbs_total_$DHD_milhab &
@@ -1477,10 +1465,6 @@ consumo_zbs_total_$Quintil[quantile(consumo_zbs_total_$DHD_milhab, 0.8, na.rm=TR
              consumo_zbs_total_$DHD_milhab <= quantile(consumo_zbs_total_$DHD_milhab, 1, na.rm=TRUE)] <- "quintil 5"
 
 
-
-# consumo_zbs_total_ <- consumo_zbs_total_ %>% mutate(color = ifelse(DHD_milhab > median(consumo_zbs_total_$DHD_milhab,na.rm=TRUE), '#8F0000','#1e4620'))
-# 
-# consumo_zbs_total_$color[consumo_zbs_total_$DHD_milhab == median(consumo_zbs_total_$DHD_milhab,na.rm=TRUE)] <- 'gray70'
 consumo_zbs_total_ <- consumo_zbs_total_ %>% filter(!is.na(n_zbs))
 
 p <- ggplot(data=consumo_zbs_total_, aes(x=reorder(n_zbs,DHD_milhab, decreasing=FALSE), y = DHD_milhab, fill = Quintil,
@@ -1497,7 +1481,7 @@ theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(), plot.title =
       panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank()) 
 
 ggplotly(p, tooltip = 'text') %>% 
-  layout(title =  list(text=paste0('Consumo (DHD) de Zona Básica de Salud por quintiles (',consumo_zbs_total_$año_cd,')',
+  layout(title =  list(text=paste0('Consumo (DHD) de Zona Básica de Salud por quintiles (',consumo_zbs_total_$year,')',
                                     '<br>',
                                     '<sup>')),
          margin = list(t = 50),
@@ -1506,14 +1490,14 @@ ggplotly(p, tooltip = 'text') %>%
   
 rm(consumo_zbs_total)
 rm(p)
-rm(pobla_tsi_)
+
 ```
 
 
 ## Distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años en las ZBS de mayor DHD (mayor quintil de consumo) en el último año disponible
 ::: {.justify}
 ```{epoxy}
-Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$año_cd)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. 
+Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$year)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. 
 
 ```
 
@@ -1738,6 +1722,7 @@ Se observa la evolución temporal de las siguientes tres variables según catego
 evolucion_temporal_tsi <- evolucion_temporal_tsi %>% filter(!is.na(tsi_cd))
 evolucion_temporal_tsi$año_cd <- as.integer(evolucion_temporal_tsi$año_cd)
 pobla_tsi_ <- pobla_tsi %>% filter(!is.na(tsi_cd))
+pobla_tsi_ <- pobla_tsi_ %>% filter(grupo_edad_cd>=4)
 pobla_tsi_ <- pobla_tsi_ %>% group_by(año_cd,tsi_cd) %>% summarise(n_poblacion=sum(n_poblacion,na.rm=TRUE))
 pobla_tsi_$año_cd <- as.integer(pobla_tsi_$año_cd)
 
