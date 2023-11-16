@@ -50,20 +50,47 @@ if __name__ == '__main__':
         entity_name = entity['name']
         title = configuration_file['metadata']['use_case'] + ' - ' + entity_name + ' | Profiling Report'
         categorical_variables = [variable["label"] for variable in entity['variables'] if variable['type'] == "Categorical"]
-        query = "Select * from {entity}".format(entity=entity_name)
-        df_entity = con.query(query).to_df()
-        df_entity[categorical_variables] = df_entity[categorical_variables].astype('category')
-        logging.info(f"\"{entity_name}\" entity contains {len(df_entity)} records")
-        if len(df_entity) > 0:
-            profile = ProfileReport(df_entity, title=title, minimal=True)
-            html_out = os.path.join(output_path, "dqa_{usecase}_{entity_}.html".format(
-                usecase=use_case_name,
-                entity_=str(entity_name).replace(' ', '_')
-            ))
-            json_out = os.path.join(output_path, "dqa_{usecase}_{entity_}.json".format(
-                usecase=use_case_name,
-                entity_=str(entity_name).replace(' ', '_')
-            ))
-            profile.to_file(html_out)
-            profile.to_file(json_out)
+
+        # Custom code
+        # Big volume of data >> one report per year
+        if entity_name == "envase_dispensado":
+            query_years = "select distinct YEAR(fecha_dispensacion_dt) as years from main.envase_dispensado where YEAR(fecha_dispensacion_dt) >= 2013 order by YEAR(fecha_dispensacion_dt) ASC"
+            df_years = con.query(query_years).to_df()
+            years = df_years.years.values.tolist()
+            for year in years:
+                query_df = f"select * from main.envase_dispensado where YEAR(fecha_dispensacion_dt) == {year}"
+                df_entity = con.query(query_df).to_df()
+                df_entity[categorical_variables] = df_entity[categorical_variables].astype('category')
+                logging.info(f"\"{entity_name}\" entity ({year}) contains {len(df_entity)} records")
+                profile = ProfileReport(df_entity, title=title, minimal=True)
+                html_out = os.path.join(output_path, "dqa_{usecase}_{entity_}_{year}.html".format(
+                    usecase=use_case_name,
+                    entity_=str(entity_name).replace(' ', '_'),
+                    year=year
+                ))
+                json_out = os.path.join(output_path, "dqa_{usecase}_{entity_}_{year}.json".format(
+                    usecase=use_case_name,
+                    entity_=str(entity_name).replace(' ', '_'),
+                    year=year
+                ))
+                profile.to_file(html_out)
+                profile.to_file(json_out)
+
+        else:
+            query = "Select * from {entity}".format(entity=entity_name)
+            df_entity = con.query(query).to_df()
+            df_entity[categorical_variables] = df_entity[categorical_variables].astype('category')
+            logging.info(f"\"{entity_name}\" entity contains {len(df_entity)} records")
+            if len(df_entity) > 0:
+                profile = ProfileReport(df_entity, title=title, minimal=True)
+                html_out = os.path.join(output_path, "dqa_{usecase}_{entity_}.html".format(
+                    usecase=use_case_name,
+                    entity_=str(entity_name).replace(' ', '_')
+                ))
+                json_out = os.path.join(output_path, "dqa_{usecase}_{entity_}.json".format(
+                    usecase=use_case_name,
+                    entity_=str(entity_name).replace(' ', '_')
+                ))
+                profile.to_file(html_out)
+                profile.to_file(json_out)
     con.close()
