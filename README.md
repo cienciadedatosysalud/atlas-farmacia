@@ -47,8 +47,8 @@ docker pull ghcr.io/cienciadedatosysalud/atlas-farmacia:latest
 
 docker run -d -p 127.0.0.1:3000:3000 --name atlas-farmacia-aspire ghcr.io/cienciadedatosysalud/atlas-farmacia:latest
 
-# Open your web browser at http://localhost:3000.
 ```
+Open your web browser at http://localhost:3000.
 
 ## 2-Run the analysis of variations in the consumption of antibiotics.
 Follow the steps below.
