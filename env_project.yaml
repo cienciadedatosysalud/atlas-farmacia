@@ -10,4 +10,4 @@ dependencies:
 - r-ggrepel=0.9.3
 - r-ggplot2=3.4.2
 - r-plotly=4.10.2
-
+- r-htmlwidgets=1.6.2
