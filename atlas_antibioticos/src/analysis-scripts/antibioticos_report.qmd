@@ -87,7 +87,7 @@ dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_ine (
 
 dbWriteTable(con, "zona_basica_ine", poblaciones_ine_df, append = TRUE)
 
-poblaciones_tarjeta_df <- read.csv(file = 'datos_nivel_zona_basica_tarjeta.csv', sep = '|')
+poblaciones_tarjeta_df <- read.csv(file = 'datos_nivel_zona_basica_tarjeta.csv', sep = '|',colClasses = c(zbs_residencia_cd = 'character'))
 
 dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_tarjeta (
             año_cd VARCHAR,
@@ -100,7 +100,7 @@ dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_tarjeta (
 
 dbWriteTable(con, "zona_basica_tarjeta", poblaciones_tarjeta_df, append = TRUE)
 
-relaciones_df <- read.csv(file = 'relacion_zbs_codatzbs_atlasfarmacia.csv', sep = '|')
+relaciones_df <- read.csv(file = 'relacion_zbs_codatzbs_atlasfarmacia.csv', sep = '|',colClasses = c(zbs_residencia_cd = 'character'))
 
 dbExecute(con, "CREATE OR REPLACE TABLE zbs_residencia_codatzbs (
             zbs_residencia_cd VARCHAR,
