@@ -30,7 +30,11 @@ def infer_encoding(uploaded_file_):
     encoding = detector.result['encoding']
     confidence = detector.result['confidence']
     logging.info(f"The file '{uploaded_file_}' follows an encoding format '{encoding}' at {confidence} confidence.")
-    return encoding
+    if confidence < 0.95:
+        logging.warning(f"Confidence value is too low, 'utf-8' encoding will be applied.")
+        return 'utf-8'    
+    else:
+        return encoding
 
 
 def read_file(entity_structure, dtype_, parse_dates):
@@ -40,7 +44,7 @@ def read_file(entity_structure, dtype_, parse_dates):
             entity_structure['uploaded_filename'],
             sep=entity_structure['separator'],
             dtype=dtype_,
-            #parse_dates=parse_dates,
+            parse_dates=parse_dates,
             encoding=entity_structure['encoding']
         )
         df = df[entity_structure['entity_variables']]  
@@ -70,6 +74,7 @@ def load_file(entity_structure, df):
     logging.info(f"Trying to connect to the database ...")
     try:
         con = duckdb.connect(database_path, read_only=False)
+        con.execute("SET GLOBAL pandas_analyze_sample=500000")
         logging.info(f"Connected!")
         entity_name_ = entity_structure['entity_name']
         logging.info(f"Trying to load records in the table \"{entity_name_}\"")
@@ -94,8 +99,10 @@ def check_file(entity_structure):
             pass
         elif f == 'boolean':
             dtype_[c] = pd.BooleanDtype()
-        elif f == 'date' or f == 'datetime':
-            parse_dates.append(c)
+        elif f == 'date':
+            dtype_[c] = pd.StringDtype()
+        elif f == 'datetime':
+            parse_dates.append(c)    
         elif f == 'integer':
             dtype_[c] = pd.Int64Dtype()
         elif f == 'double':
@@ -177,13 +184,22 @@ if __name__ == '__main__':
     global entities_uploaded
     entities_uploaded = 0
     # Opening JSON file
+    encoding = infer_encoding(configuration_file_path)
     try:
-        with open(configuration_file_path) as configuration_file:
+        with open(configuration_file_path,encoding=encoding) as configuration_file:
             configuration_file = json.load(configuration_file)
     except FileNotFoundError as e:
         logging.error("Configuration file "" is missing!")
         exit(1)
-    logging.info("Configuration file loaded")
+    logging.info("Configuration file loaded\n")
+    CDMB_VERSION = configuration_file["cdmb_version"] if "cdmb_version" in configuration_file else "Non-versioned"
+    ASPIRE_VERSION = os.environ.get('ASPIRE_VERSION', 'Non-versioned')
+    PIPELINE_VERSION = os.environ.get('PIPELINE_VERSION', 'Non-versioned')
+    logging.info("#########################################")
+    logging.info(f"# CDMB version: {CDMB_VERSION}")
+    logging.info(f"# ASPIRE version: {ASPIRE_VERSION}")
+    logging.info(f"# PIPELINE version: {PIPELINE_VERSION}")
+    logging.info("#########################################\n")
     csv_files = glob.glob(upload_files_path + "/*.csv", recursive=True)
     uploaded_file_structure = []
     logging.info(f"-Found {len(csv_files)} uploaded files to check and map!")

@@ -31,6 +31,7 @@ execute:
 
 library(ggplot2)
 library(dplyr)
+library(purrr)
 library(sf)
 library(Hmisc) 
 library(sjmisc)
@@ -45,9 +46,12 @@ library(ggrepel)
 library(scales)
 options(scipen = 999)
 
+s <- Sys.getenv("PIPELINE_VERSION")
+
+log_info(paste0("Versión de los análisis: ",s))
 ```
 
-
+<p> Versión de los análisis: `r paste0(s)` </p>
 
 ```{r, output = FALSE}
 #| label: tabla nomenclator y poblacion 
@@ -847,7 +851,7 @@ Quedan por lo tanto excluidos los habitantes sin derecho a la prestación farmac
 ::: {.callout-warning appearance="simple"}
 
 ```{epoxy}
-Existen {registros_zbs_null$total_envases} registros ({registros_zbs_null$total_pacientes} pacientes) para los que su zona básica de salud es nula en los datos. Hay un total de {registros_zbs_total_fail$total_envases - registros_zbs_null$total_envases} registros ({registros_zbs_total_fail$total_paciente - registros_zbs_null$total_pacientes} pacientes) que se pierden por que no hay población para su zona básica de salud, edad y sexo, por tanto, se pierden se pierden para la @sec-variaciones_zbs {registros_zbs_total_fail$total_envases} de un total de {total$total} registros.
+Existen {registros_zbs_null$total_envases} registros ({registros_zbs_null$total_pacientes} pacientes) para los que su zona básica de salud es nula en los datos. Hay un total de {registros_zbs_total_fail$total_envases - registros_zbs_null$total_envases} registros ({registros_zbs_total_fail$total_paciente - registros_zbs_null$total_pacientes} pacientes) que se pierden por que no hay población para su zona básica de salud, edad y sexo, por tanto, se pierden para la @sec-variaciones_zbs {registros_zbs_total_fail$total_envases} de un total de {total$total} registros.
 
 ```
 
@@ -1096,7 +1100,6 @@ Se muestra la distribución de la población con dispensaciones por grupo quinqu
 :::
 
 
-
 ```{r}
 #| label: Pirámide
 df_piramide$grupo_edad_cd <- as.factor(df_piramide$grupo_edad_cd)
@@ -1136,8 +1139,71 @@ p <- df_piramide %>%
         axis.text = element_text(size = 12), legend.position = "bottom", legend.justification = "center",legend.text = element_text(size = 12),
         axis.ticks = element_blank())
 p
-rm(df_piramide)
+#rm(df_piramide)
 ```
+
+
+## Porcentaje de población con dispensaciones de antibióticos por edad y sexo en el último año disponible 
+::: {.justify}
+Se muestra porcentaje de la población con dispensaciones con respecto a la población total por grupo quinquenal de edad y sexo en el último año disponible.
+:::
+
+
+
+```{r}
+#| label: porcentaje
+
+pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% df_piramide$año_cd)
+df_piramide_ <- df_piramide %>% dplyr::select(!percent)
+pobla_tsi_$sexo_cd <- factor(pobla_tsi_$sexo_cd, labels = c("Hombres","Mujeres"))
+pobla_tsi_ <- pobla_tsi_ %>% group_by(sexo_cd,grupo_edad_cd) %>% 
+  summarise(n_poblacion = sum(n_poblacion, na.rm=TRUE))
+pobla_tsi_ <- pobla_tsi_ %>% rename(quinquenio = grupo_edad_cd)
+grupos <- unique(df_piramide_$grupo_edad_cd)
+df_agecat <- data.frame(quinquenio = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
+                        grupo_edad_cd = grupos)
+pobla_tsi_ <- left_join(pobla_tsi_, df_agecat, by = 'quinquenio')
+df_piramide_ <- left_join(df_piramide_, pobla_tsi_[c('sexo_cd','grupo_edad_cd','n_poblacion','quinquenio')], by = c('sexo_cd','grupo_edad_cd'))
+
+df_piramide_ <- df_piramide_ %>% mutate(percent = round(((n_personas_dispensadas/n_poblacion)*100),2))
+
+p <- df_piramide_ %>%
+  # First, we transforms the columns so that female values show in the
+  # left-hand side of the plot, in this case as 'negative values'.
+  # I also round some values for convenience.
+  mutate(
+    n_personas_dispensadas = ifelse(sexo_cd=="Hombres", n_personas_dispensadas*(-1), n_personas_dispensadas*1), 
+    percent = ifelse(sexo_cd=="Hombres", percent*(-1), percent*1), 
+    share = paste0(abs(round(percent,1)), "%")
+  ) %>% 
+  ggplot(aes(x = percent, y=grupo_edad_cd, label = share)) +
+  geom_col(aes(fill=sexo_cd)) +
+  geom_text(aes(label = share),
+            position = position_nudge(x = nudge_fun(df_piramide_)),
+            size = 3.2
+  ) +
+  scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
+  labs(title = paste0("Porcentaje de población por edad y sexo de personas dispensadas (",df_piramide_$año_cd,")"),
+       x = "", y = "") + 
+    scale_x_continuous(
+    "", breaks = scales::pretty_breaks(n = 6),
+    # Small function to rescale y axis
+    labels =  function(br) abs(br),
+    limits = c(-50, 50)
+  ) + 
+  coord_flip() +
+      theme(title = element_text(size = 12), plot.title = element_text(hjust = 1.0) , panel.background = element_blank(),axis.line = element_blank(),axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10), 
+        axis.text.x = element_text(angle = 90),
+        legend.position = "bottom", legend.justification = "center",legend.text = element_text(size = 12),
+        axis.ticks = element_blank()) 
+p
+rm(df_piramide_)
+```
+
+
+
+
 
 ## Evolución del número de envases dispensados por año de cada ATC dentro de los grupos mayores
 
@@ -1235,7 +1301,7 @@ Se muestra el número de envases dispensados durante el periodo de estudio para 
 ::: {.callout-tip}
 ## Nota informativa
 
-Las siguientes figuras que se muestran son interactivas. Colocando el cursor a lo largo de cada una de las series es posible conocer el año y el número de envases correspondiente. Es posible ocultar las distintas series clickando sobre dicha serie en la etiqueta de la leyenda.
+Las siguientes figuras que se muestran son interactivas. Colocando el cursor a lo largo de cada una de las series es posible conocer el año y el número de envases correspondiente. Es posible ocultar las distintas series clickando sobre dicha serie en la etiqueta de la leyenda. El eje Y se muestra en **escala logarítmica**.
 :::
 
 ```{r}
@@ -1303,6 +1369,7 @@ plot_evo_temp_atc <- function(ind){
 
 
     data_filter <- evolucion_temporal_envases_atc %>% filter(grepl(ind, atc_farmaco_dispensado_short))
+    if(nrow(data_filter)>0){
     list_atc_4_ <- list_atc_4 %>% filter(codigo %in% ind)
     
     plot <- ggplot(data_filter,aes(x = año_cd, y=n_envases, group = descripcion, text = paste("Año:", año_cd, "\nNº envases:", n_envases))) +
@@ -1322,7 +1389,7 @@ plot_evo_temp_atc <- function(ind){
                                      list_atc_4_$descripcion,'</sup>')),
          legend = list(orientation = "h", y= -0.5)) 
     p[[ind]] <- plot
-  
+    }
   return(p)
 }
 
@@ -1444,7 +1511,7 @@ rm(p)
 ## Distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años en las ZBS de mayor DHD (mayor quintil de consumo) en el último año disponible
 ::: {.justify}
 ```{epoxy}
-Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$year)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. 
+Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$year)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. La caja se construye a partir de la distribución de los acumulados por ZBS calculados anualmente (uno por año). Esto permite conocer si aquellas ZBS que en el último año de estudio disponible tienen un mayor consumo presentan variación o estabilidad a lo largo de la serie. 
 
 ```
 :::
@@ -1473,9 +1540,11 @@ f_plot_distr_atc_zbs <- function(var){
 
   for(ind in df_list_indicators$indicators){
     data_filter <- distri_zbs_atc %>% filter(atc_farmaco_dispensado_short %in% ind)
+    data_filter <- data_filter %>% filter(n_zbs %in% consumo_zbs_total_q5$n_zbs)
+    if(nrow(data_filter)>0){
     data_filter <- data_filter %>% select(año_cd,zbs_residencia_cd,n_zbs,atc_farmaco_dispensado_short,all_of(var)) %>%
       rename(var = all_of(var))
-    data_filter <- data_filter %>% filter(n_zbs %in% consumo_zbs_total_q5$n_zbs)
+    
     data_filter <- data_filter %>% group_by(n_zbs) %>% mutate(median = round(median(var, na.rm=TRUE),2))
     df_names_var_distr_atc_ <- df_names_var_distr_atc %>% filter(variable %in% var)
     df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
@@ -1495,6 +1564,7 @@ f_plot_distr_atc_zbs <- function(var){
 
 
     p[[ind]] <- plot
+    }
   }
   return(p)
 }
@@ -1724,54 +1794,78 @@ rm(pobla_tsi_)
 
 ### Consumo (DHD) 
 
-
-```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
+::: {.panel-tabset}
+```{r, results='asis', message=FALSE, warning=FALSE, error=FALSE}
 #| label: ev_tsi_Consumo DHD
-cat("::: {.panel-tabset} \n")
-for (i in 1:length(plot_evo_tsi)){
-  cat("#### Categoría ", list_tsi[i], "\n")
-  cat("\n")
-  print(plot_evo_tsi[[i]]$DHD_milhab)
-  cat("\n")
-}
- cat(":::")
+
+# for (i in 1:length(plot_evo_tsi)){
+#   cat("#### Categoría ", list_tsi[i], "\n\n")
+# 
+#   print(plot_evo_tsi[[i]]$DHD_milhab)
+#   cat("\n\n")
+# }
+
+iwalk(plot_evo_tsi, ~ {
+  cat("## Categoría ", list_tsi[.y], "\n\n")
+  print(plot_evo_tsi[[.y]]$DHD_milhab)
+
+  cat('\n\n')
+
+})
 
 ```
-
+:::
 
 ### Gasto (PVP)
 
+::: {.panel-tabset}
 ```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
 #| label: ev_tsi_Gasto PVP
-cat("::: {.panel-tabset} \n")
-for (i in 1:length(plot_evo_tsi)){
-  cat("#### Categoría ", list_tsi[i], "\n")
-  cat("\n")
-  print(plot_evo_tsi[[i]]$PVP_hab)
-  cat("\n")
-}
+# for (i in 1:length(plot_evo_tsi)){
+#   cat("#### Categoría ", list_tsi[i], "\n\n")
+# 
+#   print(plot_evo_tsi[[i]]$PVP_hab)
+#   cat("\n\n")
+# }
 
- cat(":::")
+iwalk(plot_evo_tsi, ~ {
+  cat("## Categoría ", list_tsi[.y], "\n\n")
+  print(plot_evo_tsi[[.y]]$PVP_hab)
+
+  cat('\n\n')
+
+})
+
+
 ```
-
+:::
 
 
 ### Nº envases dispensados 
 
-
+::: {.panel-tabset}
 ```{r,results='asis',message=FALSE,warning=FALSE, error=FALSE}
 #| label: ev_tsi_N envases dispensados
-cat("::: {.panel-tabset} \n")
-for (i in 1:length(plot_evo_tsi)){
-  cat("#### Categoría ", list_tsi[i], "\n")
-  cat("\n")
-  print(plot_evo_tsi[[i]]$env_hab)
-  cat("\n")
-}
 
- cat(":::")
+
+# for (i in 1:length(plot_evo_tsi)){
+#   cat("#### Categoría ", list_tsi[i], "\n\n")
+#  
+#   print(plot_evo_tsi[[i]]$env_hab)
+#   cat("\n\n")
+# }
+
+iwalk(plot_evo_tsi, ~ {
+  cat("## Categoría ", list_tsi[.y], "\n\n")
+  print(plot_evo_tsi[[.y]]$env_hab)
+
+  cat('\n\n')
+
+})
+
+
 ```
-
+:::
 
 
 ## Evolución de las variaciones por zona básica de salud (ZBS) {#sec-variaciones_zbs}
