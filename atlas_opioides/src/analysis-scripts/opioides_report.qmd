@@ -80,7 +80,8 @@ dbExecute(con, "CREATE OR REPLACE TABLE nomenclator (
           	ddd_nomenclator_nm DOUBLE,
           	ddd_por_envase DOUBLE,
           	pvp_nomenclator_nm DOUBLE,
-          	precio_por_envase_nm DOUBLE);")
+          	precio_por_envase_nm DOUBLE,
+            mme_total DOUBLE);")
 
 dbWriteTable(con, "nomenclator", nomenclator_df, append = TRUE)
 
@@ -123,7 +124,7 @@ dbExecute(con, "CREATE OR REPLACE TABLE zbs_residencia_codatzbs (
 dbWriteTable(con, "zbs_residencia_codatzbs", relaciones_df, append = TRUE)
 
 dbExecute(con, 'CREATE OR REPLACE VIEW envase_dispensado_view AS SELECT envase_id, fecha_dispensacion_dt, paciente_id, edad_nm, sexo_cd, tsi_cd, zbs_residencia_cd, ccaa_cd, a.codigo_nacional_farmaco_cd,n.atc_farmaco_dispensado_cd
-, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm  FROM main.envase_dispensado a
+, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm, n.mme_total  FROM main.envase_dispensado a
  LEFT JOIN main.nomenclator n
  ON a.codigo_nacional_farmaco_cd = n.codigo_nacional_farmaco_cd
  where n.codigo_nacional_farmaco_cd is not null')
@@ -153,7 +154,7 @@ rm(list=ls())
 outputs_path <- '../../outputs/'
 names_files_est <- list.files(path=outputs_path, pattern = '[4-5]_estadisticosobs', full.names=TRUE)
 df_names_files_est <- data.frame(names_files = names_files_est,
-                             variable = c('ddd','pvp','ddd','pvp'))
+                             variable = c('ddd','mme','pvp','ddd','mme','pvp'))
 df <- data.frame()
 for(file in names_files_est){
   data <- read.csv(file, sep = ",")
@@ -175,7 +176,7 @@ write.table(df, file = paste0(outputs_path,"opioides_estadisticosobs.csv"),
 
 names_files_te <- list.files(path=outputs_path, pattern = '[4-5]_indicators_rates', full.names=TRUE)
 df_names_files_te <- data.frame(names_files = names_files_te,
-                             variable = c('ddd','pvp','ddd','pvp'))
+                             variable = c('ddd','mme','pvp','ddd','mme','pvp'))
 df <- data.frame()
 for(file in names_files_te){
   data <- read.csv(file, sep = ",")
@@ -189,7 +190,7 @@ file.remove(names_files_te)
 df <- df %>% rename(std_value = te, cum_var = total, year = año)
 df$variable[df$variable=='ddd'] <- 'dhd'
 df <- df %>% dplyr::select(year, codatzbs, n_zbs, indicator, cum_var, population, variable, std_value)
-write.table(df, file = paste0(outputs_path,"opioides_dhd_pvp_population_values.csv"),
+write.table(df, file = paste0(outputs_path,"opioides_dhd_mme_pvp_population_values.csv"),
             row.names = FALSE,  sep = '|')
 df_ <- df %>% group_by(year, indicator, variable) %>% 
   summarise(mean_std_value = round(mean(std_value, na.rm=TRUE),2),
@@ -200,7 +201,7 @@ df_ <- df %>% group_by(year, indicator, variable) %>%
             p_75_std_value = round(quantile(std_value, 0.75, na.rm=TRUE),2),
             p_95_std_value = round(quantile(std_value, 0.95, na.rm=TRUE),2)
             )
-write.table(df_, file = paste0(outputs_path,"opioides_dhd_pvp_resumen_anual.csv"),
+write.table(df_, file = paste0(outputs_path,"opioides_dhd_mme_pvp_resumen_anual.csv"),
             row.names = FALSE,  sep = '|')
 ```
 
@@ -215,7 +216,7 @@ con = dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
 
 nomenclator_fail <- dbGetQuery(conn = con, '
    SELECT envase_id, fecha_dispensacion_dt, paciente_id, edad_nm, sexo_cd, tsi_cd, zbs_residencia_cd, ccaa_cd, a.codigo_nacional_farmaco_cd,n.atc_farmaco_dispensado_cd
-, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm  FROM main.envase_dispensado a
+, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm, n.mme_total  FROM main.envase_dispensado a
  LEFT JOIN main.nomenclator n
  ON a.codigo_nacional_farmaco_cd = n.codigo_nacional_farmaco_cd
  where n.codigo_nacional_farmaco_cd is null 
@@ -542,7 +543,8 @@ select
 	ddd_nomenclator_nm,
 	ddd_por_envase,
 	pvp_nomenclator_nm,
-	precio_por_envase_nm
+	precio_por_envase_nm,
+  mme_total
 from
 	main.envase_dispensado_view)
 select
@@ -560,6 +562,7 @@ from
 		grupo_edad_cd,
 		tsi_cd ,
 		sum(ddd_por_envase) as consumo_ddd_por_envase,
+    sum(mme_total) as consumo_mme,
 		sum(pvp_nomenclator_nm) as gasto_pvp_nomenclator_nm,
 		sum(precio_por_envase_nm) as gasto_precio_por_envase_nm,
 		count(DISTINCT paciente_id) as pacientes_nm,
@@ -950,6 +953,13 @@ siendo *Nº DDD* el sumatorio de DDD por envase y *población* la población en 
 - Gasto PVP en € por habitante: es el sumatorio del gasto (tomando el PVP como precio de referencia) dividido entre la población en cada uno de las categorías de edad y sexo para cada año.
 
 - Nº de envases dispensados por habitante: es el sumatorio del número de envases dividido entre la población en cada uno de las categorías de edad y sexo para cada año.
+
+:::
+
+::: {.callout-tip}
+## Nota informativa
+
+Se calcula también el consumo en miligramos equivalentes de morfina (MME) por 1000 habitantes/día utilizando los factores de conversión para cada principio activo en MME disponibles en [@Korff_2008], [@Nielsen_2015].
 :::
 
 
@@ -1514,7 +1524,7 @@ La siguiente figura que se muestra es interactiva. Colocando el cursor sobre cad
 # consumo_zbs_total_ <- consumo_zbs_total_ %>% mutate(DHD_milhab=round((1000*consumo_ddd)/(365*n_poblacion),2))
 
 
-consumo_zbs_total_ <- read.csv('../../outputs/opioides_dhd_pvp_population_values.csv', sep = '|')
+consumo_zbs_total_ <- read.csv('../../outputs/opioides_dhd_mme_pvp_population_values.csv', sep = '|')
 consumo_zbs_total_ <- consumo_zbs_total_ %>% filter(year %in% max(year,na.rm=TRUE))
 consumo_zbs_total_ <- consumo_zbs_total_ %>% filter(variable %in% 'dhd', indicator %in% 'N02A')
 consumo_zbs_total_$DHD_milhab <- round(consumo_zbs_total_$std_value,2)
@@ -1940,14 +1950,14 @@ A continuación, se muestra la distribución del consumo (DHD) y el gasto (PVP) 
 
 ```{r}
 #| label: funcion para plotear violines
-data <- read.csv('../../outputs/opioides_dhd_pvp_population_values.csv', sep = "|",colClasses=c("codatzbs"="character"))
+data <- read.csv('../../outputs/opioides_dhd_mme_pvp_population_values.csv', sep = "|",colClasses=c("codatzbs"="character"))
 
 data <- data %>% filter(indicator %nin% 'N02A')
 
 df_list_indicators <- data.frame(indicators = c('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE'),
                                  descr = c('Alcaloides naturales del opio', 'Derivados de fenilpiperidina', 'Otros opioides',
                                            'Opioides en combinación con analgésicos no opioides','Derivados de oripavina'))
-list_variables <- unique(data$variable)
+list_variables <- c('dhd', 'pvp')
 
 
 df_names_var_te <- data.frame(variable = c('dhd', 'pvp'),
