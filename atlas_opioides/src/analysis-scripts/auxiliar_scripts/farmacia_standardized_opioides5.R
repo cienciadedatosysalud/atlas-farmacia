@@ -114,7 +114,8 @@ select
 	ddd_nomenclator_nm,
   ddd_por_envase,
 	pvp_nomenclator_nm,
-	precio_por_envase_nm
+	precio_por_envase_nm,
+  mme_total
 from
 	main.envase_dispensado_view)
 select a.* from (select atc_farmaco_dispensado_5 as atc_farmaco_dispensado ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd , 
@@ -122,6 +123,7 @@ sum(ddd_nomenclator_nm) as ddd_nomenclator_nm,
 sum(ddd_por_envase) as ddd_por_envase,
 sum(pvp_nomenclator_nm) as pvp_nomenclator_nm,
 sum(precio_por_envase_nm) as precio_por_envase_nm,
+sum(mme_total) as mme_total,
 count(DISTINCT paciente_id) as pacientes_nm,
 count(DISTINCT envase_id) as n_envases,
 from partial_df where año = ",año," and sexo_cd in (1,2) group by atc_farmaco_dispensado_5 ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd) a 
@@ -171,7 +173,7 @@ getRatesByIndicator <- function(data,population_ref,population_aux){
   population_aux <- population_aux %>% filter(gqe>=4)
   population_ref <- population_ref %>% filter(gqe>=4)
   #####  
-  if(variable_indicator_ == 'ddd'){
+  if(variable_indicator_ == 'ddd' | variable_indicator_ == 'mme'){
     
     p <- data %>% group_by(codatzbs,gqe,sexo) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
     population_aux_ <- population_aux %>% group_by(codatzbs,gqe,sexo) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
@@ -299,7 +301,7 @@ writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
 #########################
 #       PROGRAMA       #
 #########################
-for(variable_indicator in c('ddd_por_envase','pvp_nomenclator_nm')){
+for(variable_indicator in c('ddd_por_envase','pvp_nomenclator_nm','mme_total')){
   lista_años <- seq(2013,2022,1)
   indicators_rates_total <- data.frame()
   estadisticosobs_total  <- data.frame()
