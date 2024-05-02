@@ -11,3 +11,5 @@ dependencies:
 - r-ggplot2=3.4.2
 - r-plotly=4.10.2
 - r-htmlwidgets=1.6.2
+- r-duckdb=0.10.1
+- python-duckdb==0.10.1

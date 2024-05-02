@@ -10,7 +10,7 @@
         "work_package": "1",
         "use_case": "Variaciones en el consumo de antibióticos por ZBS (y CCAA)",
         "document": "Especificación del modelo común de datos del AtlasVPM de farmacia ",
-        "version_sem": "1.0.3",
+        "version_sem": "1.0.4",
         "authors": [
             {
                 "name": "Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud",
