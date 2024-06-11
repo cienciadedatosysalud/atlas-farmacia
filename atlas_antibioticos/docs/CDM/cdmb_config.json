@@ -10,7 +10,7 @@
         "work_package": "1",
         "use_case": "Variaciones en el consumo de antibióticos por ZBS (y CCAA)",
         "document": "Especificación del modelo común de datos del AtlasVPM de farmacia ",
-        "version_sem": "1.0.4",
+        "version_sem": "1.0.5",
         "authors": [
             {
                 "name": "Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud",
@@ -62,7 +62,7 @@
     "cohort": {
         "name": "Estudio del consumo y gasto de fármacos antibióticos por zona básica de salud",
         "description": "Dispensaciones de fármacos antibióticos en las CCAA participantes a nivel de zona básica de salud en el periodo de estudio \n",
-        "inclusion_criteria": "Cualquier persona con alguna prescripción activa de un fármaco antibiótico (ver 'antibioticos_selection (def)') y dispensación/facturación de al menos un envase de estos fármacos en el periodo de estudio\n",
+        "inclusion_criteria": "Cualquier persona con alguna dispensación/facturación (ver definición inclusión) de al menos un envase de estos fármacos en el periodo de estudio \n",
         "exclusion_criteria": "Personas sin tarjeta sanitaria\nPersonas sin dispensación/facturación de fármaco antibiótico",
         "beggining_study_period": "2013-01-01",
         "end_study_period": "2022-12-31",
