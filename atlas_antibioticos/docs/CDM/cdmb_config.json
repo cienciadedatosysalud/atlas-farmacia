@@ -62,7 +62,7 @@
     "cohort": {
         "name": "Estudio del consumo y gasto de fármacos antibióticos por zona básica de salud",
         "description": "Dispensaciones de fármacos antibióticos en las CCAA participantes a nivel de zona básica de salud en el periodo de estudio \n",
-        "inclusion_criteria": "Cualquier persona con alguna dispensación/facturación (ver definición inclusión) de al menos un envase de estos fármacos en el periodo de estudio \n",
+        "inclusion_criteria": "Cualquier persona con tarjeta sanitaria con alguna dispensación/facturación (ver definición inclusión) de al menos un envase de estos fármacos en el periodo de estudio \n",
         "exclusion_criteria": "Personas sin tarjeta sanitaria\nPersonas sin dispensación/facturación de fármaco antibiótico",
         "beggining_study_period": "2013-01-01",
         "end_study_period": "2022-12-31",
