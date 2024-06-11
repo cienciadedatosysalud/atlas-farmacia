@@ -10,7 +10,7 @@
         "work_package": "1",
         "use_case": "Variaciones en el consumo de opioides por ZBS (y CCAA)",
         "document": "Especificación del modelo común de datos del AtlasVPM de farmacia ",
-        "version_sem": "1.0.4",
+        "version_sem": "1.0.5",
         "authors": [
             {
                 "name": "Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud",
@@ -62,7 +62,7 @@
     "cohort": {
         "name": "Estudio del consumo y gasto de fármacos opioides por zona básica de salud",
         "description": "Dispensaciones de farmacos opioides en las CCAA participantes a nivel de zona básica de salud en el periodo de estudio \n",
-        "inclusion_criteria": "Mayores de 14 años con tarjeta sanitaria con alguna prescripción activa de fármaco opioide (ver 'opiodes_selection (def)') y dispensación/facturación de al menos un envase de este fármaco en el periodo de estudio",
+        "inclusion_criteria": "Mayores de 14 años con tarjeta sanitaria con alguna dispensación/facturación (ver definición inclusión) de al menos un envase de este fármaco en el periodo de estudio \n",
         "exclusion_criteria": "Menores o igual de 14 años de edad\nPersonas sin tarjeta sanitaria\nPersonas sin dispensación/facturación de fármaco opioide",
         "beggining_study_period": "2013-01-01",
         "end_study_period": "2022-12-31",
