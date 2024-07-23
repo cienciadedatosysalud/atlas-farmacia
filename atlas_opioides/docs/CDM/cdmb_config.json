@@ -10,7 +10,7 @@
         "work_package": "1",
         "use_case": "Variaciones en el consumo de opioides por ZBS (y CCAA)",
         "document": "Especificación del modelo común de datos del AtlasVPM de farmacia ",
-        "version_sem": "1.0.5",
+        "version_sem": "1.0.6",
         "authors": [
             {
                 "name": "Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud",

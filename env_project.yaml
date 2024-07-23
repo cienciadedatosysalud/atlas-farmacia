@@ -4,13 +4,13 @@ channels:
 dependencies:
 - r-sf=1.0_14
 - r-sjmisc=2.8.9
-- r-gt=0.9.0
-- r-cowplot=1.1.1
+- r-gt=0.10.0
+- r-cowplot=1.1.2
 - r-ggalluvial=0.12.5
 - r-ggrepel=0.9.3
-- r-ggplot2=3.4.2
-- r-plotly=4.10.2
+- r-ggplot2=3.5.0
+- r-plotly=4.10.4
 - r-stringr=1.5.1
-- r-htmlwidgets=1.6.2
+- r-htmlwidgets=1.6.4
 - r-duckdb=0.10.1
 - python-duckdb==0.10.1
