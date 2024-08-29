@@ -1,7 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below:"
-title: "AtlasVPM: Atlas de Farmacia"
-abstract: "Variaciones en el consumo de Antibióticos|Opioides por Zona Básica de Salud"
+title: "AtlasVPM: Atlas de Farmacia - Variaciones en el consumo de Antibióticos|Opioides por Zona Básica de Salud"
 version: "3.0.8"
 date-released: "2024-06-07" 
 authors:
@@ -12,4 +11,4 @@ identifiers:
   - description: "This is the collection of archived snapshots of all versions of AtlasVPM: Atlas de Farmacia"
     type: "doi"
     value: "10.5281/zenodo.8189758"
-license: "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/"
+license: "CC BY 4.0"
