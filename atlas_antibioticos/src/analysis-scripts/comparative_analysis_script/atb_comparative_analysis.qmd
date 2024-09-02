@@ -1,0 +1,2378 @@
+---
+title: "AtlasVPM: Atlas de Farmacia"
+subtitle: "Variaciones en el consumo de **Antibióticos** por Zona Básica de Salud"
+lang: es
+author:
+  - name: "[Atlas de Variaciones injustificadas de la Práctica Médica (Atlas VPM)](https://cienciadedatosysalud.org/)"
+    affiliations:
+      - name: Grupo de Ciencia de datos para la investigación en servicios y políticas sanitarias
+      - name: Instituto Aragonés de Ciencias de la Salud (IACS)
+      - name: Instituto de Investigación Sanitaria de Aragón (IIS)
+      - name: Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)
+date: "2024-07-26"
+# bibliography:
+#   - referencias.bib
+bibliography:
+  - referencias.bib
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 4
+    highlight-style: pygments
+    code-fold: true
+    html-math-method: katex
+    grid:
+      body-width: 1100px
+include-in-header:
+  - text: |
+      <style>
+      #title-block-header {
+        background-image: url(logo_ciencia_atlas.png);
+        background-size: 300px;
+        background-position: top right;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+      }
+      </style>
+execute: 
+  echo: false
+  warning: false
+  cache: false
+---
+
+
+```{css, echo = FALSE}
+.justify {
+  text-align: justify !important
+}
+```
+
+
+```{r}
+#| label: cargar paquetes
+
+library(ggplot2)
+library(dplyr)
+# library(purrr)
+library(Hmisc) 
+# library(sjmisc)
+library(DBI)
+library(gt)
+library(gtExtras)
+library(logger)
+library(epoxy)
+library(cowplot)
+library(plotly)
+library(ggalluvial)
+library(ggrepel)
+library(scales)
+library(tidyr)
+library(treemapify)
+library(ggridges)
+library(tmap)
+library(sf)
+library(stringr)
+options(scipen = 999)
+
+#s <- Sys.getenv("PIPELINE_VERSION")
+s <- '0.0.2'
+log_info(paste0("Versión de los análisis: ",s))
+```
+
+<p> Versión de los análisis: `r paste0(s)` </p>
+
+
+
+
+# Resumen ejecutivo
+
+::: {.justify}
+
+El número de envases de antibióticos dispensados en el periodo 2017-2022 aumentó un 1,5% (de 10,7 millones a 10,9 millones de dispensaciones). El 59,4% de todas estas dispensaciones se realizaron en mujeres. El porcentaje de mujeres con alguna dispensación de antibióticos fue mayor en todos los tramos etarios exceptuando a la población pediátrica. Las tarjetas sanitarias sin aseguramiento, farmacia gratuita y pensionistas y activos con rentas inferiores a 18000 euros (66,5% de la población en las CCAA analizadas) recibieron más del 74,3% de los envases dispensados de antibióticos.
+
+
+Con variación en la evolución anual y entre CCAA, en torno al 45% de los envases dispensados correspondieron a penicilinas, el 19% a macrólidos, el 14% a otros antibacterianos, el 13% a fluoroquinolonas y cerca del 9% a otros betalactámicos.
+
+
+Pese al aumento de envases dispensados entre 2017 y 2020, la mediana de consumo de antibióticos seleccionados en términos de DHD descendió para el conjunto de ZBS pasando de 14,37 DHD en 2017 a 12,64 DHD en 2022. Este descenso, con variaciones entre las CCAA analizadas, se produjo principalmente en penicilinas, macrólidos y fluoroquinolonas, mientras que el consumo de otros betalactámicos y otros antibacterianos aumentó sensiblemente.
+
+
+Para el conjunto de antibióticos analizados y años, la variación de DHD entre las ZBS de más y menos consumo, sin considerar las ZBS con valores extremos, fue de una razón de variación de 2,6 veces las DHD entre estas ZBS, siendo esta variación constante a lo largo de los años. Por subgrupos terapéuticos, esta variación fue más elevada, siendo mayor en otros betalactámicos  con una razón de variación  de 4,1 veces entre las ZBS de más y menos consumo, macrólidos  con una razón de 4, fluoroquinolonas con una razón de 3,4, penicilinas con una razón de variación de 3 y otros antibacterianos con una razón de 2,7. Respecto a los indicadores del Programa de Resistencia de Antibióticos (PROA), hubo una lenta tendencia general a la mejora de los mismos con cierta distorsión en los valores de los años pandémicos 2020 y 2021. Para los indicadores de antibióticos de espectro reducido, macrólidos y fluoroquinolonas, el porcentaje de ZBS con resultados aceptables paso del 70% a 76% en antibióticos de espectro reducido, del 68% a 71% en macrólidos y del 54% a 92% en fluoroquinolonas. El indicador de amoxicilina sin ácido clavulánico se comportó de forma diferente disminuyendo las ZBS con resultados aceptables, del 78% al 75%. 
+
+:::
+
+# Contexto
+
+::: {.justify}
+
+Este informe pertenece a la serie de informes de AtlasVPM sobre Farmacia, en el que se incluyen el análisis de consumo de Opioides y de Antibióticos. 
+En este informe nos referimos a consumo como la dispensación ambulatoria de un fármaco en oficina de farmacia a una persona con tarjeta sanitaria en el Sistema Nacional de Salud (SNS). 
+El consumo de los medicamentos está mediado por la prescripción de un profesional sanitario -principalmente los médicos especialistas en medicina familiar y comunitaria-  y, en el caso de algunos medicamentos, al visado de la receta médica por un inspector del SNS.
+La utilización de los medicamentos, como sucede con otras tecnologías sanitarias, está sujeta a una gran variabilidad. 
+El análisis de las _variaciones en la práctica médica_, entendidas como las variaciones sistemáticas -no aleatorias- en las tasas estandarizadas de una exposición o intervención sanitaria (i.e., consumo de medicamento) al nivel que se produce la toma de decisiones sobre esta exposición o intervención sanitaria, en este caso, a nivel de Zona Básica de Salud (ZBS), es indispensable para identificar potenciales problemas de gestión sanitaria y ayudar a orientar la toma de decisiones sobre los servicios de salud. 
+Las variaciones sistemáticas en los patrones de dispensación de medicamentos antibióticos y opioides suponen un desafío importante para todos los Sistemas de Salud. 
+
+
+:::
+::: {.callout-warning}
+## Atención
+
+Debe tenerse en cuenta que, cuando se habla de grupos mayores (J01C, J01D, J01F, J01MA, J01X) o total (J01) de Antibióticos en este estudio, estos ATC no incluyen todos los antibióticos o antimicrobianos sino sólo aquellos seleccionados como relevantes para estudio que aparecen en @sec-indicadores (para más información descargar el fichero ([Modelo de datos](https://github.com/cienciadedatosysalud/atlas-farmacia/blob/main/atlas_antibioticos/docs/CDM/common_datamodel.xlsx))
+
+:::
+# Resultados
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+#| label: crear query
+
+database_path <- '../inputs/data.duckdb'
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+envases_dispensados <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         mes_cd,
+                         ccaa_cd,
+                         grupo_edad_cd,
+                         sexo_cd,
+                         sum(pacientes_nm) as n_pacientes
+                         FROM main.aggregated_outputs 
+                         WHERE sexo_cd IN (1,2) and año_cd >= 2017 and grupo_edad_cd IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18) 
+                         GROUP BY 
+                         año_cd,
+                         mes_cd,
+                         ccaa_cd,
+                         sexo_cd,
+                         grupo_edad_cd"))
+
+pobla_tsi <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         ccaa_cd,
+                         grupo_edad_cd,
+                         sexo_cd,
+                         sum(n_poblacion) as n_poblacion
+                         FROM main.zona_basica_tarjeta 
+                         WHERE sexo_cd IN (1,2) and grupo_edad_cd IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18) and año_cd::DOUBLE >= 2017
+                         GROUP BY 
+                         año_cd,
+                         ccaa_cd,
+                         sexo_cd,
+                         grupo_edad_cd"))
+
+pobla_tsi <- pobla_tsi %>% filter(ccaa_cd %in% envases_dispensados$ccaa_cd)
+pobla_tsi <- pobla_tsi %>% filter(año_cd %in% envases_dispensados$año_cd)
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+```{r,output=FALSE}
+
+df_participantes <- data.frame(ccaa_st = c('Aragón','Asturias','Baleares','Cantabria','Cataluña','Canarias','Castilla y León','Valencia','Madrid',
+                                           'Navarra','País Vasco','La Rioja'),
+                               ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52',
+                                           'ES30','ES22','ES21','ES23'))
+df_mes <- data.frame(mes_cd = c(1,2,3,4,5,6,7,8,9,10,11,12),
+                     mes_st = c('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'))
+
+df_participantes_ <- df_participantes %>% filter(ccaa_cd %in% unique(pobla_tsi$ccaa_cd))
+
+df_atc_farmaco_dispensado <- data.frame(atc = c('J01C','J01D','J01F','J01MA','J01X'),
+                                        color_atc = c("#66c2a5", "#fc8d62", "#8da0cb", '#e78ac3', '#a6d854'),
+                                        descr = c('Penicilinas', 'Otros Betalactámicos', 'Macrólidos, Lincosaminas, Estreptograminas','Fluorquinolonas', 'Otros Antibacterianos'))
+
+envases_dispensados_ <- envases_dispensados %>% group_by(año_cd,mes_cd) %>% summarise(n_pacientes = sum(n_pacientes,na.rm=TRUE))
+envases_dispensados_ <- envases_dispensados_ %>% group_by(año_cd) %>% summarise(n_pacientes = mean(n_pacientes,na.rm=TRUE))
+pobla_tsi_ <- pobla_tsi %>% group_by(año_cd) %>% summarise(n_poblacion = sum(n_poblacion,na.rm = TRUE))
+pobla_tsi_ <- pobla_tsi_ %>% summarise(n_poblacion = mean(n_poblacion,na.rm = TRUE))
+c <- round(100*((mean(envases_dispensados_$n_pacientes, na.rm = TRUE))/pobla_tsi_$n_poblacion),2)
+rm(envases_dispensados_,pobla_tsi_)
+
+# df <- data.frame()
+# for(año in unique(pobla_tsi$año_cd)){
+#   pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% año)
+#   print(año)
+#   lista_dfs <- list()
+# 
+# # Replicar el DataFrame para cada mes del año
+# for (mes in 1:12) {
+# df_temp <- pobla_tsi_
+# df_temp$mes_cd <- mes
+# lista_dfs[[mes]] <- df_temp
+# }
+# df_final <- do.call(rbind, lista_dfs)
+# df <- rbind(df_final,df)
+# }
+
+# Entre aquellos que han sido dispensados de algún antibiótico, el {round(100*(sum(filter(envases_dispensados,sexo_cd %in% 2)$n_pacientes, na.rm = TRUE)/sum(envases_dispensados$n_pacientes, na.rm = TRUE)),2)}% eran mujeres y un {round(100*(sum(filter(envases_dispensados,grupo_edad_cd <= 3)$n_pacientes, na.rm = TRUE)/sum(envases_dispensados$n_pacientes, na.rm = TRUE)),2)}% eran población pediátrica (<15 años)
+
+```
+
+
+```{epoxy}
+
+En este estudio participan un total de {length(df_participantes_$ccaa_st)} comunidades autónomas, con una población global de {scales::label_comma()(sum(filter(pobla_tsi,año_cd %in% 2022)$n_poblacion, na.rm = TRUE))} en el año 2022, de la cual, la media mensual de personas distintas que han sido dispensadas de algún antibiótico (ATC = J01) durante el periodo de estudio 2017 a 2022  es de un {c}%. 
+
+
+```
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+tabla_descriptiva <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         ccaa_cd,
+                         sum(n_envases) as sum_n_envases
+                         FROM main.aggregated_outputs  WHERE año_cd >= 2017
+                         GROUP BY 
+                         año_cd,
+                         ccaa_cd"))
+tabla_descriptiva_sexo <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         sexo_cd,
+                         sum(n_envases) as sum_n_envases
+                         FROM main.aggregated_outputs WHERE año_cd >= 2017
+                         GROUP BY 
+                         año_cd,
+                         sexo_cd"))
+
+tabla_descriptiva_tsi <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         tsi_cd,
+                         sum(n_envases) as sum_n_envases
+                         FROM main.aggregated_outputs WHERE año_cd >= 2017
+                         GROUP BY 
+                         año_cd,
+                         tsi_cd"))
+
+dbDisconnect(con, shutdown=TRUE)
+
+total <- tabla_descriptiva %>% group_by(año_cd) %>% summarise(total = sum(sum_n_envases,na.rm=TRUE))
+tabla_descriptiva <- tabla_descriptiva %>% group_by(año_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE)) %>% 
+  ungroup() 
+tabla_descriptiva <- tabla_descriptiva %>% group_by(año_cd,ccaa_cd) %>% summarise(value = paste0(sum_n_envases, ' (',round((100*sum_n_envases/total),2),'%)'))
+
+tabla_descriptiva_ <- tabla_descriptiva %>% pivot_wider(names_from = año_cd,values_from = value)
+tabla_descriptiva_ <- left_join(tabla_descriptiva_,df_participantes_,by='ccaa_cd')
+tabla_descriptiva_ <- tabla_descriptiva_ %>% dplyr::select(!ccaa_cd) %>% rename(variable = ccaa_st)
+
+tabla_descriptiva_sexo <- tabla_descriptiva_sexo %>% group_by(año_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE)) %>% 
+  ungroup() 
+tabla_descriptiva_sexo <- tabla_descriptiva_sexo %>% group_by(año_cd,sexo_cd) %>% summarise(value = paste0(sum_n_envases, ' (',round((100*sum_n_envases/total),2),'%)'))
+
+tabla_descriptiva_sexo_ <- tabla_descriptiva_sexo %>% pivot_wider(names_from = año_cd,values_from = value)
+tabla_descriptiva_sexo_$sexo_cd[tabla_descriptiva_sexo_$sexo_cd %in% '1'] <- 'Hombres'
+tabla_descriptiva_sexo_$sexo_cd[tabla_descriptiva_sexo_$sexo_cd %in% '2'] <- 'Mujeres'
+tabla_descriptiva_sexo_ <- tabla_descriptiva_sexo_ %>% rename(variable = sexo_cd)
+
+
+tabla_descriptiva_tsi <- tabla_descriptiva_tsi %>% group_by(año_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE)) %>% 
+  ungroup() 
+tabla_descriptiva_tsi <- tabla_descriptiva_tsi %>% filter(tsi_cd %in% c('0','1','2','4'))
+
+tabla_descriptiva_tsi_ <- tabla_descriptiva_tsi %>% group_by(año_cd,total) %>% summarise(value = sum(sum_n_envases,na.rm=TRUE))
+tabla_descriptiva_tsi_ <- tabla_descriptiva_tsi_ %>% group_by(año_cd) %>% summarise(value = paste0(value, ' (',round((100*value/total),2),'%)'))
+
+
+tabla_descriptiva_tsi_ <- tabla_descriptiva_tsi_ %>% pivot_wider(names_from = año_cd,values_from = value)
+tabla_descriptiva_tsi_$variable <- 'Conjunto categorías TSI (0+1+2+4)'
+rm(tabla_descriptiva,tabla_descriptiva_sexo,tabla_descriptiva_tsi)
+```
+
+
+::: {.callout-tip}
+## Descripción tabla
+
+La siguiente tabla muestra el número de envases totales por año, la aportación al mismo por cada comunidad autónoma, sexo y para el conjunto específico de categorías TSI (0,1,2, y 4).
+:::
+
+
+```{r,warning=FALSE,echo=FALSE}
+total$variable <- 'Nº envases'
+total <- total %>% pivot_wider(names_from = año_cd,values_from = total)
+
+tabla <- rbind(tabla_descriptiva_,tabla_descriptiva_sexo_,tabla_descriptiva_tsi_,total)
+rm(total)
+tabla %>% gt(rowname_col = "variable") %>% 
+  tab_row_group(
+    label = "Conjunto categorías TSI (0+1+2+4)",
+    rows = which(tabla$variable %in% c('Conjunto categorías TSI (0+1+2+4)')),
+    id='tsi') %>% 
+      tab_row_group(
+    label = "Sexo",
+    rows = which(tabla$variable %in% c('Hombres','Mujeres')),
+    id='sexo'
+  ) %>% 
+    tab_row_group(
+    label = "CCAA",
+    rows = which(tabla$variable %in% c('Aragón','Asturias','Baleares',
+                                       'Cantabria','Cataluña','Canarias',
+                                       'Castilla y León','Valencia','Madrid',
+                                       'Navarra','País Vasco','La Rioja')),
+    id='ccaa') %>% 
+      tab_row_group(
+    label = "Total Nº envases anual",
+    rows = which(tabla$variable %in% c('Nº envases')),
+    id='total') %>% 
+    tab_style(
+    style = cell_fill(color = "gray85"),
+    locations = cells_row_groups())  %>% 
+   tab_header(
+    title = md("Tabla descriptiva anual: Nº envases (%)"),
+    subtitle = md("Antibióticos (J01)")
+  )
+rm(tabla,tabla_descriptiva_,tabla_descriptiva_sexo_,tabla_descriptiva_tsi_)
+```
+
+
+
+
+## Porcentaje de envases dispensados por subgrupo terapéutico 
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+tabla_envases_año <- dbGetQuery(conn=con,
+                  "SELECT * FROM(
+SELECT
+	año_cd,
+	ccaa_cd,
+	atc_farmaco_dispensado_short,
+	sum(pacientes_nm) as n_pacientes,
+	sum(n_envases) as n_envases
+from
+	(
+	select
+		año_cd,
+		ccaa_cd,
+		atc_farmaco_dispensado[1:4] as atc_farmaco_dispensado_short,
+		pacientes_nm,
+		n_envases
+	from
+		main.aggregated_outputs
+	WHERE
+		(atc_farmaco_dispensado_short in ('J01C', 'J01D', 'J01F', 'J01X'))
+UNION all
+	SELECT
+		año_cd,
+		ccaa_cd,
+		atc_farmaco_dispensado[1:5] as atc_farmaco_dispensado_short,
+		pacientes_nm,
+		n_envases
+	from
+		main.aggregated_outputs 
+	WHERE
+		(atc_farmaco_dispensado_short = 'J01MA'))
+GROUP BY
+	año_cd,
+	ccaa_cd,
+	atc_farmaco_dispensado_short) WHERE año_cd >= 2017
+")
+
+dbDisconnect(con, shutdown=TRUE)
+
+
+tabla_envases_año$atc_farmaco_dispensado_short <- factor(tabla_envases_año$atc_farmaco_dispensado_short)
+df_ <- tabla_envases_año %>% group_by(atc_farmaco_dispensado_short) %>% 
+  summarise(n_envases = sum(n_envases,na.rm=TRUE))
+
+df_$total <- sum(df_$n_envases)
+  
+df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),2))
+
+df_ <- left_join(df_,df_atc_farmaco_dispensado,by=c('atc_farmaco_dispensado_short'='atc'))
+
+plot <- ggplot(data=df_,aes(area = percent_envases, fill = color_atc,label = paste(descr, paste0(percent_envases,'%'), sep = "\n"))) +
+  geom_treemap() +
+  geom_treemap_text(place = "centre",
+                    size=10) +
+  labs(title='Porcentaje de envases dispensados por subgrupo terapéutico (2017-2022)',
+       subtitle='')+
+  scale_fill_identity() +
+  theme(legend.position = "none",
+        plot.title.position = 'plot')
+  
+
+rm(df_)
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Para el total de envases dispensados (suma de todas las comunidades autónomas participantes) en toda la serie temporal, se muestra el porcentaje de envases por cada subgrupo terapéutico. 
+:::
+
+```{r,warning=FALSE,echo=FALSE}
+#| fig-align: center
+plot
+```
+
+
+
+
+## Evolución temporal del porcentaje de envases dispensados por subgrupo terapéutico 
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+df_ <- tabla_envases_año %>% group_by(año_cd,ccaa_cd) %>% 
+  mutate(total =(sum(n_envases,na.rm=TRUE))) 
+df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),2))
+df_ <- df_[order(df_$año_cd,df_$percent_envases, df_$atc_farmaco_dispensado_short),]
+
+df_ <- left_join(df_,df_participantes_,by='ccaa_cd')
+df_ <- left_join(df_,df_atc_farmaco_dispensado,by=c('atc_farmaco_dispensado_short'='atc'))
+plot <- ggplot(df_,
+       aes(x = factor(año_cd), stratum = atc_farmaco_dispensado_short, alluvium = atc_farmaco_dispensado_short,
+           y = percent_envases,
+           fill = color_atc)) +
+  scale_fill_identity() +
+  geom_flow(stat = "alluvium", lode.guidance = "frontback",
+            color = "darkgray", width = 0.6) +
+  geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
+  theme_minimal() +
+    geom_text(stat = "stratum", aes(label = paste0(percent_envases,'%')), size=2.7)+ 
+      labs(title = 'Evolución temporal del porcentaje de envases dispensados por ATC',
+           subtitle='',
+       y = 'Porcentaje de envases dispensados',
+       x = 'Año') + facet_wrap(~ccaa_st,ncol = 3)+
+  guides(fill=guide_legend(title="ATC fármaco")) + theme(plot.title.position = 'plot')
+rm(df_)
+```
+::: {.callout-tip}
+## Descripción figura
+
+Para el total de envases dispensados en toda la serie temporal en cada comunidad autónoma, se muestra el porcentaje de envases por cada subgrupo terapéutico. 
+:::
+
+::: {.column-margin}
+
+<span style="color:black;">La leyenda es, de acuerdo con la figura anterior,:</span> 
+
+  - <span style="color:#66c2a5;">Penicilinas (J01C)</span>,
+  
+  - <span style="color:#fc8d62;">Otros Betalactámicos (J01D)</span>,
+  
+  - <span style="color:#8da0cb;">Macrólidos, Lincosaminas, Estreptograminas (J01F)</span>,
+  
+  - <span style="color:#e78ac3;">Fluorquinolonas (J01MA)</span>,
+  
+  - <span style="color:#a6d854;">Otros Antibacterianos (J01X)</span>,
+
+:::
+
+```{r,warning=FALSE,echo=FALSE,fig.width=11, fig.height=9}
+#| label: ev_temp_alluvial
+plot
+```
+
+
+
+
+## Distribución de la población con alguna dispensación de antibióticos (_J01_) por grupo de edad y sexo
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+df_piramide <- dbGetQuery(conn = con, "
+SELECT
+  año_cd,
+  ccaa_cd,
+  sexo_cd,
+  grupo_edad_cd,
+  sum(n_envases) as sum_n_envases,
+  sum(pacientes_nm) as sum_n_personas
+FROM 
+ main.aggregated_outputs WHERE año_cd >= 2017 and grupo_edad_cd IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18) and sexo_cd IN (1,2)
+GROUP BY
+  año_cd,
+  ccaa_cd,
+  sexo_cd,
+  grupo_edad_cd
+	")
+
+
+dbDisconnect(con, shutdown=TRUE)
+
+
+```
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+df_agecat <- data.frame(grupo_edad_cd = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
+                        grupo_edad_st = c('00-04 años','05-09 años','10-14 años', '15-19 años', '20-24 años','25-29 años','30-34 años', '35-39 años','40-44 años','45-49 años','50-54 años','55-59 años','60-64 años','65-69 años','70-74 años','75-79 años','80-84 años','85 años o más'))
+
+df_piramide_ <- df_piramide
+
+df_piramide_$sexo_cd <- factor(df_piramide_$sexo_cd, labels = c("Hombres","Mujeres"))
+df_piramide_ <- df_piramide_[order(df_piramide_$grupo_edad_cd),]
+df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd,sexo_cd,grupo_edad_cd) %>% 
+  summarise(sum_n_personas = sum(sum_n_personas,na.rm=TRUE),
+            sum_n_envases = sum(sum_n_envases,na.rm=TRUE))
+df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd) %>% mutate(total_pobla = sum(sum(sum_n_personas,na.rm=TRUE)))
+df_piramide_ <- df_piramide_ %>% mutate(percent = round(100*(sum_n_personas/total_pobla),1)) %>% 
+  ungroup()
+df_piramide_ <- left_join(df_piramide_,df_participantes_,by='ccaa_cd')
+df_piramide_$ccaa_st[df_piramide_$ccaa_st %in% 'Castilla y León'] <- 'Castilla y \nLeón'
+
+nudge_fun <- function(df){
+  ifelse(df$sexo_cd == "Hombres", (sd(df$percent)/3)-2.3, sd(df$percent)/3+1.9)
+}
+df_piramide_ <- left_join(df_piramide_, df_agecat, by = 'grupo_edad_cd')
+df_piramide_$grupo_edad_st <- as.factor(df_piramide_$grupo_edad_st)
+plot <- df_piramide_ %>% 
+  # First, we transforms the columns so that female values show in the
+  # left-hand side of the plot, in this case as 'negative values'.
+  # I also round some values for convenience.
+  mutate(
+    sum_n_personas = ifelse(sexo_cd=="Hombres", sum_n_personas*(-1), sum_n_personas*1), 
+    percent = ifelse(sexo_cd=="Hombres", percent*(-1), percent*1), 
+    share = paste0(abs(round(percent,1)), "%")
+  ) %>% 
+  ggplot(aes(x = percent, y=grupo_edad_st, label = share,group=ccaa_st)) +
+  geom_col(aes(fill=sexo_cd)) +
+  geom_text(aes(label = share),
+            position = position_nudge(x = nudge_fun(df_piramide_)),
+            size = 3
+  ) +
+  scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
+  labs(title = paste0("Pirámide de edad y sexo de personas con alguna dispensación (2017-2022)"),
+       subtitle = "",
+       x = "", y = "") +
+    scale_x_continuous(
+    "",# breaks = scales::pretty_breaks(n = 6),
+    # Small function to rescale y axis
+    labels =  function(br) abs(br)
+  ) + facet_wrap(~ccaa_st,ncol=3,strip.position = 'left')+theme_void() +
+      theme(plot.title.position = 'plot',axis.text = element_text(size = 10), legend.position = "bottom", legend.justification = "center",legend.text = element_text(size = 10),
+        axis.ticks = element_blank())
+
+#rm(df_piramide)
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la distribución de la población con dispensaciones por grupo quinquenal de edad y sexo en toda la serie temporal.
+
+Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. 
+
+Para el resto de comunidades es 2017-2022.
+:::
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=9.5}
+#| label: Pirámide
+
+plot
+```
+
+
+
+## Porcentaje de población con alguna dispensación de antibióticos (_J01_) en cada mes para el conjunto de la serie temporal y por sexo
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+df_piramide <- dbGetQuery(conn = con, "
+SELECT
+  año_cd,
+  mes_cd,
+  ccaa_cd,
+  sexo_cd,
+  sum(n_envases) as sum_n_envases,
+  sum(pacientes_nm) as sum_n_personas
+FROM 
+ main.aggregated_outputs WHERE año_cd >= 2017 and sexo_cd IN (1,2)
+GROUP BY
+  año_cd,
+  mes_cd,
+  ccaa_cd,
+  sexo_cd
+	")
+
+pobla_tsi <- dbGetQuery(conn = con,
+                  paste0("SELECT 
+                         año_cd,
+                         ccaa_cd,
+                         sexo_cd,
+                         sum(n_poblacion) as n_poblacion
+                         FROM main.zona_basica_tarjeta 
+                         WHERE sexo_cd IN (1,2)
+                         GROUP BY 
+                         año_cd,
+                         ccaa_cd,
+                         sexo_cd")
+)
+pobla_tsi <- pobla_tsi %>% filter(año_cd %in% df_piramide$año_cd)
+
+dbDisconnect(con, shutdown=TRUE)
+
+df <- data.frame()
+for(año in unique(pobla_tsi$año_cd)){
+  pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% año)
+#  print(año)
+  lista_dfs <- list()
+
+# Replicar el DataFrame para cada mes del año
+for (mes in 1:12) {
+df_temp <- pobla_tsi_
+df_temp$mes_cd <- mes
+lista_dfs[[mes]] <- df_temp
+}
+df_final <- do.call(rbind, lista_dfs)
+df <- rbind(df_final,df)
+}
+pobla_tsi <- df
+rm(df,df_final)
+
+```
+
+
+
+
+
+```{r,warning=FALSE,echo=FALSE}
+#| label: porcentaje
+
+
+# pobla_tsi_ <- pobla_tsi %>% rename(quinquenio = grupo_edad_cd)
+
+
+# #grupos <- unique(df_piramide_$grupo_edad_cd)
+# df_agecat <- data.frame(quinquenio = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
+#                         grupo_edad_cd = c('00-04 años','05-09 años','10-14 años', '15-19 años', '20-24 años','25-29 años','30-34 años', '35-39 años','40-44 años','45-49 años','50-54 años','55-59 años','60-64 años','65-69 años','70-74 años','75-79 años','80-84 años','85 años o más'))
+# pobla_tsi_ <- left_join(pobla_tsi_, df_agecat, by = 'quinquenio')
+
+#df_piramide_ <- df_piramide %>% rename(quinquenio = grupo_edad_cd)
+
+# df_piramide_ <- left_join(df_piramide_, pobla_tsi_[c('año_cd','mes_cd','sexo_cd','grupo_edad_cd','n_poblacion','quinquenio','ccaa_cd')], by = c('año_cd','mes_cd','sexo_cd','quinquenio','ccaa_cd'))
+
+
+pobla_tsi_ <- pobla_tsi
+pobla_tsi_$año_cd <- as.numeric(pobla_tsi_$año_cd)
+df_piramide_ <- df_piramide
+df_piramide_ <- left_join(df_piramide_, pobla_tsi_[c('año_cd','mes_cd','sexo_cd','n_poblacion','ccaa_cd')], by = c('año_cd','mes_cd','sexo_cd','ccaa_cd'))
+
+
+df_piramide_ <- df_piramide_ %>% mutate(percent = round(((sum_n_personas/n_poblacion)*100),2))
+
+
+
+df_piramide_ <- df_piramide_ %>% group_by(sexo_cd,ccaa_cd,mes_cd) %>% summarise(percent_mean = round(mean(percent,na.rm=TRUE),2))
+df_piramide_ <- left_join(df_piramide_,df_participantes_,by='ccaa_cd')
+df_piramide_ <- left_join(df_piramide_,df_mes,by='mes_cd')
+df_piramide_$sexo_cd <- factor(df_piramide_$sexo_cd, labels = c("Hombres","Mujeres"))
+# p <- df_piramide_ %>%  ggplot(aes(x = reorder(factor(mes_st),mes_cd), y=percent_mean,fill=factor(sexo_cd))) +
+#     geom_bar(width = 0.9,stat="identity",             
+#               position = position_dodge()              
+#            )+
+#   geom_text(aes(label = paste0(abs(round(percent_mean,1)), "%")),
+#             size = 3.0
+#   ) +
+#   labs(title = paste0("Porcentaje de población por sexo de personas dispensadas al mes (media mensual 2017-2022)"),
+#        x = "", y = "") + facet_wrap(~ccaa_st) +
+#   scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
+#       theme(title = element_text(size = 12), panel.background = element_blank(),axis.line = element_blank(),axis.title = element_text(size = 12),
+#         axis.text = element_text(size = 10), 
+#         axis.text.x = element_text(angle = 90),
+#         legend.position = "bottom", legend.justification = "center",legend.text = element_text(size = 12),
+#         axis.ticks = element_blank(),strip.background =element_rect(fill="white")) 
+
+nudge_fun <- function(df){
+  ifelse(df$sexo_cd == "Hombres", (sd(df$percent_mean)/3)*-1.5, sd(df$percent_mean)/3+1.5)
+}
+
+plot <- df_piramide_ %>%
+  # First, we transforms the columns so that female values show in the
+  # left-hand side of the plot, in this case as 'negative values'.
+  # I also round some values for convenience.
+  mutate(percent_mean = ifelse(sexo_cd=="Hombres", percent_mean*(-1), percent_mean*1), 
+    share = paste0(abs(round(percent_mean,1)), "%")
+  ) %>% 
+  ggplot(aes(x = percent_mean, y=reorder(factor(mes_st),mes_cd), label = share)) +
+  geom_col(aes(fill=factor(sexo_cd))) +
+  geom_text(aes(label = share),
+            position = position_nudge(x = nudge_fun(df_piramide_)),
+            size = 2.5
+  ) +
+  scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
+  labs(title = paste0("Porcentaje de población por sexo de personas con alguna dispensación al mes (2017-2022)"),
+       subtitle = "",
+       x = "", y = "")+ facet_wrap(~ccaa_st,ncol = 3) +
+    scale_x_continuous(
+    "", breaks = scales::pretty_breaks(n = 6),
+    # Small function to rescale y axis
+    labels =  function(br) abs(br)
+  ) +
+  coord_flip() +
+      theme(title = element_text(size = 12),
+            plot.title.position = 'plot',panel.background = element_blank(),axis.line = element_blank(),axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10), 
+        axis.text.x = element_text(angle = 90),
+        axis.text.y = element_blank(),
+        legend.position = "bottom", legend.justification = "center",legend.text = element_text(size = 12),
+        axis.ticks = element_blank(),strip.background =element_rect(fill="white")) 
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la distribución de la población con dispensaciones por sexo y mes en toda la serie temporal. Se construye calculando el porcentaje de personas con alguna dispensación por sexo para cada mes de cada año y luego realizando la media de cada mes a lo largo de la serie temporal.
+
+Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. 
+
+Para el resto de comunidades es 2017-2022.
+:::
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Pirámide_mes
+
+plot
+```
+
+
+
+## Evolución de la variación de consumo por ZBS (SNS)
+
+<!-- VIOLIN PLOT POR AÑO (EJE Y)
+IDEAS: 
+- VIOLINES GREY70
+- AÑADIR MEDIANA GENERAL (FIREBRICK DASHED) ANOTADA
+- AÑADIR MEDIANA AÑO (BLACK DASHED)
+- AÑADIR ALPHA 0.3 A LOS PUNTOS
+- USAR UN THEME_VOID() o quitar todo lo que no sea necesario
+--> 
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+df_dhd_pvp <- dbGetQuery(conn = con, "
+SELECT * FROM(SELECT
+	a.*,
+	b.ccaa_cd
+FROM 
+	main.std_dhd_pvp_values a
+LEFT JOIN (SELECT
+DISTINCT codatzbs,
+ccaa_cd,
+FROM main.zbs_residencia_codatzbs b) b
+ON
+	a.codatzbs = b.codatzbs) WHERE year >= 2017
+	")
+
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+list_variables <- 'dhd'
+df_list_indicators <- data.frame(indicators = c('J01','J01C','J01D','J01F','J01MA','J01X'),
+                                 descr = c('Antibióticos','Penicilinas', 'Otros Betalactámicos', 
+                                           'Macrólidos, Lincosaminas, Estreptograminas',
+                                           'Fluorquinolonas', 'Otros Antibacterianos'),
+                                 limite_eje = c(30,25,9,8,5,2))
+
+df_names_var_te <- data.frame(variable = c('dhd'),
+                              title = c('Consumo (DHD) mg'))
+  
+p <- list()
+plot_te_violin <- function(var){
+  
+  #names_files <- list.files(path="../../outputs", pattern = pattern, full.names=TRUE)
+ #for(file in names_files){
+  for(ind in df_list_indicators$indicators){
+    data <- df_dhd_pvp
+    data_filter <- data %>% filter(variable %in% var, indicator %in% ind)
+    df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
+    medians <- data_filter %>% group_by(year) %>% summarise(median_year = median(std_value,na.rm=TRUE))
+    
+    plot <- ggplot(data=data_filter, aes(x=year, y=std_value, group = year)) +
+      geom_violin(trim = FALSE, color = 'gray70') + 
+      stat_summary(fun = "median",
+               geom = "crossbar", 
+               linewidth = 0.1,
+               colour = "black",
+               linetype=2) +
+      geom_text_repel(data=medians,aes(x=year,y=median_year,label=paste0('P50=',round(median_year,2))),nudge_y=0.5) +
+      geom_jitter(position=position_jitter(0.25), size=0.3, alpha = 0.1) +
+      labs(title = paste0(df_names_var_te_$title),
+           subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
+           y = df_names_var_te_$title,
+           x='') +
+      ylim(c(0,df_list_indicators_$limite_eje)) +
+      theme_minimal_hgrid() + scale_x_continuous(breaks = c(2017,2018,2019,2020,2021,2022))+
+      geom_hline(data=data_filter, mapping=aes(yintercept=median(std_value,na.rm = TRUE)), color="firebrick",linetype=2) +
+      geom_text(x=max(data_filter$year)+0.4,
+                y=df_list_indicators_$limite_eje-1, 
+                label=paste0('| P50 global: ',round(median(data_filter$std_value,na.rm = TRUE),2)), 
+                color = 'firebrick', size=4) +
+      coord_flip() + theme(plot.title.position = 'plot')
+    p[[ind]] <- plot
+  }
+  return(p)
+}
+
+
+plot_te <- lapply(list_variables, plot_te_violin)
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la variación (mediante violines) del consumo (DHD) en las zonas básicas de salud que componen el sistema nacional de salud de manera que cada punto es una zona básica. Las líneas discontinuas negras son la mediana (P50) anual y la línea discontinua roja (P50 global) es la mediana de toda la serie temporal.
+:::
+
+::: {.panel-tabset} 
+### Antibióticos (J01)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Total
+
+plot_te[[1]]$J01
+
+
+```
+
+
+### Penicilinas (J01C)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Penicilinas
+
+plot_te[[1]]$J01C
+
+
+```
+
+### Otros betalactámicos (J01D)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Otros_Betalactámicos
+plot_te[[1]]$J01D
+```
+
+### Macrólidos, lincosaminas, estreptograminas (J01F)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Macrolidos_Lincosaminas_Estreptograminas
+
+plot_te[[1]]$J01F
+```
+
+### Fluorquinolonas (J01MA)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Fluorquinolonas
+
+plot_te[[1]]$J01MA
+```
+
+### Otros antibacterianos (J01X)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Otros_Antibacterianos
+
+plot_te[[1]]$J01X
+```
+
+
+:::
+
+## Evolución de la variación de consumo (DHD) por ZBS y por CCAA 
+
+<!-- PUNTOS (ZBS), FACET(CCAA)
+IDEAS: 
+  - EJE Y (AÑO), EJE X (DHD), FACET(CCAA)
+- AÑADIR MEDIANA GENERAL (FIREBRICK SOLID) ANOTADA
+- AÑADIR P5-P95 RIBBON GREY70
+- AÑADIR ALPHA 0.3 A LOS PUNTOS
+- CAMBIAR COLOR PUNTO SI ESTÁ POR ENCIMA DE P95 SEGÚN LÓGICA INDICADOR
+- USAR UN THEME_VOID() o quitar todo lo que no sea necesario
+--> 
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+  
+p <- list()
+plot_te_violin_ccaa <- function(var){
+  
+  #names_files <- list.files(path="../../outputs", pattern = pattern, full.names=TRUE)
+ #for(file in names_files){
+  for(ind in df_list_indicators$indicators){
+    data <- df_dhd_pvp
+    data_filter <- data %>% filter(variable %in% var, indicator %in% ind)
+    df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
+    
+    
+    
+    data_filter_ <- data_filter %>% group_by(year) %>% mutate(p50 = median(std_value,na.rm=TRUE),
+                                                                     p25 = quantile(std_value,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(std_value,0.75,na.rm=TRUE))
+    plot <- ggplot(data=data_filter_, aes(x=factor(year), y=std_value, group = year)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill = "P25-P75 nacional"), alpha = 0.3) +
+    geom_point(size=0.7, alpha = 0.3) +
+    geom_line(aes(x=factor(year),y=p50,group =ccaa_st,color='P50 nacional')) + 
+    labs(title = paste0(df_names_var_te_$title),
+           subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
+        x = '',
+        y = df_names_var_te_$title) +facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() + ylim(c(0,df_list_indicators_$limite_eje)) +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick')) + 
+      scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),
+          legend.position = 'bottom')
+    
+    
+    
+    p[[ind]] <- plot
+  }
+  return(p)
+}
+
+
+plot_te <- lapply(list_variables, plot_te_violin_ccaa)
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la evolución de la variación por CCAA del consumo (DHD) en las zonas básicas de salud que componen el sistema nacional de salud de manera que cada punto es una zona básica. La línea sólida roja es la mediana nacional y la zona sobreada gris es el rango intercuartílico, por lo que son comunes a todas las comunidades.
+:::
+
+::: {.panel-tabset} 
+
+### Antibióticos (J01)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Total_CCAA
+
+plot_te[[1]]$J01
+
+
+```
+
+
+### Penicilinas (J01C)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Penicilinas_CCAA
+
+plot_te[[1]]$J01C
+
+
+```
+
+### Otros betalactámicos (J01D)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Otros_Betalactámicos_CCAA
+
+plot_te[[1]]$J01D
+```
+
+### Macrólidos, lincosaminas, estreptograminas (J01F)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Macrolidos,Lincosaminas,Estreptograminas_CCAA
+
+plot_te[[1]]$J01F
+```
+
+### Fluorquinolonas (J01MA)
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Fluorquinolonas_CCAA
+
+plot_te[[1]]$J01MA
+```
+
+### Otros antibacterianos (J01X)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Otros Antibacterianos_CCAA
+
+plot_te[[1]]$J01X
+```
+
+:::
+
+## Variación geográfica de consumo (DHD) de antibióticos en el año 2022
+
+<!-- MAPA POLIOGONOS POR ZBS DE CADA CCAA
+- QUINTILES SNS (TODOS LAS ZBS)
+- JUNTAR TODAS LAS CCAA PARTICIPANTES CON PATCHWORK (ESTILIZAR LAYOUT PATCHWORK PARA PONER LEYENDA COMÚN)
+--> 
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+mapa_zbs <- read_sf('ZBS_ESP_4258_nuts2.shp')
+  
+p <- list()
+plot_mapa_ccaa <- function(var){
+  
+  #names_files <- list.files(path="../../outputs", pattern = pattern, full.names=TRUE)
+ #for(file in names_files){
+  for(ind in df_list_indicators$indicators){
+    data <- df_dhd_pvp
+    data_filter <- data %>% filter(variable %in% var, indicator %in% ind, year %in% 2022)
+    df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
+    
+    data_filter <- left_join(mapa_zbs[c('codatzbs','geometry')],data_filter,by='codatzbs')
+    data_filter <- data_filter %>% filter(!is.na(std_value))
+    
+
+    mapa_ <- data_filter %>% rename(te = std_value)
+    mapa_ <- mapa_ %>% ungroup()
+    
+    mapa_$Quintil[mapa_$te <= quantile(mapa_$te, 0.2, na.rm=TRUE)] <- "#ffffd4"
+
+    mapa_$Quintil[quantile(mapa_$te, 0.2, na.rm=TRUE) < mapa_$te &
+               mapa_$te <= quantile(mapa_$te, 0.4, na.rm=TRUE)] <- "#fed98e"
+
+    mapa_$Quintil[quantile(mapa_$te, 0.4, na.rm=TRUE) < mapa_$te &
+               mapa_$te <= quantile(mapa_$te, 0.6, na.rm=TRUE)] <- "#fe9929"
+
+    mapa_$Quintil[quantile(mapa_$te, 0.6, na.rm=TRUE) < mapa_$te &
+               mapa_$te <= quantile(mapa_$te, 0.8, na.rm=TRUE)] <- "#d95f0e"
+
+    mapa_$Quintil[quantile(mapa_$te, 0.8, na.rm=TRUE) < mapa_$te &
+               mapa_$te <= quantile(mapa_$te, 1, na.rm=TRUE)] <- "#993404"
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('Quintil', title = "Quintil",
+                            #palette = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404'),
+                            legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(type = 'fill', labels = c(paste0("Q1 = (",
+                          str_replace(as.character(round(quantile(mapa_$te, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),')'), 
+                          paste0("Q5 = (",str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$te, 1.0, na.rm=TRUE),2)),'\\.',','),')')), 
+                                        col = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404')) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+    
+#     plot <- data_filter %>%
+#               tm_shape() +
+#               tm_fill(title = paste0(df_names_var_te_$title),
+#            subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),col = "std_value", style = "quantile",
+#                           palette = c('#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404'),
+#                           legend.format = list(text.separator='-')) +
+#               tm_borders("gray70", lwd = 0.0) +
+#       tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+# # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(legend.outside = FALSE,legend.show = TRUE,
+#               legend.position = c("right", "bottom"), inner.margins = c(0.01, 0.01, .12, .25),
+#               panel.label.bg.color = "white")
+#   
+  p[[ind]] <- plot   
+  }
+  return(p)
+}
+
+
+plot_te <- lapply(list_variables, plot_mapa_ccaa)
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la variación geográfica mediante mapas por CCAA del consumo (DHD) en las zonas básicas de salud que componen el sistema nacional de salud para el último año disponible. La figura está coloreada por quintiles calculados a nivel nacional.
+:::
+
+::: {.panel-tabset} 
+### Antibióticos (J01)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo_DHD_Total_CCAA_mapa
+
+plot_te[[1]]$J01
+
+
+```
+
+
+### Penicilinas (J01C)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo_DHD_Penicilinas_CCAA_mapa
+
+plot_te[[1]]$J01C
+
+
+```
+
+### Otros betalactámicos (J01D)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo_DHD_Otros_Betalactámicos_CCAA_mapa
+
+plot_te[[1]]$J01D
+```
+
+### Macrólidos, lincosaminas, estreptograminas (J01F)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo_DHD_Macrolidos,Lincosaminas,Estreptograminas_CCAA_mapa
+
+plot_te[[1]]$J01F
+```
+
+### Fluorquinolonas (J01MA)
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo_DHD_Fluorquinolonas_CCAA_mapa
+
+plot_te[[1]]$J01MA
+```
+
+### Otros antibacterianos (J01X)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+#| label: Consumo DHD Otros Antibacterianos CCAA mapa
+
+plot_te[[1]]$J01X
+```
+
+
+:::
+
+## Evolución de la variación por ZBS de los indicadores PROA
+
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+data_proa <- dbGetQuery(conn = con, "
+SELECT
+atc_farmaco_dispensado,
+año_cd,
+ccaa_cd,
+zbs_residencia_cd,
+sum(n_envases) as sum_n_envases
+FROM
+ main.aggregated_outputs WHERE año_cd >= 2017
+GROUP BY
+atc_farmaco_dispensado,
+año_cd,
+ccaa_cd,
+zbs_residencia_cd
+	")
+
+dbDisconnect(con, shutdown=TRUE)
+
+
+data_proa <- data_proa %>% filter(!is.na(zbs_residencia_cd))
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la evolución de la variación por CCAA del porcentaje de envases dispensados en las zonas básicas de salud que componen el sistema nacional de salud de manera que cada punto es una zona básica. La línea sólida roja es la mediana nacional y la zona sobreada gris es el rango intercuartílico, por lo que son comunes a todas las comunidades. Las ZBS están coloreadas en función de la lógica favorable de dispensación, siendo esta dependiente de cada fármaco (rojo - peor; negro - mejor).
+:::
+
+
+::: {.panel-tabset} 
+
+### % Amoxicilina sin ácido clavulánico
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS -->
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+
+data_proa_ <- data_proa %>% filter(atc_farmaco_dispensado %in% c('J01CA04','J01CR02'))
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(atc_farmaco_dispensado %in% 'J01CA04') %>%
+group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent<data_proa_$p25,'Porcentaje < P25','Porcentaje >= P25')
+# data_proa_ <- data_proa_ %>% filter(percent > p05 &
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill = 'P25-P75 nacional'), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de amoxicilina sin ácido clavulánico (J01CA04) respecto al total de amoxicilina (J01CA04 + J01CR02)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),axis.text.x = element_text(angle=90,size=10),
+          legend.position = 'bottom',plot.title.position = 'plot')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: amoxicilina
+plot
+```
+
+
+
+### % Antibiótico espectro reducido
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS-->
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01CA|J01CF|J01CE|J01XX01')) %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent<data_proa_$p25,'Porcentaje < P25','Porcentaje >= P25')
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill='P25-P75 nacional'), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de antibióticos de espectro reducido (J01CA, J01CF, J01CE, J01XX01) respecto al total de antibióticos (J01)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),
+          plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+plot
+```
+
+
+
+### % Penicilinas sens. betalactamasas
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS -->
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01CE')) %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+data_proa_aux <- data_proa %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% summarise()
+
+data_proa_ <- left_join(data_proa_aux,data_proa_,by=c('año_cd','ccaa_cd','zbs_residencia_cd'))
+data_proa_$percent[is.na(data_proa_$percent)]<-0
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent<data_proa_$p25,'Porcentaje < P25','Porcentaje >= P25')
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill = 'P25-P75 nacional'), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de penicilinas sensibles a betalactamasas (J01CE) respecto al total de antibióticos (J01)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),
+          plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+plot
+```
+
+
+### % Macrólidos 
+<!-- LÓGICA: MAYOR % ES PEOR. DESTACAR ZBS P95 MALAS -->
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01FA')) %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent>data_proa_$p75,'Porcentaje > P75','Porcentaje <= P75')
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill = 'P25-P75 nacional'), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de macrólidos (J01FA) respecto al total de antibióticos (J01)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),
+          plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+plot
+```
+
+
+
+### % Fluoroquinolonas
+<!-- LÓGICA: MAYOR % ES PEOR. DESTACAR ZBS P95 MALAS -->
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01MA')) %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent>data_proa_$p75,'Porcentaje > P75','Porcentaje <= P75')
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill = "P25-P75 nacional"), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de fluoroquinolonas (J01MA) respecto al total de antibióticos (J01)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),
+          plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+plot
+```
+
+
+
+### % Cefalosporinas (3ª gen.)
+<!-- LÓGICA: MAYOR % ES PEOR. DESTACAR ZBS P95 MALAS -->
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01DD')) %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE)))
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+
+data_proa_ <- data_proa_ %>% group_by(año_cd) %>% mutate(p50 = median(percent,na.rm=TRUE),
+                                                                     p05 = quantile(percent,0.05,na.rm=TRUE),
+                                                                     p95 = quantile(percent,0.95,na.rm=TRUE),
+                                                                     p25 = quantile(percent,0.25,na.rm=TRUE),
+                                                                     p75 = quantile(percent,0.75,na.rm=TRUE))
+
+data_proa_ <- left_join(data_proa_,df_participantes_, by = 'ccaa_cd')
+data_proa_$color_point <- ifelse(data_proa_$percent>data_proa_$p75,'Porcentaje > P75','Porcentaje <= P75')
+
+plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd)) +
+    geom_ribbon(aes(ymin = p25, ymax = p75,group =ccaa_st,fill='P25-P75 nacional'), alpha = 0.3) +
+    geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
+    geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
+    labs(title= 'Porcentaje de cefalosporinas de tercera generación (J01DD) respecto al total de antibióticos (J01)',
+         subtitle='',
+         x = '',
+         y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
+    theme_minimal() +
+    scale_color_manual(name = "",values = c(
+    'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
+  scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
+      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+    theme(plot.title = element_text(size=10),
+          plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
+
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+plot
+```
+
+
+:::
+
+## Variación geográfica por ZBS de los indicadores PROA en el año 2022
+<!-- @SANTI: 
+ESTO SE PUEDE DIVIDIR EN DOS SECCIONES SEGÚN LA LÓGICA DEL INDICADOR PARA QUE TE RESULTE MÁS FÁCIL PROGRAMA UNA FUNCIÓN CON CADA LÓGICA
+- ACORTAR NOMBRE INDICADORES '% AMOXICILINA, % ATB ESPECTRO REDUCIDO', '% PENICILINA SENS. BETALACTAMASA', ETC. 
+- REVISAR LÓGICAS -->
+
+<!-- PUNTOS (ZBS), FACET(CCAA)
+IDEAS: 
+- EJE Y (AÑO), EJE X (% envases dispensados), FACET(CCAA)
+- AÑADIR MEDIANA GENERAL (FIREBRICK SOLID) ANOTADA
+- AÑADIR P5-P95 RIBBON GREY70
+- AÑADIR ALPHA 0.3 A LOS PUNTOS
+- CAMBIAR COLOR PUNTO SI ESTÁ POR FUERA DE P5-P95 SEGÚN LÓGICA INDICADOR
+- USAR UN THEME_VOID() o quitar todo lo que no sea necesario
+--> 
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+
+data_proa <- dbGetQuery(conn = con, "
+SELECT 
+		atc_farmaco_dispensado,
+		año_cd,
+		ccaa_cd,
+		codatzbs,
+		sum(sum_n_envases) as sum_n_envases
+FROM
+	(
+	SELECT
+		a.*,
+		b.codatzbs
+	FROM
+		(
+		SELECT
+			atc_farmaco_dispensado,
+			año_cd,
+			ccaa_cd,
+			zbs_residencia_cd,
+			sum(n_envases) as sum_n_envases
+		FROM
+			main.aggregated_outputs
+		WHERE
+			año_cd == 2022
+		GROUP BY
+			atc_farmaco_dispensado,
+			año_cd,
+			ccaa_cd,
+			zbs_residencia_cd) a
+	LEFT JOIN main.zbs_residencia_codatzbs b 
+ON
+		a.ccaa_cd = b.ccaa_cd
+		and a.zbs_residencia_cd = b.zbs_residencia_cd)
+GROUP BY
+	atc_farmaco_dispensado,
+		año_cd,
+		ccaa_cd,
+		codatzbs")
+
+dbDisconnect(con, shutdown=TRUE)
+
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la variación geográfica mediante mapas por CCAA del porcentaje de envases dispensados en las zonas básicas de salud que componen el sistema nacional de salud para el último año disponible. Las ZBS están coloreadas en función de la lógica favorable de dispensación, siendo esta dependiente de cada fármaco (rojo - peor; negro - mejor).
+:::
+
+
+::: {.panel-tabset} 
+
+### % Amoxicilina sin ácido clavulánico
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS -->
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa %>% filter(atc_farmaco_dispensado %in% c('J01CA04','J01CR02'))
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(atc_farmaco_dispensado %in% 'J01CA04') %>% 
+group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#ca0020"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#0571b0"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                   #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title='Porcentaje de amoxicilina sin ácido clavulánico (J01CA04) respecto al total de amoxicilina (J01CA04 + J01CR02)',title.position = c("LEFT", "TOP"),
+title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+
+
+
+### % Antibiótico espectro reducido
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS-->
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01CA|J01CF|J01CE|J01XX01')) %>% group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#ca0020"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#0571b0"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                 # palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title= 'Porcentaje de antibióticos de espectro reducido (J01CA, J01CF, J01CE, J01XX01) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
+title.size = 0.95,
+                        legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+
+### % Penicilinas sens. betalactamasas
+<!-- LÓGICA: MAYOR % ES MEJOR. DESTACAR ZBS EN P5 MALAS -->
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01CE')) %>% group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#ca0020"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#0571b0"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                 #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title= 'Porcentaje de penicilinas sensibles a betalactamasas (J01CE) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
+title.size = 0.95,
+              legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+
+### % Macrólidos 
+<!-- LÓGICA: MAYOR % ES PEOR. DESTACAR ZBS P95 MALAS -->
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01FA')) %>% group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#0571b0"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#ca0020"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title= 'Porcentaje de macrólidos (J01FA) respecto al total de antibióticos (J01)',
+                        title.position = c("LEFT", "TOP"),
+title.size = 0.95,
+                        legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+
+
+### % Fluoroquinolonas
+<!-- LÓGICA: MAYOR % ES PEOR. DESTACAR ZBS P95 MALAS -->
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01MA')) %>% group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#0571b0"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#ca0020"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title= 'Porcentaje de fluoroquinolonas (J01MA) respecto al total de antibióticos (J01)',
+                        title.position = c("LEFT", "TOP"),
+title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+
+
+
+### % Cefalosporinas (3ª gen.)
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+data_proa_ <- data_proa
+
+data_proa_ <- data_proa_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
+
+data_proa_ <- data_proa_ %>% filter(str_starts(atc_farmaco_dispensado,'J01DD')) %>% group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
+data_proa_$percent <- round((100*(data_proa_$percent/data_proa_$total)),2)
+data_proa_ <- data_proa_ %>% dplyr::select(!total)
+
+mapa_zbs_ <- mapa_zbs %>% filter(ccaa_cd %in% unique(df_participantes_$ccaa_cd))
+
+data_filter <- left_join(mapa_zbs_[c('codatzbs','geometry','ccaa_cd')],data_proa_,by=c('codatzbs','ccaa_cd'))
+data_filter$percent[is.na(data_filter$percent)] <- 0
+
+
+
+mapa_ <- data_filter 
+mapa_ <- mapa_ %>% ungroup()
+
+mapa_$quartil[mapa_$percent <= quantile(mapa_$percent, 0.25, na.rm=TRUE)] <- "#0571b0"
+
+mapa_$quartil[quantile(mapa_$percent, 0.25, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.5, na.rm=TRUE)] <- "#ffffff"
+mapa_$quartil[quantile(mapa_$percent, 0.5, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 0.75, na.rm=TRUE)] <- "#ffffff"
+
+mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
+           mapa_$percent <= quantile(mapa_$percent, 1.0, na.rm=TRUE)] <- "#ca0020"
+
+
+mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
+
+
+
+tmap::tmap_options(check.and.fix = TRUE)
+
+sf_use_s2(FALSE)
+plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+                                 legend.is.portrait = FALSE) +
+                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+                        # tm_borders('#6e0c05', lwd = 1.2) +
+              tm_layout(title='Porcentaje de cefalosporinas de tercera generación (J01DD) respecto al total de antibióticos (J01)', legend.outside = TRUE,legend.show = TRUE,title.position = c("LEFT", "TOP"),
+title.size = 0.95,
+              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+              panel.label.bg.color = "white")
+
+
+
+```
+
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+ plot
+```
+
+:::
+
+## Comparación de la variación de gasto (PVP) frente a variación de consumo (DHD) 
+
+
+
+```{r}
+#| label: funcion para plotear pvp_dhd
+
+data <- df_dhd_pvp %>% 
+  dplyr::select(codatzbs,n_zbs,indicator,variable,ccaa_cd,std_value,year)
+lista_indicadores <- unique(df_list_indicators$indicators)
+p <- list()
+plot_te_pvp_dhd <- function(ind){
+
+    data_filter <- data %>% filter(indicator %in% ind) %>% 
+      pivot_wider(names_from = variable,values_from = std_value)
+    data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    data_filter <- data_filter %>% ungroup()
+    plot <- ggplot(data=data_filter, aes(x=dhd, y=pvp,color = ccaa_st,group=ccaa_st,text = paste("ZBS:", n_zbs))) +
+      geom_smooth(method = 'lm',se=FALSE) +
+      geom_point(alpha=0.1,size=0.1) +
+      scale_color_hue() +
+      labs(title = paste0('Gasto PVP frente consumo (DHD)'),
+           subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
+           x = 'Consumo (DHD) mg por mil habitantes',
+           y = 'Gasto (PVP) € por habitante',
+           color = 'CCAA') +
+      theme_minimal_hgrid(font_size = 12)
+    plot <- ggplotly(plot, tooltip = 'text')
+    p[[ind]] <- plot
+  return(p)
+}
+
+
+plot_te <- lapply(lista_indicadores, plot_te_pvp_dhd)
+rm(data)
+```
+
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra el gasto PVP frente al consumo (DHD) donde para cada comunidad autónoma se calcula una regresión lineal en función de los valores calculados para cada ZBS para toda la serie temporal.
+:::
+
+::: {.panel-tabset} 
+### Antibióticos (J01)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Total CCAA vs PVP
+plot_te[[1]]$J01
+
+
+```
+
+
+### Penicilinas (J01C)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Penicilinas CCAA vs PVP
+plot_te[[2]]$J01C
+
+
+```
+
+### Otros betalactámicos (J01D)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Otros Betalactámicos CCAA vs PVP
+plot_te[[3]]$J01D
+```
+
+### Macrólidos, lincosaminas, estreptograminas (J01F)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Macrolidos, Lincosaminas, Estreptograminas CCAA vs PVP
+plot_te[[4]]$J01F
+```
+
+### Fluorquinolonas (J01MA)
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Fluorquinolonas CCAA vs PVP
+plot_te[[5]]$J01MA
+```
+
+### Otros antibacterianos (J01X)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo DHD Otros Antibacterianos CCAA vs PVP
+plot_te[[6]]$J01X
+```
+
+
+:::
+
+
+# Notas metodológicas
+## Sobre los resultados analizados
+
+::: {.justify}
+
+Este informe se centra en el cálculo de las tasas estandarizadas para cada subgrupo terapéutico tomando como referencia la población española (población INE), por sexo y grupo quinquenal de edad, para cada año del periodo de estudio. 
+Este informe restringe el periodo de estudio desde el 01 de enero de 2017 al 31 de diciembre de 2022. 
+Los indicadores de consumo de medicamentos están calculados como Dosis por mil Habitantes Día (DHD), o como gasto (€) por habitante, utilizando como referencia la Dosis Diaria Definida (DDD) por envase de cada medicamento o el Precio de Venta al Público (PVP) disponibles en el [nomenclator de facturación de farmacia del Ministerio de Sanidad](https://www.sanidad.gob.es/profesionales/nomenclator.do) (descargado en Junio 2022) respectivamente. 
+
+- El número de envases dispensados por habitante se calcula como el $$\sum(envases_{ATC, ZBS})/población_{ZBS, sexo, grupo edad}$$ 
+- Dosis por mil Habitantes Día (DHD) se calcula como el $$((\sum(DDD_{ATC}) * 1000_{habitantes})/ (población_{ZBS, sexo, grupo edad} * 365_{días}))$$
+- El gasto (€) por habitante se calcula como $$Gasto = \sum(PVP)/(población_{ZBS, sexo, grupo edad})$$
+
+
+:::
+
+## Sobre la unidad de análisis
+
+
+::: {.justify}
+
+La unidad de análisis en este informe son las zonas básicas de salud (ZBS) de referencia según la residencia de los pacientes dispensados.
+
+:::
+
+## Sobre los indicadores {#sec-indicadores}
+
+::: {.justify}
+
+Los indicadores estudiados se corresponden con subgrupos de antibióticos en función de su código ATC (4-5 dígitos), además de aquellos otros indicadores considerados relevantes para estudio por las comunidades autónomas participantes en este proyecto. 
+
+- Antibióticos (*J01*),
+
+- Subgrupo terapéutico:
+
+  - Penicilinas (*J01C*),
+  
+  - Otros betalactámicos (*J01D*), 
+  
+  - Macrólidos, lincosaminas, y estreptograminas (*J01F*),
+  
+  - Fluoroquinolonas (*J01MA*),
+  
+  - Otros antibacterianos (*J01X*),
+  
+- Indicadores del **_[Programa de Optimización de Uso de Antibióticos (PROA)](https://www.resistenciaantibioticos.es/es/publicaciones/indicadores-de-uso-de-antibioticos-en-atencion-primaria)_**:
+
+  - Porcentaje de amoxicilina sin ácido clavulánico (*J01CA04*) respecto al total de amoxicilina (*J01CA04* + *J01CR02*)
+  
+  - Porcentaje de antibióticos de espectro reducido (i.e., penicilinas de espectro ampliado (*J01CA*), penicilinas sensibles a betalactamasas (*J01CE*), penicilinas resistentes a betalactamasas (*J01CF*), fosfomicina (*J01XX01*)) respecto al total de antibióticos (*J01*)
+  
+  - Porcentaje de penicilinas sensibles a betalactamasas (*J01CE*) respecto al total de antibióticos (*J01*)
+  
+  - Porcentaje de macrólidos (*J01FA*) respecto al total de antibióticos (*J01*)
+  
+  - Porcentaje de fluoroquinolonas (*J01MA*) respecto al total de antibióticos (*J01*) 
+  
+  - Porcentaje de cefalosporinas de tercera generación (*J01DD*) respecto al total de antibióticos (*J01*)
+
+A continuación se muestra el listado de códigos de ATC que aparecen en los datos de entrada:
+
+```{r}
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+tabla_atc <- dbGetQuery(conn=con,
+  "
+	select
+		atc_farmaco_dispensado,
+	  sum(n_envases) as sum_n_envases
+	from
+		main.aggregated_outputs
+	group by atc_farmaco_dispensado
+")
+
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+
+```{mermaid}
+flowchart TD        
+    A[J01] -->B[J01C]
+    A -->C[J01D]
+    A -->D[J01F]
+    A -->E[J01MA]
+    A -->F[J01X]
+    A -->L[Otros]
+    B -->G[J01CA01\nJ01CA04\nJ01CE01\nJ01CE02\nJ01CE08\nJ01CE09\nJ01CE10\nJ01CE30\nJ01CF02\nJ01CR02]
+    C -->H[J01DB01\nJ01DB04\nJ01DB05\nJ01DC01\nJ01DC02\nJ01DC04\nJ01DC06\nJ01DD01\nJ01DD02\nJ01DD04\nJ01DD08\nJ01DD13\nJ01DD14\nJ01DD16\nJ01DE01\nJ01DF01]
+    D -->I[J01FA01\nJ01FA02\nJ01FA06\nJ01FA07\nJ01FA09\nJ01FA10\nJ01FA11\nJ01FA15\nJ01FF01\nJ01FF02]
+    E -->J[J01MA01\nJ01MA02\nJ01MA06\nJ01MA12\nJ01MA14]
+    F -->K[J01XA01\nJ01XC01\nJ01XE01\nJ01XX01]
+    L -->M[J01AA02\nJ01AA07\nJ01AA08\nJ01EA01\nJ01EB20\nJ01EC02\nJ01EE01\nJ01GA01\nJ01GB01\nJ01GB03\nJ01GB06\nJ01MB04\nJ01RA04]
+```
+
+
+
+:::
+
+## Fuente de datos
+
+::: {.justify}
+
+Los registros de los envases dispensados han sido extraídos de acuerdo al modelo común de datos del Atlas de Farmacia a partir de la base de datos de dispensaciones (i.e., receta electrónica) o base de datos de facturación de farmacia (i.e., cinta de facturación de farmacia) de las CCAA participantes. Puede consultar el modelo común de datos en el [repositorio del proyecto](https://github.com/cienciadedatosysalud/atlas-farmacia). 
+
+:::
+
+## Sobre el numerador 
+
+::: {.justify}
+
+Para el cálculo de los indicadores se utilizaron todos los envases dispensados de forma ambulatoria en oficina de farmacia de aquellos fármacos cuyo ATC se consideró relevante (i.e., antibióticos (_J01_)) a pacientes con una tarjeta sanitaria activa en el momento de la dispensación independientemente de la necesidad de visado y de la patología o condición para la que fueran dispensados. 
+Estos ATC no incluyen todos los antibióticos o antimicrobianos sino sólo aquellos seleccionados como relevantes para estudio. 
+
+
+```{r,message=FALSE,warning=FALSE, error=FALSE}
+#| label: numerador
+df_numerador <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas Baleares','Cantabria','Cataluña','Canarias','Castilla y León',
+                                     'Comunidad Valenciana','Comunidad de Madrid','Comunidad Foral de Navarra','País Vasco','La Rioja','Región de Murcia'),
+                         ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
+                         numerador = c('Población residente en la CCAA y asignada a ZBS que tenga al menos una dispensación durante el periodo de estudio','Población residente asignada a ZBS con al menos una dispensación', 'Cualquier persona con tarjeta sanitaria que recibe una dispensación en la CCAA independientemente de que esté adscrita a una ZBS de otra CCAA (i.e., interoperabilidad SNS)','Persona con tarjeta sanitaria CCAA con CIPAUT adscrita a una ZBS de la CCAA (independientemente si es HABITUAL, DESPLAZADO o RESIDENTE)', 'Población residente asignada a ZBS con al menos una dispensación', 'Población residente asignada a ZBS con al menos una dispensación', 'Solo se incluyen recetas de pacientes de Castilla y León (tanto dentro como fuera de la CCAA si están prescritas en la CCAA)', 'Población residente asignada a ZBS con al menos una dispensación', 'Población residente asignada a ZBS con al menos una dispensación', 'Residentes en la CCAA adscritas a la ZBS (independientemente del profesional del SNS-O que la realiza)', 'Población TIS con tarjeta sanitaria adscrita a un ZBS de la CCAA','Sólo residentes en la CCAA con tarjeta sanitaria adscrita a una ZBS de la CCAA','Población residente asignada a ZBS con al menos una dispensación'),
+                         fuente = c('Receta electrónica','Receta electrónica', 'Facturación farmacia ambulatoria','Facturación farmacia ambulatoria', 'Receta electrónica', 'Receta electrónica', 'Facturación farmacia ambulatoria', 'Receta electrónica', 'Receta electrónica', 'Receta electrónica', 'Receta electrónica','Receta electrónica','Receta electrónica'),
+                         Logo = c('aragon.png','asturias.png','baleares.png','cantabria.png','cataluña.png','canarias.png','castilla_leon.png',
+                                   'valencia.png','madrid.png','navarra.png','pais_vasco.png','rioja.png','murcia.png'))
+
+df_numerador_ <- df_numerador %>% filter(ccaa_cd %in% df_participantes_$ccaa_cd) %>%
+  dplyr::select(!Logo)
+
+# df_numerador_ <- df_numerador %>% 
+#   dplyr::select(!Logo)
+
+dplyr::tibble(
+  CCAA = df_numerador_$ccaa_st,
+  Numerador = df_numerador_$numerador,
+  `Fuente de información` = df_numerador_$fuente) %>% 
+  gt() %>% 
+  tab_options(data_row.padding = px(1)) %>% 
+  opt_table_lines(extent = c("none"))
+```
+
+
+:::
+
+## Sobre el denominador
+
+::: {.justify}
+
+Los envases dispensados se asignan a la ZBS relativa al área de residencia del paciente. De esta manera, el análisis realizado compara el consumo farmacéutico o la exposición de las poblaciones a estos fármacos según su lugar de residencia. La población utilizada en la estandarización y cálculo de los denominadores de los indicadores procede de la actualización anual de población con tarjeta sanitaria del conjunto de todas las CCAA durante el periodo de estudio.
+
+:::
+
+
+## Sobre la metodología de análisis
+
+::: {.justify}
+
+Este informe se basa en la compilación y meta-análisis de resultados agregados generados por cada CCAA participante de forma federada, mediante la ejecución de análisis locales reproducibles. Este informe es el primer AtlasVPM realizado de forma federada. 
+Las CCAA han participado en este AtlasVPM desplegando un entorno analítico reproducible (i.e., contendor Docker) conteniendo los análisis estadísticos locales para la generación de resultados agregados y compartiendo estos resultados con el grupo de Ciencia de Datos para la Investigación en Servicios y Políticas de Salud en el Instituto Aragonés de Ciencias de la Salud (IACS).  
+
+:::
+
+
+# Contribuciones
+
+::: {.justify}
+
+
+
+```{r,message=FALSE,warning=FALSE, error=FALSE}
+#| label: autores
+df_autores <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas Baleares','Cantabria','Cataluña','Canarias','Castilla y León',
+                                     'Comunidad Valenciana','Comunidad de Madrid','Comunidad Foral de Navarra','País Vasco','La Rioja',
+                                     'Región de Murcia'),
+                         ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
+                         autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','María Ángeles Lumbreras, Flora Pérez Hernández, Óscar Valcuende Mantilla', 'Cristina Colls Guerra, Mireia Espallargues Carreras, Érica Martínez Solanas, Manuel Medina Peralta, Andrea Molina Nadal, Pere Carbonell Puigdollers, Montserrat Vicente Belis', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
+                         afiliacion_st = c('Instituto Aragonés de Ciencias de Salud', 'Unidad de Farmacia de Salud. Servicio de Salud del Principado de Asturias','Consejería de Salud y Consumo','Dirección General de Ordenación Sanitaria, Farmacia e Inspección','Agència de Qualitat i Avaluació Sanitàries de Catalunya (AQUAS). Servei Català de la Salut. Consorci Sanitari de Barcelona', 'Servicio de Evaluación de la Calidad Asistencial y Sistemas de Información de la Dirección General de Programas Asistenciales', 'Dirección Técnica de Farmacia. Gerencia Regional de Salud de Castilla y León', 'Conselleria de Sanitat','Gerencia Asistencial de Atención Primaria','Servicio Navarro de Salud - Osasunbidea (SNS-O)','Osakidetza','Rioja Salud','Servicio Murciano de Salud'), Logo = c('aragon.png','asturias.png','baleares.png','cantabria.png','cataluña.png','canarias.png','castilla_leon.png',
+                                   'valencia.png','madrid.png','navarra.png','pais_vasco.png','rioja.png','murcia.png'))
+
+#df_autores_ <- df_autores %>% filter(ccaa_cd %in% df_participantes_$ccaa_cd)
+df_autores_ <- df_autores
+dplyr::tibble(
+  Logo = df_autores_$Logo,
+  CCAA = df_autores_$ccaa_st,
+  Autores = df_autores_$autores_st,
+  Afiliación = df_autores_$afiliacion_st) %>% 
+  gt() %>% 
+  gt_img_rows(columns = Logo, img_source = "local", height = 25) %>%
+   cols_label(
+    Logo = "",
+    CCAA = "",
+    Autores = "",
+    Afiliación = ""
+  ) %>% 
+  tab_options(data_row.padding = px(1)) %>% 
+  opt_table_lines(extent = c("none"))
+```
+
+
+:::
+
+# Referencias
+
+ - [Atlas de variaciones injustificadas de la práctica médica (Atlas VPM)](https://cienciadedatosysalud.org/)
+ 
+ - [Repositorio GitHub *Atlas Farmacia* del grupo de Ciencia de datos para la investigación en servicios y políticas sanitarias](https://github.com/cienciadedatosysalud/atlas-farmacia)
+ 
+ - [Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)](https://www.ricapps.es/)
+ 
+ - [Programa de Optimización de Uso de Antibióticos (PROA)](https://www.resistenciaantibioticos.es/es/publicaciones/indicadores-de-uso-de-antibioticos-en-atencion-primaria)
