@@ -9,7 +9,7 @@ author:
       - name: Instituto Aragonés de Ciencias de la Salud (IACS)
       - name: Instituto de Investigación Sanitaria de Aragón (IIS)
       - name: Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)
-date: "2024-07-26"
+date: "2024-11-04"
 # bibliography:
 #   - referencias.bib
 format: 
@@ -74,7 +74,7 @@ library(stringr)
 options(scipen = 999)
 
 #s <- Sys.getenv("PIPELINE_VERSION")
-s <- '0.0.2'
+s <- '0.0.3'
 log_info(paste0("Versión de los análisis: ",s))
 ```
 
@@ -519,7 +519,7 @@ df_piramide_ <- df_piramide_[order(df_piramide_$grupo_edad_cd),]
 df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd,sexo_cd,grupo_edad_cd) %>% 
   summarise(sum_n_personas = sum(sum_n_personas,na.rm=TRUE),
             sum_n_envases = sum(sum_n_envases,na.rm=TRUE))
-df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd) %>% mutate(total_pobla = sum(sum(sum_n_personas,na.rm=TRUE)))
+df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd) %>% mutate(total_pobla = sum(sum_n_personas,na.rm=TRUE))
 df_piramide_ <- df_piramide_ %>% mutate(percent = round(100*(sum_n_personas/total_pobla),1)) %>% 
   ungroup()
 df_piramide_ <- left_join(df_piramide_,df_participantes_,by='ccaa_cd')
@@ -1448,7 +1448,7 @@ data_new_ind_ <- data_new_ind
 
 data_new_ind_ <- data_new_ind_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
 
-data_new_ind_ <- data_new_ind_ %>% filter(str_starts(atc_farmaco_dispensado,'N02AX02|N02AJ13')) %>% 
+data_new_ind_ <- data_new_ind_ %>% filter(str_starts(atc_farmaco_dispensado,'N02AX02|N02AJ13|N02AJ14')) %>% 
 group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
 data_new_ind_$percent <- round((100*(data_new_ind_$percent/data_new_ind_$total)),2)
 
@@ -1470,7 +1470,7 @@ plot <- ggplot(data=data_new_ind_,aes(x=factor(año_cd), y=percent, group = año
     #geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
     geom_point(size=0.7,alpha = 0.3) +
     geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
-    labs(title= 'Porcentaje de tramadol (sólo o en combinación) (N02AX02, N02AJ13) respecto al total de opioides (N02A)',
+    labs(title= 'Porcentaje de tramadol (sólo o en combinación) (N02AX02, N02AJ13, N02AJ14) respecto al total de opioides (N02A)',
          x = '',
          y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
     theme_minimal() +
@@ -1617,11 +1617,11 @@ plot
 
 
 
-data_new_ind_ <- data_new_ind %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AX02'))
+data_new_ind_ <- data_new_ind %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AX02','N02AJ14'))
 
 data_new_ind_ <- data_new_ind_ %>% group_by(año_cd,ccaa_cd,zbs_residencia_cd) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
 
-data_new_ind_ <- data_new_ind_ %>% filter(atc_farmaco_dispensado %in% 'N02AJ13') %>% 
+data_new_ind_ <- data_new_ind_ %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AJ14')) %>% 
 group_by(año_cd,ccaa_cd,zbs_residencia_cd,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
 data_new_ind_$percent <- round((100*(data_new_ind_$percent/data_new_ind_$total)),2)
 
@@ -1642,7 +1642,7 @@ plot <- ggplot(data=data_new_ind_,aes(x=factor(año_cd), y=percent, group = año
     #geom_point(aes(color=color_point),size=0.7,alpha = 0.3) +
     geom_point(size=0.7,alpha = 0.3) +
     geom_line(aes(x=factor(año_cd),y=p50,group =ccaa_st,color='P50 nacional')) +
-    labs(title= 'Porcentaje de tramadol en combinación (N02AJ13) respecto al total de tramadol dispensado (N02AJ13 + N02AX02)',
+    labs(title= 'Porcentaje de tramadol en combinación (N02AJ13, N02AJ14) respecto al total de tramadol dispensado (N02AJ13 + N02AJ14 + N02AX02)',
          x = '',
          y='Porcentaje (%)')+facet_wrap(~ccaa_st,ncol = 4) +
     theme_minimal() +
@@ -2011,7 +2011,7 @@ data_new_ind_ <- data_new_ind
 
 data_new_ind_ <- data_new_ind_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
 
-data_new_ind_ <- data_new_ind_ %>% filter(str_starts(atc_farmaco_dispensado,'N02AX02|N02AJ13')) %>% 
+data_new_ind_ <- data_new_ind_ %>% filter(str_starts(atc_farmaco_dispensado,'N02AX02|N02AJ13|N02AJ14')) %>% 
 group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
 data_new_ind_$percent <- round((100*(data_new_ind_$percent/data_new_ind_$total)),2)
 
@@ -2050,7 +2050,7 @@ plot <- tm_shape(mapa_)  + tm_fill('percent', title = "Deciles",
                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
                         # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title='Porcentaje de tramadol (sólo o en combinación) (N02AX02, N02AJ13) respecto al total de opioides (N02A)',title.position =  c("LEFT", "TOP"),
+              tm_layout(title='Porcentaje de tramadol (sólo o en combinación) (N02AX02, N02AJ13, N02AJ14) respecto al total de opioides (N02A)',title.position =  c("LEFT", "TOP"),
 title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
               panel.label.bg.color = "white")
@@ -2196,11 +2196,11 @@ plot
 
 ```{r,warning=FALSE,output=FALSE,echo=FALSE}
 
-data_new_ind_ <- data_new_ind %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AX02'))
+data_new_ind_ <- data_new_ind %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AX02','N02AJ14'))
 
 data_new_ind_ <- data_new_ind_ %>% group_by(año_cd,ccaa_cd,codatzbs) %>% mutate(total = sum(sum_n_envases,na.rm=TRUE))
 
-data_new_ind_ <- data_new_ind_ %>% filter(atc_farmaco_dispensado %in% 'N02AJ13') %>% 
+data_new_ind_ <- data_new_ind_ %>% filter(atc_farmaco_dispensado %in% c('N02AJ13','N02AJ14')) %>% 
 group_by(año_cd,ccaa_cd,codatzbs,total) %>% summarise(percent = (sum(sum_n_envases,na.rm=TRUE))) 
 data_new_ind_$percent <- round((100*(data_new_ind_$percent/data_new_ind_$total)),2)
 
@@ -2239,7 +2239,7 @@ plot <- tm_shape(mapa_)  + tm_fill('percent', title = "Deciles",
                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
                         # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title='Porcentaje de tramadol en combinación (N02AJ13) respecto al total de tramadol dispensado (N02AJ13 + N02AX02)',title.position =  c("LEFT", "TOP"),
+              tm_layout(title='Porcentaje de tramadol en combinación (N02AJ13, N02AJ14) respecto al total de tramadol dispensado (N02AJ13 + N02AJ14 + N02AX02)',title.position =  c("LEFT", "TOP"),
 title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
               panel.label.bg.color = "white")
@@ -2417,13 +2417,13 @@ Los indicadores estudiados se corresponden con subgrupos de opioides en función
   
   - Porcentaje de oxicodona (sólo o en combinación) (*N02AA05*, *N02AA55*) respecto al total de opioides (*N02A*)
   
-  - Porcentaje de tramadol (sólo o en combinación) (*N02AX02*, *N02AJ13*) respecto al total de opioides (*N02A*)
+  - Porcentaje de tramadol (sólo o en combinación) (*N02AX02*, *N02AJ13*, *N02AJ14*) respecto al total de opioides (*N02A*)
   
   - Porcentaje de tapentadol (sólo o en combinación) (*N02AX06*) respecto al total de opiodes (*N02A*)
   
   - Porcentaje de oxicodona en combinación (*N02AA55*) respecto al total de oxicodona dispensada (*N02AA05* + *N02AA55*)
   
-  - Porcentaje de tramadol en combinación (*N02AJ13*) respecto al total de tramadol dispensado (*N02AJ13* + *N02AX02*)
+  - Porcentaje de tramadol en combinación (*N02AJ13*, *N02AJ14*) respecto al total de tramadol dispensado (*N02AJ13* + *N02AJ14* + *N02AX02*)
 
 
 A continuación se muestra el listado de códigos de ATC que aparecen en los datos de entrada:

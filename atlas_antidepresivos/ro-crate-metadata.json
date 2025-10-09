@@ -1,0 +1,1616 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "creator": "Common Data Model Builder",
+            "datePublished": "2025-09-19T08:51:21+00:00",
+            "description": "Especificaci\u00f3n del modelo de datos para el estudio de las variaciones en la dispensaci\u00f3n, consumo y gasto de f\u00e1rmacos antidepresivos por zona b\u00e1sica de salud en el Sistema Nacional de Salud que documenta los requerimientos de datos a nivel individual (i.e., a nivel de envase dispensado) y a nivel de zona b\u00e1sica de salud (ZBS) necesarios para responder a la pregunta de investigaci\u00f3n del AtlasVPM de f\u00e1rmacos antidepresivos. La especificaci\u00f3n del modelo de datos incluye la definici\u00f3n de la cohorte, la especificaci\u00f3n de las variables a nivel individual y a nivel de \u00e1rea, incluyendo diccionarios de datos y cruces para la definici\u00f3n sem\u00e1ntica interoperable de ciertas variables (por ejemplo, f\u00e1rmacos considerados para estudio). V\u00e9anse a continuaci\u00f3n algunas de las convenciones utilizadas para documentar este modelo de datos. \n",
+            "hasPart": [
+                {
+                    "@id": "README.md"
+                },
+                {
+                    "@id": "LICENSE.md"
+                },
+                {
+                    "@id": "man_container_deployment.md"
+                },
+                {
+                    "@id": ".gitignore"
+                },
+                {
+                    "@id": "inputs/data.duckdb"
+                },
+                {
+                    "@id": "src/dqa-scripts/dqa.py"
+                },
+                {
+                    "@id": "src/validation-scripts/validator.py"
+                },
+                {
+                    "@id": "src/validation-scripts/validator_report.qmd"
+                },
+                {
+                    "@id": "src/validation-scripts/_quarto.yml"
+                },
+                {
+                    "@id": "src/analysis-scripts/r_report_template.qmd"
+                },
+                {
+                    "@id": "src/analysis-scripts/_quarto.yml"
+                },
+                {
+                    "@id": "docs/CDM/cdmb_config.json"
+                },
+                {
+                    "@id": "docs/CDM/common_datamodel.xlsx"
+                },
+                {
+                    "@id": "docs/CDM/cohort_definition_inclusion.csv"
+                },
+                {
+                    "@id": "docs/CDM/ER.gv.png"
+                },
+                {
+                    "@id": "docs/CDM/ER.gv"
+                },
+                {
+                    "@id": "docs/CDM/synthetic-data/synthetic_envase_dispensado.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/envase_dispensado/catalogs/catalogo_zbs_residencia_cd.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/envase_dispensado/catalogs/cat_nuts2_spain.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/envase_dispensado/catalogs/nomenclator_antidepresivos.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/envase_dispensado/validation-rules/rules_set_envase_dispensado.json"
+                },
+                {
+                    "@id": "docs/CDM/synthetic-data/synthetic_zona_basica.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/zona_basica/catalogs/cat_nuts2_spain.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/zona_basica/catalogs/catalogo_zbs_residencia_cd.csv"
+                },
+                {
+                    "@id": "docs/CDM/entities/zona_basica/validation-rules/rules_set_zona_basica.json"
+                }
+            ],
+            "keywords": "indicadores, atlasvpm, farmacia, antipsic\u00f3ticos",
+            "license": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/",
+            "name": "ATLASVPM FARMACIA "
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Grupo de Investigaci\u00f3n en Ciencia de Datos para Servicios y Pol\u00edticas de Salud"
+        },
+        {
+            "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Grupo de Investigaci\u00f3n en Ciencia de Datos para Servicios y Pol\u00edticas de Salud"
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-7837-5759",
+            "@type": "Person",
+            "affiliation": "Instituto de Investigaci\u00f3n Sanitaria de Arag\u00f3n (IIS)",
+            "name": " Ridao-L\u00f3pez, Manuel"
+        },
+        {
+            "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f",
+            "@type": "Person",
+            "affiliation": "Instituto de Investigaci\u00f3n Sanitaria de Arag\u00f3n (IIS)",
+            "name": " Ridao-L\u00f3pez, Manuel"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-6285-8120",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Estupi\u00f1an-Romero, Francisco"
+        },
+        {
+            "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Estupi\u00f1an-Romero, Francisco"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-8783-5478",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Gonz\u00e1lez-Galindo, Javier"
+        },
+        {
+            "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Gonz\u00e1lez-Galindo, Javier"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-0048-4370",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Royo-Sierra, Santiago"
+        },
+        {
+            "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Royo-Sierra, Santiago"
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-7442-3450",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Angulo-Pueyo, Ester"
+        },
+        {
+            "@id": "#d176430b-d52e-4a70-9116-8421f9649432",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Angulo-Pueyo, Ester"
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-9365-4342",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Seral-Rodr\u00edguez, Miriam"
+        },
+        {
+            "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Seral-Rodr\u00edguez, Miriam"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-0961-3298",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Bernal-Delgado, Enrique"
+        },
+        {
+            "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57",
+            "@type": "Person",
+            "affiliation": " Instituto Aragon\u00e9s de Ciencias de la Salud (IACS)",
+            "name": "Bernal-Delgado, Enrique"
+        },
+        {
+            "@id": "README.md",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/markdown",
+            "name": "README"
+        },
+        {
+            "@id": "LICENSE.md",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/markdown",
+            "name": "License"
+        },
+        {
+            "@id": "man_container_deployment.md",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/markdown",
+            "name": "Manual on how to deploy the project in a docker container"
+        },
+        {
+            "@id": ".gitignore",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": ".gitignore file"
+        },
+        {
+            "@id": "inputs/data.duckdb",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "application/octet-stream",
+            "name": "SQL OLAP auxiliary database"
+        },
+        {
+            "@id": "src/dqa-scripts/dqa.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": "Data Quality Assessment script"
+        },
+        {
+            "@id": "src/validation-scripts/validator.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": "Rules validator file"
+        },
+        {
+            "@id": "src/validation-scripts/validator_report.qmd",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": "Rules validator report"
+        },
+        {
+            "@id": "src/validation-scripts/_quarto.yml",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/yaml",
+            "name": "Rules validator report metadata"
+        },
+        {
+            "@id": "src/analysis-scripts/r_report_template.qmd",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": "Quarto analysis script template"
+        },
+        {
+            "@id": "src/analysis-scripts/_quarto.yml",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/yaml",
+            "name": "Analysis script report metadata"
+        },
+        {
+            "@id": "docs/CDM/cdmb_config.json",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "application/json",
+            "name": "CDM builder and project configuration file"
+        },
+        {
+            "@id": "docs/CDM/common_datamodel.xlsx",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "name": "Common Data Model spreadsheet"
+        },
+        {
+            "@id": "docs/CDM/cohort_definition_inclusion.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Crosswalks for the cohort definition inclusion"
+        },
+        {
+            "@id": "docs/CDM/ER.gv.png",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "image/png",
+            "name": "Entity Relationship Diagram PNG"
+        },
+        {
+            "@id": "docs/CDM/ER.gv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/plain",
+            "name": "Entity Relationship Diagram GV"
+        },
+        {
+            "@id": "docs/CDM/synthetic-data/synthetic_envase_dispensado.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Synthetic data for entity: envase_dispensado"
+        },
+        {
+            "@id": "docs/CDM/entities/envase_dispensado/catalogs/catalogo_zbs_residencia_cd.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Catalog file for envase_dispensado-zbs_residencia_cd"
+        },
+        {
+            "@id": "docs/CDM/entities/envase_dispensado/catalogs/cat_nuts2_spain.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Catalog file for envase_dispensado-ccaa_cd"
+        },
+        {
+            "@id": "docs/CDM/entities/envase_dispensado/catalogs/nomenclator_antidepresivos.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Catalog file for envase_dispensado-codigo_nacional_farmaco_cd"
+        },
+        {
+            "@id": "docs/CDM/entities/envase_dispensado/validation-rules/rules_set_envase_dispensado.json",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "application/json",
+            "name": "Rule set for entity: envase_dispensado"
+        },
+        {
+            "@id": "docs/CDM/synthetic-data/synthetic_zona_basica.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Synthetic data for entity: zona_basica"
+        },
+        {
+            "@id": "docs/CDM/entities/zona_basica/catalogs/cat_nuts2_spain.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Catalog file for zona_basica-ccaa_cd"
+        },
+        {
+            "@id": "docs/CDM/entities/zona_basica/catalogs/catalogo_zbs_residencia_cd.csv",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "text/csv",
+            "name": "Catalog file for zona_basica-zbs_residencia_cd"
+        },
+        {
+            "@id": "docs/CDM/entities/zona_basica/validation-rules/rules_set_zona_basica.json",
+            "@type": "File",
+            "author": [
+                {
+                    "@id": "#a742eb8d-3c2f-4b8a-a165-2fbb9d8d68f9"
+                },
+                {
+                    "@id": "#c8f08eff-c0ea-4b26-9cac-d25967fa2073"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7837-5759"
+                },
+                {
+                    "@id": "#8055d30b-4850-4d1d-8806-a2f399b0981f"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-6285-8120"
+                },
+                {
+                    "@id": "#dbaf0aeb-d89f-4929-92e1-bebe184653e6"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-8783-5478"
+                },
+                {
+                    "@id": "#e0128270-d0aa-401c-bdff-bb4805509bbb"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0048-4370"
+                },
+                {
+                    "@id": "#d5bf92f8-3356-44ac-8f36-f5ec2715d273"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7442-3450"
+                },
+                {
+                    "@id": "#d176430b-d52e-4a70-9116-8421f9649432"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-9365-4342"
+                },
+                {
+                    "@id": "#fb9eaa6c-7f2e-4c68-b006-19b56311a640"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-0961-3298"
+                },
+                {
+                    "@id": "#de67ba71-7f5a-41bc-8d99-386dbe403b57"
+                }
+            ],
+            "encodingFormat": "application/json",
+            "name": "Rule set for entity: zona_basica"
+        }
+    ]
+}

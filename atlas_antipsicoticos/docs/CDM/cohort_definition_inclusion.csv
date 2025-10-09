@@ -1,0 +1,28 @@
+classification_system,code_4dig,code_5dig,description_family,code_7dig,description,ddd_o,ddd_p,ddd_r,ddd_n,ddd_sl,ddd_td,"DDD,.U,.Adm.R",Note,Source
+ATC/DDD,N05A,N05AA,Fenotiazinas con cadena lateral alifática,N05AA01,Clorpromazina,"0,3 g","0,1 g","0,3 g",,,,"0,3 g O; 0,1 g P; 0,3 g R",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AA,Fenotiazinas con cadena lateral alifática,N05AA02,Levomepromazina,"0,3 g","0,1 g",,,,,"0,3 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AB,Fenotiazinas con estructura piperazínica,N05AB02,Flufenazina,10 mg,1 mg,,,,,10 mg O; 1 mg P,depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AB,Fenotiazinas con estructura piperazínica,N05AB03,Perfenazina,30 mg,7 mg; 10 mg,16 mg,,,,10 mg O; 7 mg P; 10 mg P; 16 mg R,depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AC,Fenotiazinas con estructura piperidínica,N05AC01,Periciazina,50 mg,20 mg,,,,,50 mg O; 20 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AC,Fenotiazinas con estructura piperidínica,N05AC04,Pipotiazina,10 mg,5 mg,,,,,10 mg O; 5 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AD,Derivados de la butirofenona,N05AD01,Haloperidol,8 mg,8 mg,,,,,8 mg O; 8 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AE,Derivados del indol,N05AE03,Sertindol,16 mg,,,,,,16 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AE,Derivados del indol,N05AE04,Ziprasidona,80 mg,40 mg,,,,,80 mg O; 40 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AE,Derivados del indol,N05AE05,Lurasidona,60 mg,,,,,,60 mg,as hydrochloride,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AF,Derivados del tioxanteno,N05AF05,Zuclopentixol,30 mg,15 mg; 30 mg,,,,,30 mg O; 15 mg P; 30 mg P,depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AG,Derivados del difenilbutilpiperidina,N05AG02,Pimozida,4 mg,,,,,,4 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AH,"Diazepinas, oxaxepinas y tiazepinas",N05AH02,Clozapina,"0,3 g","0,3 g",,,,,"0,3 g O; 0,3 P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AH,"Diazepinas, oxaxepinas y tiazepinas",N05AH03,Olanzapina,10 mg,10 mg; 10 mg,,,,,10 mg O; 10 mg P; 10 mg P,depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AH,"Diazepinas, oxaxepinas y tiazepinas",N05AH04,Quetiapina,"0,4 g",,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AH,"Diazepinas, oxaxepinas y tiazepinas",N05AH05,Asenapina,,,,,20 mg,,20 mg SL,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AH,"Diazepinas, oxaxepinas y tiazepinas",N05AH06,Clotiapina,80 mg,80 mg,,,,,80 mg O; 80 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AL,Benzamidas,N05AL01,Sulpirida,"0,8 g","0,8 g",,,,,"0,8 g O; 0,8 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AL,Benzamidas,N05AL03,Tiaprida,"0,4 g","0,4 g",,,,,"0,4 g O; 0,4 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AL,Benzamidas,N05AL05,Amisulprida,"0,4 g","7,5 mg",,,,,"0,4 g O; 7,5 mg P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AL,Benzamidas,N05AL07,Levosulpirida,"0,4 g",,,,,,"0,4 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AN,Litio,N05AN01,Litio,24 mmol,,,,,,24 mmol O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AX,Otros antipsicóticos,N05AX08,Risperidona,5 mg ,"2,7 mg",,,,,"5 mg O; 2,7 mg P",depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AX,Otros antipsicóticos,N05AX12,Aripiprazole,15 mg,"15 mg; 13,3 mg",,,,,"15 mg O; 15 mg P; 13,3 mg P",depot,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AX,Otros antipsicóticos,N05AX13,Paliperidona,6 mg,"2,5 mg",,,,,"6 mg O; 2,5 mg P",depot Expressed as paliperidone,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AX,Otros antipsicóticos,N05AX15,Cariprazina,3 mg,,,,,,3 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N05A,N05AX,Otros antipsicóticos,N05AX16,Bexpiprazol,3 mg,,,,,,3 mg O,,https://www.whocc.no/atc_ddd_index

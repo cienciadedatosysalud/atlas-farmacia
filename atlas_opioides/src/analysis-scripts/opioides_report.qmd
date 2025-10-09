@@ -6,7 +6,6 @@ author:
     affiliations:
       - name: Grupo de Ciencia de datos para la investigación en servicios y políticas sanitarias
       - name: Instituto Aragonés de Ciencias de la Salud (IACS)
-      - name: Instituto de Investigación Sanitaria de Aragón (IIS)
       - name: Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)
 #date: 
 bibliography:
@@ -19,8 +18,8 @@ format:
     highlight-style: pygments
     code-fold: true
     html-math-method: katex
-    # grid:
-    #   body-width: 1100px
+    grid:
+      body-width: 1100px
 echo: false
 message: false
 warning: false
@@ -38,7 +37,6 @@ error: false
 
 library(ggplot2)
 library(dplyr)
-library(sf)
 library(Hmisc) 
 library(sjmisc)
 library(DBI)
@@ -91,7 +89,7 @@ dbWriteTable(con, "nomenclator", nomenclator_df, append = TRUE)
 
 log_info('Cargando poblaciones')
 
-poblaciones_ine_df <- read.csv(file = 'datos_nivel_zona_basica_ine.csv', sep = '|')
+poblaciones_ine_df <- read.csv(file = 'poblacion_referencia_ine.csv', sep = '|')
 
 dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_ine (
             año_cd VARCHAR,
@@ -465,7 +463,7 @@ GROUP BY
 pobla_tsi <- dbGetQuery(conn = con,
                   paste0("SELECT * FROM main.zona_basica_tarjeta where ccaa_cd = '",list_ccaa,"' and sexo_cd IN (1,2)")
 )
-
+pobla_tsi$año_cd <- as.numeric(pobla_tsi$año_cd)
 evolucion_temporal_tsi <- dbGetQuery(conn=con,
                   " SELECT
 	año_cd, 
@@ -773,13 +771,13 @@ Estudio observacional, retrospectivo, longitudinal y ecológico del consumo y ga
 ::: {.justify}
 
 
-El origen de la información se corresponde con las bases de datos de medicamentos prescritos en receta oficial del Sistema Nacional de Salud (SNS), también conocido como receta electrónica. Los datos utilizados son los datos de envases dispensados desde el 1 de Enero de 2013 al 31 de Diciembre de 2022 para los ATC seleccionados, registrados por los Servicios de Farmacia de las CCAA participantes. 
+El origen de la información se corresponde con las bases de datos de medicamentos prescritos en receta oficial del Sistema Nacional de Salud (SNS), también conocido como receta electrónica. Los datos utilizados son los datos de envases dispensados desde el 1 de Enero de 2013 al 31 de Diciembre de 2024 para los ATC seleccionados, registrados por los Servicios de Farmacia de las CCAA participantes. 
 
 ### Nomenclator
 
 ::: {.callout-warning appearance="simple"}
 
-El nomenclator usado como referencia para todos los años es el nomenclator del Ministerio de Sanidad (Junio 2022) para todas las CCAA en el que se han modificado los DDD de los fármacos combinados para especificar el DDD del fármaco de interés (opioides). 
+El nomenclator usado como referencia para todos los años es el nomenclator del Ministerio de Sanidad (septiembre 2025) para todas las CCAA en el que se han modificado los DDD de los fármacos combinados para especificar el DDD del fármaco de interés (opioides). 
 El mismo nomenclator se aplica todos los años para poder realizar comparaciones y no atribuir variaciones a cambios en los precios de los medicamentos.
 
 ```{epoxy}
@@ -794,7 +792,7 @@ Existen {length(unique(nomenclator_fail$codigo_nacional_farmaco_cd))} códigos n
 
 ::: {.justify}
 
-La unidad de análisis es la Zona Básica de Salud (ZBS) de las CCAA participantes que son: Aragón, Islas Baleares, Canarias, Cantabria, Castilla y León, Cataluña, Comunidad de Madrid, Comunidad Foral de Navarra, Comunidad Valenciana, País Vasco y Principado de Asturias. Estas ZBS engloban a las poblaciones de cada ZBS distribuidas en función de su modalidad de copago identificadas a partir de las categorías de Tarjeta Sanitaria (TSI - Tarjeta Sanitaria Individual). Existen 8 categorías de TSI:
+La unidad de análisis es la Zona Básica de Salud (ZBS) de las CCAA participantes que son: Aragón, Islas Baleares, Canarias, Cantabria, Castilla y León, Cataluña, Comunidad de Madrid, Comunidad Foral de Navarra, Comunidad Valenciana, País Vasco, Principado de Asturias, La Rioja y Región de Murcia. Estas ZBS engloban a las poblaciones de cada ZBS distribuidas en función de su modalidad de copago identificadas a partir de las categorías de Tarjeta Sanitaria (TSI - Tarjeta Sanitaria Individual). Existen 8 categorías de TSI:
 
 
 - 0 = "TSI 000 sin aseguramiento", 
@@ -1178,6 +1176,7 @@ Se muestra la distribución de la población con dispensaciones por grupo quinqu
 
 ```{r}
 #| label: Pirámide
+#| fig-align: center
 df_piramide$grupo_edad_cd <- as.factor(df_piramide$grupo_edad_cd)
 df_piramide$sexo_cd <- factor(df_piramide$sexo_cd, labels = c("Hombres","Mujeres"))
 df_piramide <- df_piramide[order(df_piramide$grupo_edad_cd),]
@@ -1228,6 +1227,7 @@ Se muestra el porcentaje de la población con dispensaciones por grupo quinquena
 
 ```{r}
 #| label: porcentaje
+#| fig-align: center
 
 pobla_tsi_ <- pobla_tsi %>% filter(año_cd %in% df_piramide$año_cd)
 df_piramide_ <- df_piramide %>% dplyr::select(!percent)
@@ -1579,170 +1579,170 @@ rm(p)
 ```
 
 
-## Distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años en las ZBS de mayor DHD (mayor quintil de consumo) en el último año disponible
-::: {.justify}
-```{epoxy}
-Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$year)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. La caja se construye a partir de la distribución de los acumulados por ZBS calculados anualmente (uno por año). Esto permite conocer si aquellas ZBS que en el último año de estudio disponible tienen un mayor consumo presentan variación o estabilidad a lo largo de la serie. 
+<!-- ## Distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años en las ZBS de mayor DHD (mayor quintil de consumo) en el último año disponible -->
+<!-- ::: {.justify} -->
+<!-- ```{epoxy} -->
+<!-- Se muestra para las ZBS en el quintil de mayor consumo (DHD) en el último año disponible ({unique(consumo_zbs_total_$year)}) la distribución del acumulado de DDDs y PVP por ATC (grupo mayor) para todos los años de la serie. La caja se construye a partir de la distribución de los acumulados por ZBS calculados anualmente (uno por año). Esto permite conocer si aquellas ZBS que en el último año de estudio disponible tienen un mayor consumo presentan variación o estabilidad a lo largo de la serie.  -->
 
-```
+<!-- ``` -->
 
-:::
-::: {.callout-tip}
-## Nota informativa
+<!-- ::: -->
+<!-- ::: {.callout-tip} -->
+<!-- ## Nota informativa -->
 
-La siguiente figura que se muestra es interactiva. Colocando el cursor en el interior de la caja se muestra el nombre de la ZBS y el valor de la mediana. Si movemos el cursor sobre la vertical de la caja se muestran el máximo, mínimo, límites superior e inferior de los bigotes, Q1, Q3 y mediana. También es posible visualizar los valores extremos (outliers). 
-:::
-
-
-```{r, warning = FALSE}
-#| label: Distribución por ZBS y ATC
-
-df_list_indicators <- data.frame(indicators = c("N02AA",
-             'N02AB',
-             'N02AX',
-             'N02AJ',
-             'N02AE'),
-                                 descr = c("Alcaloides naturales del opio",
-             'Derivados de fenilpiperidina',
-             'Otros opioides',
-             'Opioides en combinación con analgésicos no opioides',
-             'Derivados de oripavina'))
+<!-- La siguiente figura que se muestra es interactiva. Colocando el cursor en el interior de la caja se muestra el nombre de la ZBS y el valor de la mediana. Si movemos el cursor sobre la vertical de la caja se muestran el máximo, mínimo, límites superior e inferior de los bigotes, Q1, Q3 y mediana. También es posible visualizar los valores extremos (outliers).  -->
+<!-- ::: -->
 
 
+<!-- ```{r, warning = FALSE} -->
+<!-- #| label: Distribución por ZBS y ATC -->
 
-df_names_var_distr_atc <- data.frame(variable = c('consumo_ddd', 'gasto_pvp'),
-                              title = c('Acumulado DDD', 'Acumulado PVP en €'))
-distri_zbs_atc <- left_join(x = distri_zbs_atc,y = rel_zbs_codatzbs[c('zbs_residencia_cd','n_zbs')], by = c('zbs_residencia_cd'))
-p <- list()
-
-consumo_zbs_total_q5 <- consumo_zbs_total_ %>% filter(Quintil %in% 'quintil 5')
-rm(consumo_zbs_total_)
-f_plot_distr_atc_zbs <- function(var){
-
-  for(ind in df_list_indicators$indicators){
-    data_filter <- distri_zbs_atc %>% filter(atc_farmaco_dispensado_short %in% ind)
-    data_filter <- data_filter %>% filter(n_zbs %in% consumo_zbs_total_q5$n_zbs)
-    if(nrow(data_filter)>0){
-    data_filter <- data_filter %>% select(año_cd,zbs_residencia_cd,n_zbs,atc_farmaco_dispensado_short,all_of(var)) %>%
-      rename(var = all_of(var))
-    
-    data_filter <- data_filter %>% group_by(n_zbs) %>% mutate(median = round(median(var, na.rm=TRUE),2))
-    df_names_var_distr_atc_ <- df_names_var_distr_atc %>% filter(variable %in% var)
-    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
-
-    plot <- ggplot(data=data_filter, aes(x=reorder(n_zbs,median, decreasing=FALSE), y=var, color = '#fc8d62', text = paste("ZBS:", n_zbs, "\nMediana acumulado:", median))) +  geom_boxplot() +  geom_point(alpha = 0) +
-        ylab('Acumulado') +
-          xlab('ZBS') +
-        theme_minimal() +
-  theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(), legend.position = 'None')
-
-  plot <- ggplotly(plot, tooltip = 'text') %>%
-  layout(title = list(text = paste0('Distribución por Zona Básica de Salud del ',df_names_var_distr_atc_$title,
-                                    '<br>',
-                                    '<sup>')),
-         margin = list(t = 50),
-         showlegend = FALSE)
-
-
-    p[[ind]] <- plot
-    }
-  }
-  return(p)
-}
-
-
-plot_distri_atc_zbs <- lapply(df_names_var_distr_atc$variable, f_plot_distr_atc_zbs)
-rm(distri_zbs_atc)
-```
+<!-- df_list_indicators <- data.frame(indicators = c("N02AA", -->
+<!--              'N02AB', -->
+<!--              'N02AX', -->
+<!--              'N02AJ', -->
+<!--              'N02AE'), -->
+<!--                                  descr = c("Alcaloides naturales del opio", -->
+<!--              'Derivados de fenilpiperidina', -->
+<!--              'Otros opioides', -->
+<!--              'Opioides en combinación con analgésicos no opioides', -->
+<!--              'Derivados de oripavina')) -->
 
 
 
-### Acumulado DDD
+<!-- df_names_var_distr_atc <- data.frame(variable = c('consumo_ddd', 'gasto_pvp'), -->
+<!--                               title = c('Acumulado DDD', 'Acumulado PVP en €')) -->
+<!-- distri_zbs_atc <- left_join(x = distri_zbs_atc,y = rel_zbs_codatzbs[c('zbs_residencia_cd','n_zbs')], by = c('zbs_residencia_cd')) -->
+<!-- p <- list() -->
 
-::: {.panel-tabset}
+<!-- consumo_zbs_total_q5 <- consumo_zbs_total_ %>% filter(Quintil %in% 'quintil 5') -->
+<!-- rm(consumo_zbs_total_) -->
+<!-- f_plot_distr_atc_zbs <- function(var){ -->
 
-#### Alcaloides naturales del opio (N02AA)
+<!--   for(ind in df_list_indicators$indicators){ -->
+<!--     data_filter <- distri_zbs_atc %>% filter(atc_farmaco_dispensado_short %in% ind) -->
+<!--     data_filter <- data_filter %>% filter(n_zbs %in% consumo_zbs_total_q5$n_zbs) -->
+<!--     if(nrow(data_filter)>0){ -->
+<!--     data_filter <- data_filter %>% select(año_cd,zbs_residencia_cd,n_zbs,atc_farmaco_dispensado_short,all_of(var)) %>% -->
+<!--       rename(var = all_of(var)) -->
 
-```{r}
-#| label: Acumulado DDD Alcaloides naturales del opio
-plot_distri_atc_zbs[[1]]$N02AA
+<!--     data_filter <- data_filter %>% group_by(n_zbs) %>% mutate(median = round(median(var, na.rm=TRUE),2)) -->
+<!--     df_names_var_distr_atc_ <- df_names_var_distr_atc %>% filter(variable %in% var) -->
+<!--     df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind) -->
 
+<!--     plot <- ggplot(data=data_filter, aes(x=reorder(n_zbs,median, decreasing=FALSE), y=var, color = '#fc8d62', text = paste("ZBS:", n_zbs, "\nMediana acumulado:", median))) +  geom_boxplot() +  geom_point(alpha = 0) + -->
+<!--         ylab('Acumulado') + -->
+<!--           xlab('ZBS') + -->
+<!--         theme_minimal() + -->
+<!--   theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(), legend.position = 'None') -->
 
-```
-
-#### Derivados de fenilpiperidina (N02AB)
-
-```{r}
-#| label: Acumulado DDD Derivados de fenilpiperidina
-plot_distri_atc_zbs[[1]]$N02AB
-```
-
-#### Otros opioides (N02AX)
-
-```{r}
-#| label: Acumulado DDD Otros opioides
-plot_distri_atc_zbs[[1]]$N02AX
-```
-
-#### Opioides en combinación con analgésicos no opioides (N02AJ)
-
-```{r}
-#| label: Acumulado DDD Opioides en combinación con analgésicos no opioides
-plot_distri_atc_zbs[[1]]$N02AJ
-```
-
-#### Derivados de oripavina (N02AE)
-
-```{r}
-#| label: Acumulado DDD Derivados de oripavina
-plot_distri_atc_zbs[[1]]$N02AE
-```
-
-:::
+<!--   plot <- ggplotly(plot, tooltip = 'text') %>% -->
+<!--   layout(title = list(text = paste0('Distribución por Zona Básica de Salud del ',df_names_var_distr_atc_$title, -->
+<!--                                     '<br>', -->
+<!--                                     '<sup>')), -->
+<!--          margin = list(t = 50), -->
+<!--          showlegend = FALSE) -->
 
 
-### Acumulado PVP
-
-::: {.panel-tabset}
-
-#### Alcaloides naturales del opio (N02AA)
-
-```{r}
-#| label: Acumulado PVP Alcaloides naturales del opio
-plot_distri_atc_zbs[[2]]$N02AA
+<!--     p[[ind]] <- plot -->
+<!--     } -->
+<!--   } -->
+<!--   return(p) -->
+<!-- } -->
 
 
-```
+<!-- plot_distri_atc_zbs <- lapply(df_names_var_distr_atc$variable, f_plot_distr_atc_zbs) -->
+<!-- rm(distri_zbs_atc) -->
+<!-- ``` -->
 
-#### Derivados de fenilpiperidina (N02AB)
 
-```{r}
-#| label: Acumulado PVP Derivados de fenilpiperidina
-plot_distri_atc_zbs[[2]]$N02AB
-```
 
-#### Otros opioides (N02AX)
+<!-- ### Acumulado DDD -->
 
-```{r}
-#| label: Acumulado PVP Otros opioides
-plot_distri_atc_zbs[[2]]$N02AX
-```
+<!-- ::: {.panel-tabset} -->
 
-#### Opioides en combinación con analgésicos no opioides (N02AJ)
+<!-- #### Alcaloides naturales del opio (N02AA) -->
 
-```{r}
-#| label: Acumulado PVP Opioides en combinación con analgésicos no opioides
-plot_distri_atc_zbs[[2]]$N02AJ
-```
+<!-- ```{r} -->
+<!-- #| label: Acumulado DDD Alcaloides naturales del opio -->
+<!-- plot_distri_atc_zbs[[1]]$N02AA -->
 
-#### Derivados de oripavina (N02AE)
 
-```{r}
-#| label: Acumulado PVP Derivados de oripavina
-plot_distri_atc_zbs[[2]]$N02AE
-```
+<!-- ``` -->
 
-:::
+<!-- #### Derivados de fenilpiperidina (N02AB) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado DDD Derivados de fenilpiperidina -->
+<!-- plot_distri_atc_zbs[[1]]$N02AB -->
+<!-- ``` -->
+
+<!-- #### Otros opioides (N02AX) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado DDD Otros opioides -->
+<!-- plot_distri_atc_zbs[[1]]$N02AX -->
+<!-- ``` -->
+
+<!-- #### Opioides en combinación con analgésicos no opioides (N02AJ) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado DDD Opioides en combinación con analgésicos no opioides -->
+<!-- plot_distri_atc_zbs[[1]]$N02AJ -->
+<!-- ``` -->
+
+<!-- #### Derivados de oripavina (N02AE) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado DDD Derivados de oripavina -->
+<!-- plot_distri_atc_zbs[[1]]$N02AE -->
+<!-- ``` -->
+
+<!-- ::: -->
+
+
+<!-- ### Acumulado PVP -->
+
+<!-- ::: {.panel-tabset} -->
+
+<!-- #### Alcaloides naturales del opio (N02AA) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado PVP Alcaloides naturales del opio -->
+<!-- plot_distri_atc_zbs[[2]]$N02AA -->
+
+
+<!-- ``` -->
+
+<!-- #### Derivados de fenilpiperidina (N02AB) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado PVP Derivados de fenilpiperidina -->
+<!-- plot_distri_atc_zbs[[2]]$N02AB -->
+<!-- ``` -->
+
+<!-- #### Otros opioides (N02AX) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado PVP Otros opioides -->
+<!-- plot_distri_atc_zbs[[2]]$N02AX -->
+<!-- ``` -->
+
+<!-- #### Opioides en combinación con analgésicos no opioides (N02AJ) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado PVP Opioides en combinación con analgésicos no opioides -->
+<!-- plot_distri_atc_zbs[[2]]$N02AJ -->
+<!-- ``` -->
+
+<!-- #### Derivados de oripavina (N02AE) -->
+
+<!-- ```{r} -->
+<!-- #| label: Acumulado PVP Derivados de oripavina -->
+<!-- plot_distri_atc_zbs[[2]]$N02AE -->
+<!-- ``` -->
+
+<!-- ::: -->
 
 
 
@@ -1754,6 +1754,7 @@ Se muestra el porcentaje de envases dispensados de cada grupo de opioides respec
 
 ```{r}
 #| label: Evolución temporal del porcentaje de envases dispensados por ATC
+#| fig-align: center
 tabla_envases_año$atc_farmaco_dispensado_short <- factor(tabla_envases_año$atc_farmaco_dispensado_short)
 df_ <- tabla_envases_año %>% group_by(año_cd,) %>% 
   mutate(total =(sum(n_envases,na.rm=TRUE))) 
@@ -2001,12 +2002,12 @@ plot_te_per_year <- function(var){
            subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),
            x = 'Año',
            y = df_names_var_te_$title) +
-      scale_x_continuous(limits = c(2012, 2023), breaks = seq(2013, 2022, by = 1)) +
+      scale_x_continuous(limits = c(min(data_filter$year)-1, max(data_filter$year)+1), breaks = seq(min(data_filter$year), max(data_filter$year), by = 1)) +
       theme_minimal_hgrid() + 
       geom_hline(data=data_filter, mapping=aes(yintercept=median(std_value,na.rm = TRUE)), color="red") +
-      geom_text(x=2023, y=max(data_filter$std_value,na.rm=TRUE), label="| P50 (2013-2022)", color = 'red', size=4,hjust=1) + 
-      geom_text(x=2023, y=median(data_filter$std_value,na.rm = TRUE), label=paste0('                ',round(median(data_filter$std_value,na.rm = TRUE),2)), color = 'red', size=4) +
-      geom_text(x=2022.5, y=max(data_filter$std_value,na.rm=TRUE), label="| P50 año", color = 'black',hjust=1) + 
+      geom_text(x=max(data_filter$year)+1, y=max(data_filter$std_value,na.rm=TRUE), label="| P50 (serie completa)", color = 'red', size=4,hjust=1) + 
+      geom_text(x=max(data_filter$year)+1, y=median(data_filter$std_value,na.rm = TRUE), label=paste0('                ',round(median(data_filter$std_value,na.rm = TRUE),2)), color = 'red', size=4) +
+      geom_text(x=max(data_filter$year)+0.5, y=max(data_filter$std_value,na.rm=TRUE), label="| P50 año", color = 'black',hjust=1) + 
       coord_flip()
     p[[ind]] <- plot
   }
@@ -2029,6 +2030,7 @@ rm(data)
 
 ```{r}
 #| label: Consumo DHD Alcaloides naturales del opio
+#| fig-align: center
 
 plot_te[[1]]$N02AA
 ```
@@ -2037,6 +2039,7 @@ plot_te[[1]]$N02AA
 
 ```{r}
 #| label: Consumo DHD Derivados de fenilpiperidina
+#| fig-align: center
 plot_te[[1]]$N02AB
 ```
 
@@ -2044,6 +2047,7 @@ plot_te[[1]]$N02AB
 
 ```{r}
 #| label: Consumo DHD Otros opioides
+#| fig-align: center
 plot_te[[1]]$N02AX
 ```
 
@@ -2051,6 +2055,7 @@ plot_te[[1]]$N02AX
 
 ```{r}
 #| label: Consumo DHD Opioides en combinación con analgésicos no opioides
+#| fig-align: center
 plot_te[[1]]$N02AJ
 ```
 
@@ -2058,6 +2063,7 @@ plot_te[[1]]$N02AJ
 
 ```{r}
 #| label: Consumo DHD Derivados de oripavina
+#| fig-align: center
 plot_te[[1]]$N02AE
 ```
 
@@ -2072,6 +2078,7 @@ plot_te[[1]]$N02AE
 
 ```{r}
 #| label: Gasto PVP Alcaloides naturales del opio
+#| fig-align: center
 
 plot_te[[2]]$N02AA
 ```
@@ -2080,6 +2087,7 @@ plot_te[[2]]$N02AA
 
 ```{r}
 #| label: Gasto PVP Derivados de fenilpiperidina
+#| fig-align: center
 plot_te[[2]]$N02AB
 ```
 
@@ -2087,6 +2095,7 @@ plot_te[[2]]$N02AB
 
 ```{r}
 #| label: Gasto PVP Otros opioides
+#| fig-align: center
 plot_te[[2]]$N02AX
 ```
 
@@ -2094,6 +2103,7 @@ plot_te[[2]]$N02AX
 
 ```{r}
 #| label: Gasto PVP Opioides en combinación con analgésicos no opioides
+#| fig-align: center
 plot_te[[2]]$N02AJ
 ```
 
@@ -2101,6 +2111,7 @@ plot_te[[2]]$N02AJ
 
 ```{r}
 #| label: Gasto PVP Derivados de oripavina
+#| fig-align: center
 plot_te[[2]]$N02AE
 ```
 :::
@@ -2119,7 +2130,7 @@ df_autores <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas B
                                      'Comunidad Valenciana','Comunidad de Madrid','Comunidad Foral de Navarra','País Vasco','La Rioja',
                                      'Región de Murcia'),
                          ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
-                         autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','María Ángeles Lumbreras, Flora Pérez Hernández, Óscar Valcuende Mantilla', 'Cristina Colls Guerra, Mireia Espallargues Carreras, Érica Martínez Solanas, Manuel Medina Peralta, Andrea Molina Nadal, Pere Carbonell Puigdollers, Montserrat Vicente Belis', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
+                         autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','Flora Pérez Hernández, María Ángeles Lumbreras, Óscar Valcuende Mantilla', 'Cristina Colls Guerra, Mireia Espallargues Carreras, Érica Martínez Solanas, Manuel Medina Peralta, Andrea Molina Nadal, Pere Carbonell Puigdollers, Montserrat Vicente Belis', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Isabel Hurtado, Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
                          afiliacion_st = c('Instituto Aragonés de Ciencias de Salud', 'Unidad de Farmacia de Salud. Servicio de Salud del Principado de Asturias','Consejería de Salud y Consumo','Dirección General de Ordenación Sanitaria, Farmacia e Inspección','Agència de Qualitat i Avaluació Sanitàries de Catalunya (AQUAS). Servei Català de la Salut. Consorci Sanitari de Barcelona', 'Servicio de Evaluación de la Calidad Asistencial y Sistemas de Información de la Dirección General de Programas Asistenciales', 'Dirección Técnica de Farmacia. Gerencia Regional de Salud de Castilla y León', 'Conselleria de Sanitat','Gerencia Asistencial de Atención Primaria','Servicio Navarro de Salud - Osasunbidea (SNS-O)','Osakidetza','Rioja Salud','Servicio Murciano de Salud'))
 
 df_autores_local <- df_autores %>% filter(ccaa_cd %in% list_ccaa)

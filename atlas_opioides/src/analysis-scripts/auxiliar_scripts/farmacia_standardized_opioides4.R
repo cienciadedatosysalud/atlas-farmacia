@@ -12,21 +12,19 @@ leerPoblacionAño <- function(año,data){
   
   population <- dbGetQuery(conn = con, paste0("SELECT año_cd,ccaa_cd,zbs_residencia_cd,grupo_edad_cd,sexo_cd,sum(n_poblacion) as n_poblacion 
                                               FROM zona_basica_tarjeta where sexo_cd IN (1,2) and ccaa_cd = '",ccaa_cd,"' and año_cd = ",año," 
-                                              GROUP BY año_cd,ccaa_cd,zbs_residencia_cd,grupo_edad_cd,sexo_cd")) %>%
-    rename(sexo = sexo_cd,
-           gqe = grupo_edad_cd)
+                                              GROUP BY año_cd,ccaa_cd,zbs_residencia_cd,grupo_edad_cd,sexo_cd")) 
 
   comb_zbs <- population$zbs_residencia_cd %>% unique()
   comb_gqe <- seq(1,18)
   comb_sexo <- seq(1,2)
   comb_total <- expand.grid(comb_zbs,comb_gqe,comb_sexo) %>%
     rename(
-      gqe = Var2,
-      sexo = Var3,
-      zbs = Var1
+      grupo_edad_cd = Var2,
+      sexo_cd = Var3,
+      zbs_residencia_cd = Var1
     )
   
-  population <- population %>% select(zbs_residencia_cd,sexo,gqe,n_poblacion) %>% rename(zbs = zbs_residencia_cd)
+  population <- population %>% select(zbs_residencia_cd,sexo_cd,grupo_edad_cd,n_poblacion)
   
   population <- merge(x=comb_total,y=population,all.x = TRUE)
   population$ccaa_cd <- ccaa_cd
@@ -43,13 +41,11 @@ getPoblacionRef <- function(año){
   con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
   
   
-  population <- dbGetQuery(conn = con, paste0("SELECT * FROM zona_basica_ine where sexo_cd IN (1,2) and año_cd = ",año)) %>%
-    rename(sexo = sexo_cd,
-           gqe = grupo_edad_cd)
+  population <- dbGetQuery(conn = con, paste0("SELECT * FROM zona_basica_ine where sexo_cd IN (1,2) and año_cd = ",año))
   
   
   poblacion_ref <- population %>%
-    group_by(sexo,gqe) %>%
+    group_by(sexo_cd,grupo_edad_cd) %>%
     summarise(pop = sum(n_poblacion,na.rm = TRUE))
   poblacion_ref[poblacion_ref$pop==0,"pop"] <- 1 # !!! No puedo tener poblaciones 0
   
@@ -57,7 +53,7 @@ getPoblacionRef <- function(año){
   return(poblacion_ref)
 }
 
-leerDataAño4 <- function(año){
+leerDataAño <- function(año){
   log_info(paste0('Connect to database  (',año,')'))
   con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
   indicador_ <- dbGetQuery(conn = con, paste0(
@@ -130,21 +126,27 @@ count(DISTINCT paciente_id) as pacientes_nm,
 count(DISTINCT envase_id) as n_envases,
 from partial_df where año = ",año," and sexo_cd in (1,2) group by atc_farmaco_dispensado_4 ,ccaa_cd, zbs_residencia_cd ,sexo_cd, grupo_edad_cd, tsi_cd) a 
 "
-  )) %>% 
-    rename(sexo = sexo_cd,
-           gqe = grupo_edad_cd,
-           tsi = tsi_cd)
-  
-  
-  indicador_ <- indicador_ %>% rename(
-    zbs = zbs_residencia_cd) 
+  ))
   
   # Sumar casos si hay fusion de areas
   
   indicador_ <- indicador_ %>%  
-    filter(!is.na(sexo)) %>% 
-    filter(!is.na(gqe))
-  indicador_[is.na(indicador_)] <- 0
+    filter(!is.na(sexo_cd)) %>% 
+    filter(!is.na(grupo_edad_cd))
+  
+  indicador_ <- indicador_ %>% group_by(atc_farmaco_dispensado,ccaa_cd,zbs_residencia_cd,
+                                        sexo_cd,grupo_edad_cd) %>% 
+    summarise(ddd_nomenclator_nm = sum(ddd_nomenclator_nm,na.rm = TRUE),
+              ddd_por_envase = sum(ddd_por_envase,na.rm = TRUE),
+              pvp_nomenclator_nm = sum(pvp_nomenclator_nm,na.rm = TRUE),
+              precio_por_envase_nm = sum(precio_por_envase_nm,na.rm = TRUE),
+              mme_total = sum(mme_total,na.rm = TRUE),
+              pacientes_nm = sum(pacientes_nm,na.rm = TRUE),
+              n_envases = sum(n_envases,na.rm = TRUE)
+    ) %>% ungroup()
+  
+  
+  #indicador_[is.na(indicador_)] <- 0
   dbDisconnect(con, shutdown=TRUE)
   log_info('Disconnect to database')
   return(indicador_)
@@ -154,9 +156,8 @@ leer_asignar_relaciones_zbs <- function(data){
   
   con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
   rel <- dbGetQuery(conn = con, paste0("SELECT * FROM zbs_residencia_codatzbs"))
-  rel <- rel %>% filter(ccaa_cd %in% unique(data$ccaa_cd)) %>% 
-    dplyr::rename(zbs = zbs_residencia_cd)
-  data <- left_join(x=data, y=rel, by=c('zbs','ccaa_cd'))
+  rel <- rel %>% filter(ccaa_cd %in% unique(data$ccaa_cd))
+  data <- left_join(x=data, y=rel, by=c('zbs_residencia_cd','ccaa_cd'))
   data <- data %>% filter(!is.na(codatzbs))
   dbDisconnect(con, shutdown=TRUE)
   return(data)  
@@ -166,23 +167,23 @@ leer_asignar_relaciones_zbs <- function(data){
 getRatesByIndicator <- function(data,population_ref,population_aux){
   log_info(paste0('Calculate rates and statistical indicators (',variable_indicator,')'))
   
-  data <- left_join(x=data,
-                    y=population_ref[,c("gqe","sexo","pop")],
-                    by=c("gqe","sexo"))
+  # data <- left_join(x=data,
+  #                   y=population_ref[,c("gqe","sexo","pop")],
+  #                   by=c("gqe","sexo"))
   
-  data <- data %>% filter(gqe>=4)
-  population_aux <- population_aux %>% filter(gqe>=4)
-  population_ref <- population_ref %>% filter(gqe>=4)
+  data <- data %>% filter(grupo_edad_cd>=4)
+  population_aux <- population_aux %>% filter(grupo_edad_cd>=4)
+  population_ref <- population_ref %>% filter(grupo_edad_cd>=4)
   #####  
   if(variable_indicator_ == 'ddd' | variable_indicator_ == 'mme'){
     
-    p <- data %>% group_by(codatzbs,gqe,sexo) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
-    population_aux_ <- population_aux %>% group_by(codatzbs,gqe,sexo) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
+    p <- data %>% group_by(codatzbs,grupo_edad_cd,sexo_cd) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
+    population_aux_ <- population_aux %>% group_by(codatzbs,grupo_edad_cd,sexo_cd) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
     population_ref_ <- population_ref %>% ungroup() %>% mutate(total = sum(pop))
     population_ref_ <- population_ref_ %>% mutate(st_pop = (pop/total))
-    p <- left_join(x=p, y=population_aux_, by = c('codatzbs','gqe','sexo'))
-    data_clean <- p %>% filter(n_poblacion >0) 
-    data_clean <- left_join(x=data_clean, y = population_ref_[c("gqe","sexo","st_pop")])
+    population_aux_ <- population_aux_ %>% filter(n_poblacion >0)
+    data_clean <- left_join(x=population_aux_, y=p, by = c('codatzbs','grupo_edad_cd','sexo_cd'))
+    data_clean <- left_join(x=data_clean, y = population_ref_[c("grupo_edad_cd","sexo_cd","st_pop")],by = c('grupo_edad_cd','sexo_cd'))
     data_clean <- data_clean %>% mutate(rate = ((1000*casos)/(365*n_poblacion)))
     rate_dsr <- data_clean %>% group_by(codatzbs) %>% summarise(te = round(sum(st_pop * rate),4),
                                                                 casos= sum(casos,na.rm=TRUE),
@@ -191,13 +192,13 @@ getRatesByIndicator <- function(data,population_ref,population_aux){
     
   }else{
     
-    p <- data %>% group_by(codatzbs,gqe,sexo) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
-    population_aux_ <- population_aux %>% group_by(codatzbs,gqe,sexo) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
+    p <- data %>% group_by(codatzbs,grupo_edad_cd,sexo_cd) %>% summarise(casos = (sum(casos,na.rm=TRUE)))
+    population_aux_ <- population_aux %>% group_by(codatzbs,grupo_edad_cd,sexo_cd) %>% summarise(n_poblacion = (sum(n_poblacion,na.rm=TRUE)))
     population_ref_ <- population_ref %>% ungroup() %>% mutate(total = sum(pop))
     population_ref_ <- population_ref_ %>% mutate(st_pop = (pop/total))
-    p <- left_join(x=p, y=population_aux_, by = c('codatzbs','gqe','sexo'))
-    data_clean <- p %>% filter(n_poblacion >0) 
-    data_clean <- left_join(x=data_clean, y = population_ref_[c("gqe","sexo","st_pop")])
+    population_aux_ <- population_aux_ %>% filter(n_poblacion >0)
+    data_clean <- left_join(x=population_aux_, y=p, by = c('codatzbs','grupo_edad_cd','sexo_cd'))
+    data_clean <- left_join(x=data_clean, y = population_ref_[c("grupo_edad_cd","sexo_cd","st_pop")],by = c('grupo_edad_cd','sexo_cd'))
     data_clean <- data_clean %>% mutate(rate = ((casos)/(n_poblacion)))
     rate_dsr <- data_clean %>% group_by(codatzbs) %>% summarise(te = round(sum(st_pop * rate),4),
                                                                 casos= sum(casos,na.rm=TRUE),
@@ -218,11 +219,11 @@ getRates <- function(indicator,data,patient_variables,population,population_ref,
   params <- c(patient_variables,variable_indicator)
   data <- data %>% dplyr::select(all_of(params)) %>% rename(casos = variable_indicator)
   population_aux <- population %>% 
-    filter(zbs %in% data$zbs) %>% 
-    select(zbs,sexo,gqe,n_poblacion,codatzbs,n_zbs)
+    filter(zbs_residencia_cd %in% data$zbs_residencia_cd) %>% 
+    select(zbs_residencia_cd,sexo_cd,grupo_edad_cd,n_poblacion,codatzbs,n_zbs)
   
   data<-merge(x=population_aux,y=data,all.x = TRUE)
-  data[is.na(data)] <- 0
+  data$casos[is.na(data$casos)] <- 0
   rates <- getRatesByIndicator(data,population_ref,population_aux)
   rates$indicator <- indicator
   return(rates)
@@ -248,8 +249,8 @@ writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
   names(objeto) <- indicators_list
   
   estadisticosobs<-array(0,c(length(objeto),7))
-  c.rr<-array(0,c(length(objeto),dim(objeto[[1]])[1]))
-  c.rreb<-array(0,c(length(objeto),dim(objeto[[1]])[1]))
+  # c.rr<-array(0,c(length(objeto),dim(objeto[[1]])[1]))
+  # c.rreb<-array(0,c(length(objeto),dim(objeto[[1]])[1]))
   for(i in 1:length(objeto)){
     
     attach(objeto[[i]])
@@ -303,14 +304,14 @@ for(variable_indicator in c('ddd_por_envase','pvp_nomenclator_nm','mme_total')){
   estadisticosobs_total  <- data.frame()
   variable_indicator_ <- unlist(strsplit(variable_indicator,'_'))[1]
   for(año in lista_años){
-    data <- leerDataAño4(año)
+    data <- leerDataAño(año)
     if(nrow(data != 0)){
       pop <- leerPoblacionAño(año,data)
       data <- leer_asignar_relaciones_zbs(data)
       pop <- leer_asignar_relaciones_zbs(pop)
       pop$n_poblacion[is.na(pop$n_poblacion)] <- 0
       population_ref <- getPoblacionRef(año)
-      patient_variables <- c("zbs","gqe","sexo","tsi","codatzbs","n_zbs")
+      patient_variables <- c("zbs_residencia_cd","grupo_edad_cd","sexo_cd","codatzbs","n_zbs")
       indicators_list <- c('N02A')
     
     

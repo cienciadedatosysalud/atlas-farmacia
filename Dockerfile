@@ -33,6 +33,8 @@ RUN micromamba install -y -n aspire -f /tmp/env_project.yaml \
 
 COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antibioticos /home/$MAMBA_USER/projects/atlas_antibioticos
 COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_opioides /home/$MAMBA_USER/projects/atlas_opioides
+COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antipsicoticos /home/$MAMBA_USER/projects/atlas_antipsicoticos
+COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antidepresivos /home/$MAMBA_USER/projects/atlas_antidepresivos
 COPY --chown=$MAMBA_USER:$MAMBA_USER main_logo.png /temp/main_logo.png
 
 RUN cp /temp/main_logo.png $(find front -name main_logo**)

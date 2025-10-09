@@ -2,7 +2,6 @@ name: aspire
 channels:
  - conda-forge
 dependencies:
-- r-sf=1.0_14
 - r-sjmisc=2.8.9
 - r-gt=0.10.0
 - r-cowplot=1.1.2
@@ -12,5 +11,3 @@ dependencies:
 - r-plotly=4.10.4
 - r-stringr=1.5.1
 - r-htmlwidgets=1.6.4
-- r-duckdb=0.10.1
-- python-duckdb==0.10.1

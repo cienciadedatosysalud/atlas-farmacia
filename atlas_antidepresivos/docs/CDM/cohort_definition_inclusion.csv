@@ -1,0 +1,29 @@
+classification_system,code_4dig,code_5dig,description_family,code_7dig,description,ddd_o,ddd_p,ddd_r,ddd_n,ddd_sl,ddd_td,"DDD,.U,.Adm.R",Note,Source
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA02,Imipramina,"0,1 g ","0,1 g",,,,,"0,1 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA04,Clomipramina,"0,1 g ","0,1 g",,,,,"0,1 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA06,Trimipramina,"0,15 g ","0,15 g",,,,,"0,15 g O; 0,15 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA09,Amitriptilina,75 mg,75 mg,,,,,75 mg O; 75 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA10,Nortriptilina,75 mg,30 mg,,,,,76 mg O; 30 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA12,Doxepina,"0,1 g ","0,1 g",,,,,"0,1 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA16,Dosulepina,"0,15 g ",,,,,,"0,15 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AA,Inhibidores no selectivos de recaptación de monoaminas,N06AA21,Maprotilina,"0,1 g ","0,1 g",,,,,"0,1 g O; 0,1 g P",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB03,Fluoxetina,20 mg,,,,,,20 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB04,Citalopram,20 mg,20 mg,,,,,20 mg O; 20 mg P,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB05,Paroxetina,20 mg,,,,,,20 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB06,Sertralina,50 mg,,,,,,50 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB08,Fluvoxamina,"0,1 g ",,,,,,"0,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AB,Inhibidores selectivos de recaptación de serotonina,N06AB10,Escitalopram,10 mg,,,,,,10 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AF,"Inhibidores de la monoaminooxidasa, no selectivos",N06AF04,Tranilcipromina,10 mg,,,,,,10 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AG,Inhibidores de la monoaminooxidasa tipo A,N06AG02,Moclobemida,"0,3 g",,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX01,Oxitriptán,,,,,,,,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX03,Mianserina,60 mg,,,,,,60 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX05,Trazodona,"0,3 g",,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX11,Mirtazapina,30 mg,,,,,,30 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX12,Bupropión,"0,3 g",,,,,,"0,3 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX14,Tianeptina,"37,5 mg",,,,,,"37,5 mg O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX16,Venlafaxina,"0,1 g ",,,,,,"0,1 g O",,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX18,Reboxetina,8 mg,,,,,,8 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX21,Duloxetina,60 mg,,,,,,60 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX22,Agomelatina,25 mg,,,,,,25 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX23,Desvenlafaxina,50 mg,,,,,,50 mg O,,https://www.whocc.no/atc_ddd_index
+ATC/DDD,N06A,N06AX,Otros antidepresivos,N06AX26,Vortioxetina,10 mg,,,,,,10 mg O,,https://www.whocc.no/atc_ddd_index
