@@ -99,7 +99,7 @@ Follow the steps below.
   2. If everything has worked well, in the "RUN ANALYSIS" tab, select the project "Variaciones en el consumo de antipsicóticos por ZBS (y CCAA)" and select the script "**antipsicoticos_report.qmd**"
   3. Go to the "OUTPUTS" tab and download the results.
 
-## MINIMUM REQUIREMENTS FOR DEPLOYMENT
+## MINIMUM REQUIREMENTS FOR DEPLOYMENT 
 
 
 [![DOI](https://zenodo.org/badge/671438742.svg)](https://zenodo.org/badge/latestdoi/671438742)
