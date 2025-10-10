@@ -302,7 +302,7 @@ writeResults2 <- function(indicators_rates, indicators_list,variable_indicator){
 #       PROGRAMA       #
 #########################
 for(variable_indicator in c('ddd_por_envase','pvp_nomenclator_nm','mme_total')){
-  lista_años <- seq(2013,2022,1)
+  lista_años <- seq(2013,2024,1)
   indicators_rates_total <- data.frame()
   estadisticosobs_total  <- data.frame()
   variable_indicator_ <- unlist(strsplit(variable_indicator,'_'))[1]
