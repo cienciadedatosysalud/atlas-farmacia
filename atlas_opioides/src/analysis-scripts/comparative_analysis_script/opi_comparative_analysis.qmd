@@ -88,7 +88,7 @@ log_info(paste0("Versión de los análisis: ",s))
 ::: {.justify}
 
 
-El número de envases de medicamentos opiáceos (opioides) dispensados en el periodo 2017-2022 aumentó un 24,5% (de 10,2 millones a 12,7 millones de dispensaciones). El 68,5% del total de  estas  dispensaciones se realizaron en mujeres. El porcentaje de mujeres con alguna dispensación de opioides respecto a los hombres fue considerablemente mayor en todos los grupos etarios, siendo más del doble a partir de los 65 años. Sin embargo, se observó un mayor crecimiento en las dispensaciones en hombres, 32,7% frente a un 20,8% en mujeres en el periodo de estudio. Las tarjetas sanitarias sin aseguramiento, farmacia gratuita y pensionistas y activos con rentas inferiores a 18000 euros (67,5% de la población en las CCAA analizadas) recibieron el 82,3% de los envases dispensados de fármacos opioides.
+El número de envases de medicamentos opiáceos (opioides) dispensados en el periodo 2017-2022 aumentó un 21,5% (de 10,2 millones a 12,4 millones de dispensaciones). El 68,5% del total de  estas  dispensaciones se realizaron en mujeres. El porcentaje de mujeres con alguna dispensación de opioides respecto a los hombres fue considerablemente mayor en todos los grupos etarios, siendo más del doble a partir de los 65 años. Sin embargo, se observó un mayor crecimiento en las dispensaciones en hombres, 30% frente a un 17,8% en mujeres en el periodo de estudio. Las tarjetas sanitarias sin aseguramiento, farmacia gratuita y pensionistas y activos con rentas inferiores a 18000 euros (67,5% de la población en las CCAA analizadas) recibieron el 82,3% de los envases dispensados de fármacos opioides.
 
 
 Con variación en la evolución anual y entre CCAA, en torno al 60% de los envases dispensados correspondieron a opioides en combinación con analgésicos, el 17% a otros opioides, el 14% a derivados de la fenilpiperidina, el 6% a alcaloides naturales del opio y el 2% a derivados de oripavina.
@@ -140,7 +140,7 @@ envases_dispensados <- dbGetQuery(conn = con,
                          grupo_edad_cd,
                          sexo_cd,
                          sum(pacientes_nm) as n_pacientes
-                         FROM main.aggregated_outputs 
+                         FROM main.aggregated_outputs
                          WHERE sexo_cd IN (1,2) and grupo_edad_cd IN (4,5,6,7,8,9,10,11,12,13,14,15,16,17,18) 
                          GROUP BY 
                          año_cd,
@@ -362,8 +362,7 @@ from
 		atc_farmaco_dispensado[1:5] as atc_farmaco_dispensado_short,
 		pacientes_nm,
 		n_envases
-	from
-		main.aggregated_outputs
+	from main.aggregated_outputs
 	WHERE
 		(atc_farmaco_dispensado_short in ('N02AA', 'N02AB', 'N02AX', 'N02AJ','N02AE')))
 GROUP BY
@@ -491,7 +490,7 @@ SELECT * FROM(SELECT
   sum(n_envases) as sum_n_envases,
   sum(pacientes_nm) as sum_n_personas
 FROM 
- main.aggregated_outputs
+main.aggregated_outputs
 GROUP BY
   año_cd,
   ccaa_cd,
@@ -2437,8 +2436,7 @@ tabla_atc <- dbGetQuery(conn=con,
 	select
 		atc_farmaco_dispensado,
 	  sum(n_envases) as sum_n_envases
-	from
-		main.aggregated_outputs
+	from main.aggregated_outputs
 	group by atc_farmaco_dispensado
 ")
 
