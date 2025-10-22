@@ -219,7 +219,6 @@ getRates <- function(indicator,data,patient_variables,population,population_ref,
   params <- c(patient_variables,variable_indicator)
   data <- data %>% dplyr::select(all_of(params)) %>% rename(casos = variable_indicator)
   population_aux <- population %>% 
-    filter(zbs_residencia_cd %in% data$zbs_residencia_cd) %>% 
     select(zbs_residencia_cd,sexo_cd,grupo_edad_cd,n_poblacion,codatzbs,n_zbs)
   
   data<-merge(x=population_aux,y=data,all.x = TRUE)
