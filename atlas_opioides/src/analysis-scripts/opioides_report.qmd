@@ -103,7 +103,7 @@ dbWriteTable(con, "zona_basica_ine", poblaciones_ine_df, append = TRUE)
 
 # poblaciones_tarjeta_df <- read.csv(file = 'datos_nivel_zona_basica_tarjeta.csv', sep = '|', colClasses = c(zbs_residencia_cd = 'character'))
 poblaciones_tarjeta_df <- dbGetQuery(conn = con, "
-   SELECT * FROM 'datos_nivel_zona_basica_tarjeta.parquet'
+   SELECT * FROM 'datos_nivel_zona_basica_tarjeta.parquet' WHERE tsi_cd is NULL or tsi_cd NOT IN ('8')
 	")
 
 dbExecute(con, "CREATE OR REPLACE TABLE zona_basica_tarjeta (
@@ -128,7 +128,8 @@ dbExecute(con, "CREATE OR REPLACE TABLE zbs_residencia_codatzbs (
 dbWriteTable(con, "zbs_residencia_codatzbs", relaciones_df, append = TRUE)
 
 dbExecute(con, "CREATE OR REPLACE VIEW envase_dispensado_view AS SELECT envase_id::VARCHAR || '-' || year(fecha_dispensacion_dt)::VARCHAR as envase_id, fecha_dispensacion_dt, paciente_id, edad_nm, sexo_cd, tsi_cd, zbs_residencia_cd, ccaa_cd, a.codigo_nacional_farmaco_cd,n.atc_farmaco_dispensado_cd
-, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm, n.mme_total  FROM main.envase_dispensado a
+, n.ddd_nomenclator_nm, n.ddd_por_envase, n.pvp_nomenclator_nm, n.precio_por_envase_nm, n.mme_total  FROM (SELECT * from main.envase_dispensado 
+WHERE tsi_cd is NULL or tsi_cd NOT IN ('8')) a
  LEFT JOIN main.nomenclator n
  ON a.codigo_nacional_farmaco_cd = n.codigo_nacional_farmaco_cd
  where n.codigo_nacional_farmaco_cd is not null")
@@ -227,7 +228,7 @@ nomenclator_fail <- dbGetQuery(conn = con, '
 	')
 nomenclator_fail[is.na(nomenclator_fail)] <- 0
 total <- dbGetQuery(conn = con, '
-   SELECT COUNT(*) as total FROM main.envase_dispensado
+   SELECT COUNT(*) as total FROM main.envase_dispensado_view
 	')
 
 registros_zbs_null <- dbGetQuery(conn = con,'
@@ -1756,7 +1757,7 @@ Se muestra el porcentaje de envases dispensados de cada grupo de opioides respec
 #| label: Evolución temporal del porcentaje de envases dispensados por ATC
 #| fig-align: center
 tabla_envases_año$atc_farmaco_dispensado_short <- factor(tabla_envases_año$atc_farmaco_dispensado_short)
-df_ <- tabla_envases_año %>% group_by(año_cd,) %>% 
+df_ <- tabla_envases_año %>% group_by(año_cd) %>% 
   mutate(total =(sum(n_envases,na.rm=TRUE))) 
 df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),2))
 df_ <- df_[order(df_$año_cd,df_$percent_envases, df_$atc_farmaco_dispensado_short),]
@@ -1765,7 +1766,7 @@ plot <- ggplot(df_,
        aes(x = factor(año_cd), stratum = atc_farmaco_dispensado_short, alluvium = atc_farmaco_dispensado_short,
            y = percent_envases,
            fill = atc_farmaco_dispensado_short)) +
-  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", '#e78ac3', '#a6d854')) +
+  scale_fill_manual(values = c("N02AA"="#66c2a5", "N02AB"="#fc8d62", "N02AE"="#8da0cb", "N02AJ"='#e78ac3', "N02AX"='#a6d854')) +
   geom_flow(stat = "alluvium", lode.guidance = "frontback",
             color = "darkgray", width = 0.6) +
   geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
@@ -1843,7 +1844,7 @@ plot_evo_tsi <- function(tsi){
        aes(x = factor(año_cd), stratum = atc_farmaco_dispensado_short, alluvium = atc_farmaco_dispensado_short,
            y = var_estudio,
            fill = atc_farmaco_dispensado_short)) +
-  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", '#e78ac3', '#a6d854')) +
+  scale_fill_manual(values = c("N02AA"="#66c2a5", "N02AB"="#fc8d62", "N02AE"="#8da0cb", "N02AJ"='#e78ac3', "N02AX"='#a6d854')) +
   geom_flow(stat = "alluvium", lode.guidance = "frontback",
             color = "darkgray", width = 0.6) +
   geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
@@ -2130,7 +2131,7 @@ df_autores <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas B
                                      'Comunidad Valenciana','Comunidad de Madrid','Comunidad Foral de Navarra','País Vasco','La Rioja',
                                      'Región de Murcia'),
                          ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
-                         autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','Flora Pérez Hernández, María Ángeles Lumbreras, Óscar Valcuende Mantilla', 'Cristina Colls, Èrica Martínez Solanas, Mireia Espallargues, Montserrat Vicente, Pere Carbonell, Thais de Pando, Ana de Andrés, Andrea Molina, Núria Escoda, Anna Berenguera, Anna Moleras, Daniel Garcia Abietar, Glòria Oliva, Carles Vilaplana, Manuel Medina, Neus Carrilero, Maria Pueyo', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Isabel Hurtado, Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont, Javier Rubio Serrano, Daniel Cifo', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
+                         autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','Flora Pérez Hernández, María Ángeles Lumbreras, Óscar Valcuende Mantilla', 'Cristina Colls, Èrica Martínez Solanas, Mireia Espallargues, Montserrat Vicente, Pere Carbonell, Thais de Pando, Ana de Andrés, Andrea Molina, Núria Escoda, Anna Berenguera, Anna Moleras, Daniel Garcia Abietar, Glòria Oliva, Carles Vilaplana, Manuel Medina, Neus Carrilero, Maria Pueyo', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Isabel Hurtado, Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont, Javier Rubio Serrano, Daniel Cifo', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Martin Sebastian Mateo Berdini, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
                          afiliacion_st = c('Instituto Aragonés de Ciencias de Salud', 'Unidad de Farmacia de Salud. Servicio de Salud del Principado de Asturias','Consejería de Salud y Consumo','Dirección General de Ordenación Sanitaria, Farmacia e Inspección','Agència de Qualitat i Avaluació Sanitàries de Catalunya (AQUAS). Servei Català de la Salut. Consorci Sanitari de Barcelona', 'Servicio de Evaluación de la Calidad Asistencial y Sistemas de Información de la Dirección General de Programas Asistenciales', 'Dirección Técnica de Farmacia. Gerencia Regional de Salud de Castilla y León', 'Conselleria de Sanitat','Gerencia Asistencial de Atención Primaria','Servicio Navarro de Salud - Osasunbidea (SNS-O)','Osakidetza','Rioja Salud','Servicio Murciano de Salud'))
 
 df_autores_local <- df_autores %>% filter(ccaa_cd %in% list_ccaa)
