@@ -63,6 +63,12 @@ From 01-01-2013 until 31-12-2024 (or the more recent date available) for antibio
 
 From 01-01-2017 until 31-12-2024 (or the more recent date available) for antidepressants and antipsychotics.
 
+
+### Data refresh and results update
+Local reports may be updated periodically according to each participating institution's data refresh schedule, utilizing the most recent available annual population data.
+
+In contrast, the general comparative report for the National Health System (SNS) is updated annually using an iterative, incremental approach. This ensures longitudinal consistency across time series, accounting for any updates to cohort definitions or the drug nomenclature (catalogue). 
+
 ## IN ORDER TO RUN THE DOCKER AND ANTIBIOTICS, OPIOIDS, ANTIDEPRESSANTS, ANTIPSYCHOTICS ANALYSIS, FOLLOW THE NEXT STEPS
 ## 1-HOW TO RUN THE DOCKER
 Use the following code snippet to create the container.
