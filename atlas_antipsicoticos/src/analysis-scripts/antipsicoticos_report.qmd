@@ -1105,9 +1105,7 @@ La unidad de análisis a estudio son las Zonas Básicas de Salud existentes en l
 
 - 6 = "TSI 005 activos tipo máximo", 
 
-- 7 = "TSI 005-03 pensionistas tipo máximo" y 
-
-- 8 = "TSI 006 mutualistas". 
+- 7 = "TSI 005-03 pensionistas tipo máximo".
 
 En las TSI están excluidos los habitantes sin derecho a la prestación farmacéutica, esencialmente los adscritos a las mutualidades de funcionarios que usan su propio sistema de recetas.
 
@@ -2272,9 +2270,7 @@ Se observa la evolución temporal de las siguientes tres variables según catego
 
 - 6 = "TSI 005 activos tipo máximo", 
 
-- 7 = "TSI 005-03 pensionistas tipo máximo" y 
-
-- 8 = "TSI 006 mutualistas".
+- 7 = "TSI 005-03 pensionistas tipo máximo".
 :::
 
 ```{r}
