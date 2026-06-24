@@ -101,6 +101,9 @@ A previous version (v.1.0.3) of this common data model not compliant with the st
 - Repository: https://github.com/cienciadedatosysalud/atlas-farmacia
 - Issue tracker: https://github.com/cienciadedatosysalud/atlas-farmacia/issues
 
+# Institutional Support
+The antibiotics cohort study update is conducted under a collaborative contract with the Spanish Agency of Medicines and Medical Devices ([AEMPS](https://www.aemps.gob.es/)), framed within the Strategic Action of the [National Plan against Antibiotic Resistance (PRAN) 2025–2027](https://www.resistenciaantibioticos.es/es/publicaciones/plan-nacional-frente-la-resistencia-los-antibioticos-pran-2025-2027).
+
 # References
 - Data Science for Health Services and Policy Research group: https://cienciadedatosysalud.org/en/
 - Common Data Model Builder library :https://github.com/cienciadedatosysalud/cdmb
