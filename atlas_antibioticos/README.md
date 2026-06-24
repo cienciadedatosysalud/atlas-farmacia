@@ -1,8 +1,8 @@
 <center style="margin-top: 50px; margin-bottom: 50px;">
 
   <span style="white-space: nowrap;">
-    <img src="https://github.com/cienciadedatosysalud/atlas-farmacia/tree/main/.github/logos/logo_aemps_color.png" alt="Logo AEMPS" height="100" style="margin: 0 20px; vertical-align: middle;">
-    <img src="https://github.com/cienciadedatosysalud/atlas-farmacia/tree/main/.github/logos/logo_pram_color.png" alt="Logo PRAM" height="100" style="margin: 0 20px; vertical-align: middle;">
+    <img src="/.github/logos/logo_aemps_color.png" alt="Logo AEMPS" height="100" style="margin: 0 20px; vertical-align: middle;">
+    <img src="/.github/logos/logo_pram_color.png" alt="Logo PRAM" height="100" style="margin: 0 20px; vertical-align: middle;">
   </span>
 
 </center>
