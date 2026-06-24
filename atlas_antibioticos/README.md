@@ -1,4 +1,11 @@
-![Logo of the project](https://cienciadedatosysalud.org/wp-content/uploads/logo-Data-Science-VPM.png)
+<center style="margin-top: 50px; margin-bottom: 50px;">
+
+  <span style="white-space: nowrap;">
+    <img src="https://github.com/cienciadedatosysalud/atlas-farmacia/tree/main/.github/logos/logo_aemps_color.png" alt="Logo AEMPS" height="100" style="margin: 0 20px; vertical-align: middle;">
+    <img src="https://github.com/cienciadedatosysalud/atlas-farmacia/tree/main/.github/logos/logo_pram_color.png" alt="Logo PRAM" height="100" style="margin: 0 20px; vertical-align: middle;">
+  </span>
+
+</center>
 
 <small><i>This project follows the structure built using the [Common Data Model Builder](https://github.com/cienciadedatosysalud/cdmb), a tool that allows you to create common data models to facilitate interoperability and reproducibility of the analyses.</i></small>
 
@@ -111,6 +118,10 @@ The antibiotics cohort study update is conducted under a collaborative contract 
 - Atlas VPM community in Zenodo: https://zenodo.org/communities/atlasvpm
 - Research Object Crate (RO-Crate): https://www.researchobject.org/ro-crate/
 - ORCID: https://orcid.org/
+
+<p align="center">
+  <img src="https://cienciadedatosysalud.org/wp-content/uploads/logo-Data-Science-VPM.png" alt="Logo of the project" height="60">
+</p>
 
 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" ><img src="https://img.shields.io/badge/license-CC--BY%204.0-lightgrey" alt="License: CC-BY 4.0"></a>
 
