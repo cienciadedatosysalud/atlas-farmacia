@@ -4,13 +4,13 @@
     "uuid": "de998c93-9f1b-4bc3-839a-fc275f4eb7ce",
     "metadata": {
         "uuid": "6e5dc3ca-2816-497a-957f-d25e4e0adcd6",
-        "project": "ATLASVPM FARMACIA",
+        "project": "ATLASVPM FARMACIA antibióticos",
         "funder": "",
         "url_project": "www.atlasvpm.org",
         "work_package": "1",
         "use_case": "Variaciones en el consumo de antibióticos por ZBS (y CCAA)",
         "document": "Especificación del modelo común de datos del AtlasVPM de farmacia ",
-        "version_sem": "1.0.6",
+        "version_sem": "1.0.7",
         "authors": [
             {
                 "name": "Grupo de Investigación en Ciencia de Datos para Servicios y Políticas de Salud",
@@ -65,7 +65,7 @@
         "inclusion_criteria": "Cualquier persona con tarjeta sanitaria con alguna dispensación/facturación (ver definición inclusión) de al menos un envase de estos fármacos en el periodo de estudio \n",
         "exclusion_criteria": "Personas sin tarjeta sanitaria\nPersonas sin dispensación/facturación de fármaco antibiótico",
         "beggining_study_period": "2013-01-01",
-        "end_study_period": "2022-12-31",
+        "end_study_period": "2024-12-31",
         "cohort_definition_inclusion": {
             "filename": "cohort_definition_inclusion.csv",
             "nature": "Drugs",

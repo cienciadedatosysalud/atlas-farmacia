@@ -1,6 +1,9 @@
-FROM ghcr.io/cienciadedatosysalud/aspire:latest
+FROM ghcr.io/cienciadedatosysalud/aspirev2-testing:latest
 ARG pipeline_version="Non-versioned"
 ENV PIPELINE_VERSION=$pipeline_version
+
+ARG github_repo="Non-versioned"
+ENV GITHUB_REPO=$github_repo
 
 USER root
 RUN apt update && apt install -y --no-install-recommends \
@@ -9,6 +12,11 @@ RUN apt update && apt install -y --no-install-recommends \
 
 
 # Set time Europe/Madrid
+
+# Creamos el entrypoint en una ruta segura y ejecutable
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 
 RUN micromamba -n aspire install tzdata -c conda-forge && micromamba clean --all --yes \
     && rm -rf /opt/conda/conda-meta
@@ -35,14 +43,17 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antibioticos /home/$MAMBA_USER/projec
 COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_opioides /home/$MAMBA_USER/projects/atlas_opioides
 COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antipsicoticos /home/$MAMBA_USER/projects/atlas_antipsicoticos
 COPY --chown=$MAMBA_USER:$MAMBA_USER atlas_antidepresivos /home/$MAMBA_USER/projects/atlas_antidepresivos
-COPY --chown=$MAMBA_USER:$MAMBA_USER main_logo.png /temp/main_logo.png
+#COPY --chown=$MAMBA_USER:$MAMBA_USER main_logo.png /temp/main_logo.png
+COPY --chown=$MAMBA_USER:$MAMBA_USER main_logo.png /tmp/main_logo.png
+#RUN cp /temp/main_logo.png $(find front -name main_logo**)
+RUN cp -f /tmp/main_logo.png $(find /var/www/html/ -type f -name "main_logo*" | head -n 1)  
 
-RUN cp /temp/main_logo.png $(find front -name main_logo**)
 
-ENV APP_PORT=3000
-ENV APP_HOST=0.0.0.0
-EXPOSE 3000
+#ENV APP_PORT=3000
+#ENV APP_HOST=0.0.0.0
+#EXPOSE 3000
 
 WORKDIR /home/$MAMBA_USER
 
-ENTRYPOINT ["micromamba","run","-n","aspire","/opt/entrypoint.sh"]
+# ENTRYPOINT fijo para RHEL / SELinux
+ENTRYPOINT ["micromamba","run","-n","aspire","entrypoint.sh"]
