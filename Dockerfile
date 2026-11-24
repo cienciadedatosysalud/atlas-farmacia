@@ -32,7 +32,7 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER env_project.yaml /tmp/env_project.yaml
 # Installing dependencies
 RUN micromamba install -y -n aspire -f /tmp/env_project.yaml \
     && micromamba run -n aspire Rscript -e "remotes::install_github('gadenbuie/epoxy')" \ 
-    && micromamba run -n aspire Rscript -e "remotes::install_github('duckdb/duckdb-r')" \ 
+    && micromamba run -n aspire Rscript -e "install.packages('duckdb')" \ 
     && micromamba clean --all --yes \
     && rm -rf /opt/conda/conda-meta /tmp/env_project.yaml
 
