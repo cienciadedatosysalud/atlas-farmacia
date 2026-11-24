@@ -31,8 +31,8 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER env_project.yaml /tmp/env_project.yaml
 
 # Installing dependencies
 RUN micromamba install -y -n aspire -f /tmp/env_project.yaml \
-    && micromamba run -n aspire Rscript -e "remotes::install_github('gadenbuie/epoxy')" \ 
-    && micromamba run -n aspire Rscript -e "install.packages('duckdb')" \ 
+    && micromamba run -n aspire Rscript -e "remotes::install_github('gadenbuie/epoxy')" \
+    && micromamba run -n aspire Rscript -e "install.packages('duckdb', repos = sprintf('https://p3m.dev/cran/latest/bin/linux/manylinux_2_28-%s/%s', R.version['arch'], substr(getRversion(), 1, 3)))" \
     && micromamba clean --all --yes \
     && rm -rf /opt/conda/conda-meta /tmp/env_project.yaml
 
