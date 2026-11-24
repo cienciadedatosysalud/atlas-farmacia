@@ -32,7 +32,6 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER env_project.yaml /tmp/env_project.yaml
 # Installing dependencies
 RUN micromamba install -y -n aspire -f /tmp/env_project.yaml \
     && micromamba run -n aspire Rscript -e "remotes::install_github('gadenbuie/epoxy')" \
-    && micromamba run -n aspire Rscript -e "options(HTTPUserAgent = sprintf('R/%s R (%s)', getRversion(), paste(getRversion(), R.version['platform'], R.version['arch'], R.version['os']))); install.packages('duckdb', repos = 'https://packagemanager.posit.co/cran/__linux__/bookworm/latest')" \
     && micromamba clean --all --yes \
     && rm -rf /opt/conda/conda-meta /tmp/env_project.yaml
 
