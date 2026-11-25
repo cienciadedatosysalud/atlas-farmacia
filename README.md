@@ -10,3 +10,9 @@ La actualización del estudio de cohorte sobre antibióticos se lleva a cabo med
 
 ### Opioides (OPI)
 👉 **[Acceder al informe OPI](https://cienciadedatosysalud.github.io/atlas-farmacia/opi/)**
+
+### Antipsicóticos (APSIC)
+👉 **[Acceder al informe APSIC](https://cienciadedatosysalud.github.io/atlas-farmacia/apsic/)**
+
+### Antidepresivos (ADEP)
+👉 **[Acceder al informe ADEP](https://cienciadedatosysalud.github.io/atlas-farmacia/adep/)**
