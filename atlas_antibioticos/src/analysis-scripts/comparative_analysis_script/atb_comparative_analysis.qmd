@@ -7,9 +7,8 @@ author:
     affiliations:
       - name: Grupo de Ciencia de datos para la investigación en servicios y políticas sanitarias
       - name: Instituto Aragonés de Ciencias de la Salud (IACS)
-      - name: Instituto de Investigación Sanitaria de Aragón (IIS)
       - name: Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)
-date: "2024-07-26"
+date: "2026-11-24"
 # bibliography:
 #   - referencias.bib
 bibliography:
@@ -28,9 +27,11 @@ include-in-header:
   - text: |
       <style>
       #title-block-header {
-        background-image: url(logo_ciencia_atlas.png);
-        background-size: 300px;
-        background-position: top right;
+        background-image:
+          url(logo_aemps_color.png),
+          url(logo_pram_color.png);
+        background-size: 200px auto, 200px auto;
+        background-position: right 220px top 40px, right 0px top 20px;
         background-repeat: no-repeat;
         background-origin: content-box;
       }
@@ -42,7 +43,7 @@ execute:
 ---
 
 
-```{css, echo = FALSE}
+```{css, echo=FALSE}
 .justify {
   text-align: justify !important
 }
@@ -76,7 +77,7 @@ library(stringr)
 options(scipen = 999)
 
 #s <- Sys.getenv("PIPELINE_VERSION")
-s <- '0.0.2'
+s <- '0.0.5'
 log_info(paste0("Versión de los análisis: ",s))
 ```
 
@@ -89,16 +90,21 @@ log_info(paste0("Versión de los análisis: ",s))
 
 ::: {.justify}
 
-El número de envases de antibióticos dispensados en el periodo 2017-2022 aumentó un 1,5% (de 10,7 millones a 10,9 millones de dispensaciones). El 59,4% de todas estas dispensaciones se realizaron en mujeres. El porcentaje de mujeres con alguna dispensación de antibióticos fue mayor en todos los tramos etarios exceptuando a la población pediátrica. Las tarjetas sanitarias sin aseguramiento, farmacia gratuita y pensionistas y activos con rentas inferiores a 18000 euros (66,5% de la población en las CCAA analizadas) recibieron más del 74,3% de los envases dispensados de antibióticos.
+El número de envases de antibióticos dispensados en el periodo 2017-2024 aumentó un 18,5% (de 8,7 millones a 10,3 millones de dispensaciones (Región de Murcia no presenta datos para 2017)). El 60,6% de todas estas dispensaciones se realizaron en mujeres. El porcentaje de mujeres con alguna dispensación de antibióticos fue mayor en todos los tramos etarios exceptuando a la población pediátrica. Las tarjetas sanitarias sin aseguramiento, farmacia gratuita y pensionistas y activos con rentas inferiores a 18000 euros (65,6% de la población en las CCAA analizadas) recibieron más del 72,2% de los envases dispensados de antibióticos.
 
 
-Con variación en la evolución anual y entre CCAA, en torno al 45% de los envases dispensados correspondieron a penicilinas, el 19% a macrólidos, el 14% a otros antibacterianos, el 13% a fluoroquinolonas y cerca del 9% a otros betalactámicos.
+Con variación en la evolución anual y entre CCAA, en torno al 45% de los envases dispensados correspondieron a penicilinas, el 19% a macrólidos, el 14% a otros antibacterianos, el 12% a fluoroquinolonas y cerca del 10% a otros betalactámicos.
 
 
-Pese al aumento de envases dispensados entre 2017 y 2020, la mediana de consumo de antibióticos seleccionados en términos de DHD descendió para el conjunto de ZBS pasando de 14,37 DHD en 2017 a 12,64 DHD en 2022. Este descenso, con variaciones entre las CCAA analizadas, se produjo principalmente en penicilinas, macrólidos y fluoroquinolonas, mientras que el consumo de otros betalactámicos y otros antibacterianos aumentó sensiblemente.
+La mediana de consumo de antibióticos seleccionados en términos de DHD aumentó ligeramente para el conjunto de ZBS pasando de 14,12 DHD en 2017 a 14,66 DHD en 2024. Con variaciones entre las CCAA analizadas, analizando por subgrupos, se produjo un descenso en penicilinas, y fluoroquinolonas, mientras que el consumo de otros betalactámicos, macrólidos y otros antibacterianos aumentó sensiblemente.
 
 
-Para el conjunto de antibióticos analizados y años, la variación de DHD entre las ZBS de más y menos consumo, sin considerar las ZBS con valores extremos, fue de una razón de variación de 2,6 veces las DHD entre estas ZBS, siendo esta variación constante a lo largo de los años. Por subgrupos terapéuticos, esta variación fue más elevada, siendo mayor en otros betalactámicos  con una razón de variación  de 4,1 veces entre las ZBS de más y menos consumo, macrólidos  con una razón de 4, fluoroquinolonas con una razón de 3,4, penicilinas con una razón de variación de 3 y otros antibacterianos con una razón de 2,7. Respecto a los indicadores del Programa de Resistencia de Antibióticos (PROA), hubo una lenta tendencia general a la mejora de los mismos con cierta distorsión en los valores de los años pandémicos 2020 y 2021. Para los indicadores de antibióticos de espectro reducido, macrólidos y fluoroquinolonas, el porcentaje de ZBS con resultados aceptables paso del 70% a 76% en antibióticos de espectro reducido, del 68% a 71% en macrólidos y del 54% a 92% en fluoroquinolonas. El indicador de amoxicilina sin ácido clavulánico se comportó de forma diferente disminuyendo las ZBS con resultados aceptables, del 78% al 75%. 
+Para el conjunto de antibióticos analizados y años, la variación de DHD entre las ZBS de más y menos consumo, sin considerar las ZBS con valores extremos, fue de una razón de variación de 3 veces las DHD entre estas ZBS, siendo esta variación constante a lo largo de los años. Por subgrupos terapéuticos, esta variación fue más elevada, siendo mayor en macrólidos con una razón de variación de 5,7 veces entre las ZBS de más y menos consumo, otros betalactámicos con una razón de 5,2, fluoroquinolonas con una razón de 4, penicilinas con una razón de variación de 3 y otros antibacterianos con una razón de 2,8. 
+
+Para el total de antibióticos, el consumo y variación de DHD fue mayor en el conjunto de TSI < 18000 euros, con una diferencia global del 23,5% en la mediana de consumo.
+
+Respecto a los indicadores del Programa de Resistencia de Antibióticos (PROA), hubo una tendencia estable con cierta distorsión en los valores de los años pandémicos 2020 y 2021. Para el indicador de amoxicilina sin ácido clavulánico (reespecto al total de amoxicilina) el porcentaje de envases dispensados pasó de 51,9% en 2017 a 53% en 2024, en antibióticos de espectro reducido (respecto al total de antibióticos) de 35,2% a 36,3%, en macrólidos (respecto al total de antibióticos) de 17,7% a 19,4%. Sin embargo, en flouroquinolonas (respecto al total de antibióticos) se observa una tendencia decreciente del porcentaje, pasando de 14,1% a 9,9%. 
+
 
 :::
 
@@ -164,6 +170,7 @@ pobla_tsi <- dbGetQuery(conn = con,
                          grupo_edad_cd"))
 
 pobla_tsi <- pobla_tsi %>% filter(ccaa_cd %in% envases_dispensados$ccaa_cd)
+pobla_tsi$año_cd <- as.numeric(pobla_tsi$año_cd)
 pobla_tsi <- pobla_tsi %>% filter(año_cd %in% envases_dispensados$año_cd)
 dbDisconnect(con, shutdown=TRUE)
 
@@ -173,9 +180,10 @@ dbDisconnect(con, shutdown=TRUE)
 ```{r,output=FALSE}
 
 df_participantes <- data.frame(ccaa_st = c('Aragón','Asturias','Baleares','Cantabria','Cataluña','Canarias','Castilla y León','Valencia','Madrid',
-                                           'Navarra','País Vasco','La Rioja'),
+                                           'Navarra','País Vasco','La Rioja','Región de Murcia','Castilla-La Mancha','Galicia','Extremadura',
+                                           'Andalucía'),
                                ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52',
-                                           'ES30','ES22','ES21','ES23'))
+                                           'ES30','ES22','ES21','ES23','ES62','ES42','ES11','ES43','ES61'))
 df_mes <- data.frame(mes_cd = c(1,2,3,4,5,6,7,8,9,10,11,12),
                      mes_st = c('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'))
 
@@ -215,7 +223,7 @@ rm(envases_dispensados_,pobla_tsi_)
 
 ```{epoxy}
 
-En este estudio participan un total de {length(df_participantes_$ccaa_st)} comunidades autónomas, con una población global de {scales::label_comma()(sum(filter(pobla_tsi,año_cd %in% 2022)$n_poblacion, na.rm = TRUE))} en el año 2022, de la cual, la media mensual de personas distintas que han sido dispensadas de algún antibiótico (ATC = J01) durante el periodo de estudio 2017 a 2022  es de un {c}%. 
+En este estudio participan un total de {length(df_participantes_$ccaa_st)} comunidades autónomas, con una población global de {scales::label_comma()(sum(filter(pobla_tsi,año_cd %in% 2024)$n_poblacion, na.rm = TRUE))} en el año 2024, de la cual, la media mensual de personas distintas que han sido dispensadas de algún antibiótico (ATC = J01) durante el periodo de estudio 2017 a 2024  es de un {c}%. 
 
 
 ```
@@ -284,7 +292,7 @@ tabla_descriptiva_tsi_ <- tabla_descriptiva_tsi_ %>% group_by(año_cd) %>% summa
 
 
 tabla_descriptiva_tsi_ <- tabla_descriptiva_tsi_ %>% pivot_wider(names_from = año_cd,values_from = value)
-tabla_descriptiva_tsi_$variable <- 'Conjunto categorías TSI (0+1+2+4)'
+tabla_descriptiva_tsi_$variable <- 'Conjunto categorías TSI < 18.000 € (Categorías 0, 1, 2, 4)'
 rm(tabla_descriptiva,tabla_descriptiva_sexo,tabla_descriptiva_tsi)
 ```
 
@@ -304,8 +312,8 @@ tabla <- rbind(tabla_descriptiva_,tabla_descriptiva_sexo_,tabla_descriptiva_tsi_
 rm(total)
 tabla %>% gt(rowname_col = "variable") %>% 
   tab_row_group(
-    label = "Conjunto categorías TSI (0+1+2+4)",
-    rows = which(tabla$variable %in% c('Conjunto categorías TSI (0+1+2+4)')),
+    label = 'Conjunto categorías TSI < 18.000 € (Categorías 0, 1, 2, 4)',
+    rows = which(tabla$variable %in% c('Conjunto categorías TSI < 18.000 € (Categorías 0, 1, 2, 4)')),
     id='tsi') %>% 
       tab_row_group(
     label = "Sexo",
@@ -317,7 +325,7 @@ tabla %>% gt(rowname_col = "variable") %>%
     rows = which(tabla$variable %in% c('Aragón','Asturias','Baleares',
                                        'Cantabria','Cataluña','Canarias',
                                        'Castilla y León','Valencia','Madrid',
-                                       'Navarra','País Vasco','La Rioja')),
+                                       'Navarra','País Vasco','La Rioja','Región de Murcia')),
     id='ccaa') %>% 
       tab_row_group(
     label = "Total Nº envases anual",
@@ -396,7 +404,7 @@ plot <- ggplot(data=df_,aes(area = percent_envases, fill = color_atc,label = pas
   geom_treemap() +
   geom_treemap_text(place = "centre",
                     size=10) +
-  labs(title='Porcentaje de envases dispensados por subgrupo terapéutico (2017-2022)',
+  labs(title='Porcentaje de envases dispensados por subgrupo terapéutico (2017-2024)',
        subtitle='')+
   scale_fill_identity() +
   theme(legend.position = "none",
@@ -428,7 +436,7 @@ plot
 
 df_ <- tabla_envases_año %>% group_by(año_cd,ccaa_cd) %>% 
   mutate(total =(sum(n_envases,na.rm=TRUE))) 
-df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),2))
+df_ <- df_ %>% mutate(percent_envases = round(100*(n_envases/total),1))
 df_ <- df_[order(df_$año_cd,df_$percent_envases, df_$atc_farmaco_dispensado_short),]
 
 df_ <- left_join(df_,df_participantes_,by='ccaa_cd')
@@ -442,7 +450,7 @@ plot <- ggplot(df_,
             color = "darkgray", width = 0.6) +
   geom_stratum(alpha = .9,width = 0.6, linewidth = 0.1, color = NA)  + 
   theme_minimal() +
-    geom_text(stat = "stratum", aes(label = paste0(percent_envases,'%')), size=2.7)+ 
+    geom_text(stat = "stratum", aes(label = paste0(percent_envases,'')), size=2.7)+ 
       labs(title = 'Evolución temporal del porcentaje de envases dispensados por ATC',
            subtitle='',
        y = 'Porcentaje de envases dispensados',
@@ -476,8 +484,6 @@ Para el total de envases dispensados en toda la serie temporal en cada comunidad
 #| label: ev_temp_alluvial
 plot
 ```
-
-
 
 
 ## Distribución de la población con alguna dispensación de antibióticos (_J01_) por grupo de edad y sexo
@@ -526,7 +532,7 @@ df_piramide_ <- df_piramide_[order(df_piramide_$grupo_edad_cd),]
 df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd,sexo_cd,grupo_edad_cd) %>% 
   summarise(sum_n_personas = sum(sum_n_personas,na.rm=TRUE),
             sum_n_envases = sum(sum_n_envases,na.rm=TRUE))
-df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd) %>% mutate(total_pobla = sum(sum(sum_n_personas,na.rm=TRUE)))
+df_piramide_ <- df_piramide_ %>% group_by(ccaa_cd) %>% mutate(total_pobla = sum(sum_n_personas,na.rm=TRUE))
 df_piramide_ <- df_piramide_ %>% mutate(percent = round(100*(sum_n_personas/total_pobla),1)) %>% 
   ungroup()
 df_piramide_ <- left_join(df_piramide_,df_participantes_,by='ccaa_cd')
@@ -553,7 +559,7 @@ plot <- df_piramide_ %>%
             size = 3
   ) +
   scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
-  labs(title = paste0("Pirámide de edad y sexo de personas con alguna dispensación (2017-2022)"),
+  labs(title = paste0("Pirámide de edad y sexo de personas con alguna dispensación (2017-2024)"),
        subtitle = "",
        x = "", y = "") +
     scale_x_continuous(
@@ -572,9 +578,11 @@ plot <- df_piramide_ %>%
 
 Se muestra la distribución de la población con dispensaciones por grupo quinquenal de edad y sexo en toda la serie temporal.
 
-Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. 
+<!-- Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. -->
 
-Para el resto de comunidades es 2017-2022.
+Para la comunidad autónoma de Murcia la serie temporal es de 2018 a 2024. 
+
+Para el resto de comunidades es 2017-2024.
 :::
 
 
@@ -625,6 +633,7 @@ pobla_tsi <- dbGetQuery(conn = con,
                          ccaa_cd,
                          sexo_cd")
 )
+pobla_tsi$año_cd <- as.numeric(pobla_tsi$año_cd)
 pobla_tsi <- pobla_tsi %>% filter(año_cd %in% df_piramide$año_cd)
 
 dbDisconnect(con, shutdown=TRUE)
@@ -718,7 +727,7 @@ plot <- df_piramide_ %>%
             size = 2.5
   ) +
   scale_fill_manual(name = "Sexo", values=c("#5983b0","#e8a202")) +
-  labs(title = paste0("Porcentaje de población por sexo de personas con alguna dispensación al mes (2017-2022)"),
+  labs(title = paste0("Porcentaje de población por sexo de personas con alguna dispensación al mes (2017-2024)"),
        subtitle = "",
        x = "", y = "")+ facet_wrap(~ccaa_st,ncol = 3) +
     scale_x_continuous(
@@ -742,9 +751,11 @@ plot <- df_piramide_ %>%
 
 Se muestra la distribución de la población con dispensaciones por sexo y mes en toda la serie temporal. Se construye calculando el porcentaje de personas con alguna dispensación por sexo para cada mes de cada año y luego realizando la media de cada mes a lo largo de la serie temporal.
 
-Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. 
+<!-- Para la comunidad autónoma de Baleares la serie temporal es de 2020 a 2022. -->
 
-Para el resto de comunidades es 2017-2022.
+Para la comunidad autónoma de Murcia la serie temporal es de 2018 a 2024. 
+
+Para el resto de comunidades es 2017-2024.
 :::
 
 ```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
@@ -831,7 +842,7 @@ plot_te_violin <- function(var){
            y = df_names_var_te_$title,
            x='') +
       ylim(c(0,df_list_indicators_$limite_eje)) +
-      theme_minimal_hgrid() + scale_x_continuous(breaks = c(2017,2018,2019,2020,2021,2022))+
+      theme_minimal_hgrid() + scale_x_continuous(breaks = c(2017,2018,2019,2020,2021,2022,2023,2024))+
       geom_hline(data=data_filter, mapping=aes(yintercept=median(std_value,na.rm = TRUE)), color="firebrick",linetype=2) +
       geom_text(x=max(data_filter$year)+0.4,
                 y=df_list_indicators_$limite_eje-1, 
@@ -910,6 +921,177 @@ plot_te[[1]]$J01X
 
 :::
 
+
+## Evolución de la variación de consumo por ZBS y TSI (SNS)
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+con <- dbConnect(duckdb::duckdb(), dbdir=database_path, read_only=FALSE)
+
+df_dhd_tsi <- dbGetQuery(conn = con, "
+SELECT * FROM consumo_dhd_tsi WHERE año_cd >= 2017
+	")
+
+dbDisconnect(con, shutdown=TRUE)
+
+```
+
+
+
+```{r,warning=FALSE,output=FALSE,echo=FALSE}
+
+
+list_variables <- 'dhd'
+df_list_indicators <- data.frame(indicators = c('J01','J01C','J01D','J01F','J01MA','J01X'),
+                                 descr = c('Antibióticos','Penicilinas', 'Otros Betalactámicos', 
+                                           'Macrólidos, Lincosaminas, Estreptograminas',
+                                           'Fluorquinolonas', 'Otros Antibacterianos'),
+                                 limite_eje = c(30,25,9,8,5,2))
+
+df_names_var_te <- data.frame(variable = c('dhd'),
+                              title = c('Consumo (DHD) mg'))
+  
+p <- list()
+plot_te_violin <- function(var){
+  
+  #names_files <- list.files(path="../../outputs", pattern = pattern, full.names=TRUE)
+ #for(file in names_files){
+  for(ind in df_list_indicators$indicators){
+    data <- df_dhd_tsi
+    data_filter <- data %>% filter(variable %in% var, atc_farmaco_dispensado %in% ind) |> 
+      dplyr::rename(std_value=te)
+    data_filter$dhd_tsi[data_filter$dhd_tsi == 'mayor_18000'] <- 'Conjunto categorías TSI >= 18.000 €' 
+    data_filter$dhd_tsi[data_filter$dhd_tsi == 'menor_18000'] <- 'Conjunto categorías TSI < 18.000 €' 
+    df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
+    df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
+    data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
+    medians <- data_filter %>% 
+    group_by(año_cd, dhd_tsi) %>% 
+    summarise(median_year = median(std_value, na.rm = TRUE), .groups = "drop")
+    
+    medians_global <- data_filter %>% 
+    group_by(dhd_tsi) %>% 
+    summarise(median_global = median(std_value, na.rm = TRUE), .groups = "drop")
+    
+plot <- ggplot(data = data_filter, aes(x = año_cd, y = std_value, group = año_cd)) +
+  geom_violin(trim = FALSE, color = 'gray70') + 
+  stat_summary(fun = "median",
+               geom = "crossbar", 
+               linewidth = 0.1,
+               colour = "black",
+               linetype = 2) +
+  geom_text_repel(data = medians, 
+                  aes(x = año_cd, y = median_year, label = paste0('P50=', round(median_year, 2))),
+                  nudge_y = 0.5) +
+  geom_jitter(position = position_jitter(0.25), size = 0.3, alpha = 0.1) +
+  
+  # Línea P50 Global por faceta
+  geom_hline(data = medians_global, 
+             aes(yintercept = median_global), 
+             color = "firebrick", linetype = 2) +
+  
+  # Texto P50 Global bien ubicado
+  geom_text(data = medians_global,
+            aes(x = max(data_filter$año_cd) + 0.3, 
+                y = median_global, # Lo situamos justo sobre la línea roja
+                label = paste0('P50 global: ', round(median_global, 2)),
+                group = NULL),
+            color = 'firebrick', 
+            size = 3.5,
+            hjust = -0.1,  # Desplaza ligeramente a la derecha de la línea
+            vjust = 0) +   # Ajusta verticalmente
+  
+  facet_wrap(~ dhd_tsi) +
+  
+  labs(title = paste0(df_names_var_te_$title),
+       subtitle = paste0(df_list_indicators_$descr, ' (', df_list_indicators_$indicators, ')'),
+       y = df_names_var_te_$title,
+       x = '') +
+  
+  theme_minimal_hgrid() + 
+  scale_x_continuous(breaks = c(2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024),
+                     expand = expansion(mult = c(0.05, 0.15))) + # Da espacio superior para el texto
+  
+  # coord_flip con control de límites y sin recortar (clip = "off")
+  coord_flip(ylim = c(0, df_list_indicators_$limite_eje), clip = "off") + 
+  
+  theme(plot.title.position = 'plot',
+        plot.margin = margin(t = 20, r = 10, b = 10, l = 10)) # Margen para que no se corte arriba
+    p[[ind]] <- plot
+  }
+  return(p)
+}
+
+
+plot_te <- lapply(list_variables, plot_te_violin)
+
+```
+
+::: {.callout-tip}
+## Descripción figura
+
+Se muestra la variación (mediante violines) del consumo (DHD) en las zonas básicas de salud que componen el sistema nacional de salud de manera que cada punto es una zona básica. Las líneas discontinuas negras son la mediana (P50) anual y la línea discontinua roja (P50 global) es la mediana de toda la serie temporal. Se comparan: categorías TSI < 18.000 € vs categorías TSI >= 18.000 €.
+:::
+
+::: {.panel-tabset} 
+### Antibióticos (J01)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Total_tsi
+
+plot_te[[1]]$J01
+
+
+```
+
+
+### Penicilinas (J01C)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Penicilinas_tsi
+
+plot_te[[1]]$J01C
+
+
+```
+
+### Otros betalactámicos (J01D)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Otros_Betalactámicos_tsi
+plot_te[[1]]$J01D
+```
+
+### Macrólidos, lincosaminas, estreptograminas (J01F)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Macrolidos_Lincosaminas_Estreptograminas_tsi
+
+plot_te[[1]]$J01F
+```
+
+### Fluorquinolonas (J01MA)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Fluorquinolonas_tsi
+
+plot_te[[1]]$J01MA
+```
+
+### Otros antibacterianos (J01X)
+
+```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+#| label: Consumo_DHD_Otros_Antibacterianos_tsi
+
+plot_te[[1]]$J01X
+```
+
+
+:::
+
+
+
 ## Evolución de la variación de consumo (DHD) por ZBS y por CCAA 
 
 <!-- PUNTOS (ZBS), FACET(CCAA)
@@ -954,7 +1136,7 @@ plot_te_violin_ccaa <- function(var){
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick')) + 
       scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),
           legend.position = 'bottom')
     
@@ -1032,7 +1214,7 @@ plot_te[[1]]$J01X
 
 :::
 
-## Variación geográfica de consumo (DHD) de antibióticos en el año 2022
+## Variación geográfica de consumo (DHD) de antibióticos en el año 2024
 
 <!-- MAPA POLIOGONOS POR ZBS DE CADA CCAA
 - QUINTILES SNS (TODOS LAS ZBS)
@@ -1040,7 +1222,7 @@ plot_te[[1]]$J01X
 --> 
 
 ```{r,warning=FALSE,output=FALSE,echo=FALSE}
-mapa_zbs <- read_sf('ZBS_ESP_4258_nuts2.shp')
+mapa_zbs <- read_sf('../../aux_files/ZBS_ESP_4258_nuts2.shp')
   
 p <- list()
 plot_mapa_ccaa <- function(var){
@@ -1049,7 +1231,7 @@ plot_mapa_ccaa <- function(var){
  #for(file in names_files){
   for(ind in df_list_indicators$indicators){
     data <- df_dhd_pvp
-    data_filter <- data %>% filter(variable %in% var, indicator %in% ind, year %in% 2022)
+    data_filter <- data %>% filter(variable %in% var, indicator %in% ind, year %in% 2024)
     df_names_var_te_ <- df_names_var_te %>% filter(variable %in% var)
     df_list_indicators_ <- df_list_indicators %>% filter(indicators %in% ind)
     data_filter <- left_join(data_filter,df_participantes_, by = 'ccaa_cd')
@@ -1075,32 +1257,53 @@ plot_mapa_ccaa <- function(var){
     mapa_$Quintil[quantile(mapa_$te, 0.8, na.rm=TRUE) < mapa_$te &
                mapa_$te <= quantile(mapa_$te, 1, na.rm=TRUE)] <- "#993404"
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('Quintil', title = "Quintil",
-                            #palette = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404'),
-                            legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(type = 'fill', labels = c(paste0("Q1 = (",
-                          str_replace(as.character(round(quantile(mapa_$te, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),')'), 
-                          paste0("Q5 = (",str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$te, 1.0, na.rm=TRUE),2)),'\\.',','),')')), 
-                                        col = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404')) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+fmt <- function(x) str_replace(as.character(round(x, 2)), '\\.', ',')
+# plot <- tm_shape(mapa_)  + tm_fill('Quintil', title = "Quintil",
+#                             #palette = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404'),
+#                             legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(type = 'fill', labels = c(paste0("Q1 = (",
+#                           str_replace(as.character(round(quantile(mapa_$te, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$te, 0.2, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$te, 0.4, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$te, 0.6, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),')'), 
+#                           paste0("Q5 = (",str_replace(as.character(round(quantile(mapa_$te, 0.8, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$te, 1.0, na.rm=TRUE),2)),'\\.',','),')')), 
+#                                         col = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404')) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
     
-#     plot <- data_filter %>%
+
+
+fmt <- function(x) str_replace(as.character(round(x, 2)), '\\.', ',')
+
+plot <- tm_shape(mapa_) + tm_fill('Quintil', 
+          fill.legend = tm_legend(title = "Quintil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0) +
+  tm_add_legend(type = 'polygons', 
+                labels = c(
+                  paste0("Q1 = (", fmt(quantile(mapa_$te, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$te, 0.2, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$te, 0.2, na.rm=T)), "-", fmt(quantile(mapa_$te, 0.4, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$te, 0.4, na.rm=T)), "-", fmt(quantile(mapa_$te, 0.6, na.rm=T)), ")"),
+                  paste0("Q4 = (", fmt(quantile(mapa_$te, 0.6, na.rm=T)), "-", fmt(quantile(mapa_$te, 0.8, na.rm=T)), ")"),
+                  paste0("Q5 = (", fmt(quantile(mapa_$te, 0.8, na.rm=T)), "-", fmt(quantile(mapa_$te, 1.0, na.rm=T)), ")")
+                ), 
+                fill = c('#ffffd4', '#fed98e', "#fe9929", "#d95f0e", '#993404')) +
+  tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
+
 #               tm_shape() +
 #               tm_fill(title = paste0(df_names_var_te_$title),
 #            subtitle = paste0(df_list_indicators_$descr, ' (',df_list_indicators_$indicators,')'),col = "std_value", style = "quantile",
@@ -1131,7 +1334,7 @@ Se muestra la variación geográfica mediante mapas por CCAA del consumo (DHD) e
 ::: {.panel-tabset} 
 ### Antibióticos (J01)
 
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo_DHD_Total_CCAA_mapa
 
 plot_te[[1]]$J01
@@ -1142,7 +1345,7 @@ plot_te[[1]]$J01
 
 ### Penicilinas (J01C)
 
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo_DHD_Penicilinas_CCAA_mapa
 
 plot_te[[1]]$J01C
@@ -1152,7 +1355,7 @@ plot_te[[1]]$J01C
 
 ### Otros betalactámicos (J01D)
 
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo_DHD_Otros_Betalactámicos_CCAA_mapa
 
 plot_te[[1]]$J01D
@@ -1160,14 +1363,14 @@ plot_te[[1]]$J01D
 
 ### Macrólidos, lincosaminas, estreptograminas (J01F)
 
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo_DHD_Macrolidos,Lincosaminas,Estreptograminas_CCAA_mapa
 
 plot_te[[1]]$J01F
 ```
 
 ### Fluorquinolonas (J01MA)
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo_DHD_Fluorquinolonas_CCAA_mapa
 
 plot_te[[1]]$J01MA
@@ -1175,7 +1378,7 @@ plot_te[[1]]$J01MA
 
 ### Otros antibacterianos (J01X)
 
-```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=7}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=10}
 #| label: Consumo DHD Otros Antibacterianos CCAA mapa
 
 plot_te[[1]]$J01X
@@ -1266,7 +1469,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),axis.text.x = element_text(angle=90,size=10),
           legend.position = 'bottom',plot.title.position = 'plot')
 
@@ -1319,7 +1522,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),
           plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
 
@@ -1375,7 +1578,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje < P25' = 'red', 'Porcentaje >= P25' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),
           plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
 
@@ -1429,7 +1632,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),
           plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
 
@@ -1484,7 +1687,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),
           plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
 
@@ -1536,7 +1739,7 @@ plot <- ggplot(data=data_proa_,aes(x=factor(año_cd), y=percent, group = año_cd
     scale_color_manual(name = "",values = c(
     'P50 nacional' = 'firebrick','Porcentaje > P75' = 'red', 'Porcentaje <= P75' = 'black')) +
   scale_fill_manual(name="",values=c('P25-P75 nacional'='grey70')) +
-      scale_x_discrete(breaks=seq(2017, 2022, by = 1))+
+      scale_x_discrete(breaks=seq(2017, 2024, by = 1))+
     theme(plot.title = element_text(size=10),
           plot.title.position = 'plot',axis.text.x = element_text(angle=90,size=10),legend.position = 'bottom')
 
@@ -1553,7 +1756,7 @@ plot
 
 :::
 
-## Variación geográfica por ZBS de los indicadores PROA en el año 2022
+## Variación geográfica por ZBS de los indicadores PROA en el año 2024
 <!-- @SANTI: 
 ESTO SE PUEDE DIVIDIR EN DOS SECCIONES SEGÚN LA LÓGICA DEL INDICADOR PARA QUE TE RESULTE MÁS FÁCIL PROGRAMA UNA FUNCIÓN CON CADA LÓGICA
 - ACORTAR NOMBRE INDICADORES '% AMOXICILINA, % ATB ESPECTRO REDUCIDO', '% PENICILINA SENS. BETALACTAMASA', ETC. 
@@ -1599,7 +1802,7 @@ FROM
 		FROM
 			main.aggregated_outputs
 		WHERE
-			año_cd == 2022
+			año_cd == 2024
 		GROUP BY
 			atc_farmaco_dispensado,
 			año_cd,
@@ -1623,7 +1826,7 @@ dbDisconnect(con, shutdown=TRUE)
 ::: {.callout-tip}
 ## Descripción figura
 
-Se muestra la variación geográfica mediante mapas por CCAA del porcentaje de envases dispensados en las zonas básicas de salud que componen el sistema nacional de salud para el último año disponible. Las ZBS están coloreadas en función de la lógica favorable de dispensación, siendo esta dependiente de cada fármaco (rojo - peor; negro - mejor).
+Se muestra la variación geográfica mediante mapas por CCAA del porcentaje de envases dispensados en las zonas básicas de salud que componen el sistema nacional de salud para el último año disponible. Las ZBS están coloreadas en función de la lógica favorable de dispensación, siendo esta dependiente de cada fármaco (rojo - peor; azul - mejor).
 :::
 
 
@@ -1669,35 +1872,60 @@ mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                   #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title='Porcentaje de amoxicilina sin ácido clavulánico (J01CA04) respecto al total de amoxicilina (J01CA04 + J01CR02)',title.position = c("LEFT", "TOP"),
-title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                    #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title='Porcentaje de amoxicilina sin ácido clavulánico (J01CA04) respecto al total de amoxicilina (J01CA04 + J01CR02)',title.position = c("LEFT", "TOP"),
+# title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
+colores_cuartiles <- c('#ca0020', '#f7f7f7', "#f7f7f7", "#0571b0")
 
+
+fmt <- function(x) str_replace(as.character(round(x, 2)), '\\.', ',')
+
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 (peor) = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+                tm_title_out('Porcentaje de amoxicilina sin ácido clavulánico (J01CA04) respecto al total de amoxicilina (J01CA04 + J01CR02)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -1743,36 +1971,61 @@ mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                 # palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title= 'Porcentaje de antibióticos de espectro reducido (J01CA, J01CF, J01CE, J01XX01) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
-title.size = 0.95,
-                        legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                  # palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title= 'Porcentaje de antibióticos de espectro reducido (J01CA, J01CF, J01CE, J01XX01) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
+# title.size = 0.95,
+#                         legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
+
+colores_cuartiles <- c('#ca0020', '#f7f7f7', "#f7f7f7", "#0571b0")
 
 
+fmt <- function(x) str_replace(as.character(round(x, 2)), '\\.', ',')
+
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 (peor) = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+  tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+              tm_title_out('Porcentaje de antibióticos de espectro reducido (J01CA, J01CF, J01CE, J01XX01) respecto al total de antibióticos (J01)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -1814,36 +2067,57 @@ mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                 #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title= 'Porcentaje de penicilinas sensibles a betalactamasas (J01CE) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
-title.size = 0.95,
-              legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                  #palette = c('#ca0020', '#ffffff', "#ffffff", "#0571b0"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 (peor) = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#ca0020', '#ffffff', "#ffffff", "#0571b0")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title= 'Porcentaje de penicilinas sensibles a betalactamasas (J01CE) respecto al total de antibióticos (J01)',title.position = c("LEFT", "TOP"),
+# title.size = 0.95,
+#               legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
 
-
+colores_cuartiles <- c('#ca0020', '#f7f7f7', "#f7f7f7", "#0571b0")
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 (peor) = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+    tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+    tm_title_out('Porcentaje de penicilinas sensibles a betalactamasas (J01CE) respecto al total de antibióticos (J01)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -1886,38 +2160,60 @@ mapa_$quartil[quantile(mapa_$percent, 0.75, na.rm=TRUE) < mapa_$percent &
 mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
+colores_cuartiles <- c("#0571b0", '#f7f7f7', "#f7f7f7",'#ca0020')
 
-tmap::tmap_options(check.and.fix = TRUE)
+
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title= 'Porcentaje de macrólidos (J01FA) respecto al total de antibióticos (J01)',
-                        title.position = c("LEFT", "TOP"),
-title.size = 0.95,
-                        legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
-
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                  #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title= 'Porcentaje de macrólidos (J01FA) respecto al total de antibióticos (J01)',
+#                         title.position = c("LEFT", "TOP"),
+# title.size = 0.95,
+#                         legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 (peor) = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+  tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+      tm_title_out('Porcentaje de macrólidos (J01FA) respecto al total de antibióticos (J01)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -1962,36 +2258,57 @@ mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title= 'Porcentaje de fluoroquinolonas (J01MA) respecto al total de antibióticos (J01)',
-                        title.position = c("LEFT", "TOP"),
-title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                  #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title= 'Porcentaje de fluoroquinolonas (J01MA) respecto al total de antibióticos (J01)',
+#                         title.position = c("LEFT", "TOP"),
+# title.size = 0.95,legend.outside = TRUE,legend.show = TRUE,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
 
-
+colores_cuartiles <- c("#0571b0", '#f7f7f7', "#f7f7f7",'#ca0020')
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 (peor) = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+    tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+          tm_title_out('Porcentaje de fluoroquinolonas (J01MA) respecto al total de antibióticos (J01)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -2035,35 +2352,55 @@ mapa_ <- left_join(mapa_,df_participantes_, by = 'ccaa_cd')
 
 
 
-tmap::tmap_options(check.and.fix = TRUE)
+#tmap::tmap_options(check.and.fix = TRUE)
 
 sf_use_s2(FALSE)
-plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
-                                 #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
-                                 legend.is.portrait = FALSE) +
-                        tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
-                          tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
-                          str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
-                          paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
-                                 str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
-                                tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
-                        # tm_borders('#6e0c05', lwd = 1.2) +
-              tm_layout(title='Porcentaje de cefalosporinas de tercera generación (J01DD) respecto al total de antibióticos (J01)', legend.outside = TRUE,legend.show = TRUE,title.position = c("LEFT", "TOP"),
-title.size = 0.95,
-              legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
-              panel.label.bg.color = "white")
+# plot <- tm_shape(mapa_)  + tm_fill('quartil', title = "Cuartil",
+#                                  #palette = c('#0571b0', '#ffffff', "#ffffff", "#ca0020"),
+#                                  legend.is.portrait = FALSE) +
+#                         tm_borders("gray50", alpha = 0.8, lwd = 0.0) +
+#                           tm_add_legend(title = "Cuartil",type = 'fill', labels = c(paste0("Q1 = (",
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.0, na.rm=TRUE),2)),'\\.',','),'-',
+#                           str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q2 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.25, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q3 = (",str_replace(as.character(round(quantile(mapa_$percent, 0.5, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),')'),
+#                           paste0("Q4 (peor) = (",str_replace(as.character(round(quantile(mapa_$percent, 0.75, na.rm=TRUE),2)),'\\.',','),'-',
+#                                  str_replace(as.character(round(quantile(mapa_$percent, 1.0, na.rm=TRUE),2)),'\\.',','),')')), col = c('#0571b0', '#ffffff', "#ffffff", "#ca0020")) +
+#                                 tm_facets(by = "ccaa_st", free.scales = TRUE,showNA = FALSE) +
+#                         # tm_borders('#6e0c05', lwd = 1.2) +
+#               tm_layout(title='Porcentaje de cefalosporinas de tercera generación (J01DD) respecto al total de antibióticos (J01)', legend.outside = TRUE,legend.show = TRUE,title.position = c("LEFT", "TOP"),
+# title.size = 0.95,
+#               legend.outside.position = c('bottom'),outer.margins = c(-0.175,0,0,0),
+#               panel.label.bg.color = "white")
 
-
+plot <- tm_shape(mapa_) + 
+  tm_fill('quartil', 
+          palette = colores_cuartiles,
+          legend.show = FALSE,
+          fill.legend = tm_legend(title = "Cuartil", orientation = "landscape")) +
+  tm_borders("gray50", fill_alpha = 0.8, lwd = 0.1) +
+  tm_add_legend(title = "Cuartil",
+                type = 'polygons', 
+                labels = c(
+                  paste0("Q1 = (", fmt(quantile(mapa_$percent, 0.0, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), ")"),
+                  paste0("Q2 = (", fmt(quantile(mapa_$percent, 0.25, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), ")"),
+                  paste0("Q3 = (", fmt(quantile(mapa_$percent, 0.5, na.rm=T)), "-", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), ")"),
+                  paste0("Q4 (peor) = (", fmt(quantile(mapa_$percent, 0.75, na.rm=T)), "-", fmt(quantile(mapa_$percent, 1.0, na.rm=T)), ")")
+                ), 
+                fill = colores_cuartiles) +
+  tm_facets(by = "ccaa_st", drop.empty.facets = TRUE,ncol=4) +
+          tm_title_out('Porcentaje de cefalosporinas de tercera generación (J01DD) respecto al total de antibióticos (J01)', 
+               position = tm_pos_out("center", "bottom")) +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "bottom",
+            panel.label.bg.color = "white")
 
 ```
 
 
-```{r,warning=FALSE,echo=FALSE,fig.width=10, fig.height=9}
+```{r,warning=FALSE,echo=FALSE,fig.width=12, fig.height=8}
  plot
 ```
 
@@ -2171,8 +2508,8 @@ plot_te[[6]]$J01X
 ::: {.justify}
 
 Este informe se centra en el cálculo de las tasas estandarizadas para cada subgrupo terapéutico tomando como referencia la población española (población INE), por sexo y grupo quinquenal de edad, para cada año del periodo de estudio. 
-Este informe restringe el periodo de estudio desde el 01 de enero de 2017 al 31 de diciembre de 2022. 
-Los indicadores de consumo de medicamentos están calculados como Dosis por mil Habitantes Día (DHD), o como gasto (€) por habitante, utilizando como referencia la Dosis Diaria Definida (DDD) por envase de cada medicamento o el Precio de Venta al Público (PVP) disponibles en el [nomenclator de facturación de farmacia del Ministerio de Sanidad](https://www.sanidad.gob.es/profesionales/nomenclator.do) (descargado en Junio 2022) respectivamente. 
+Este informe restringe el periodo de estudio desde el 01 de enero de 2017 al 31 de diciembre de 2024. 
+Los indicadores de consumo de medicamentos están calculados como Dosis por mil Habitantes Día (DHD), o como gasto (€) por habitante, utilizando como referencia la Dosis Diaria Definida (DDD) por envase de cada medicamento o el Precio de Venta al Público (PVP) disponibles en el [nomenclator de facturación de farmacia del Ministerio de Sanidad](https://www.sanidad.gob.es/profesionales/nomenclator.do) (descargado en Septiembre 2025) respectivamente. 
 
 - El número de envases dispensados por habitante se calcula como el $$\sum(envases_{ATC, ZBS})/población_{ZBS, sexo, grupo edad}$$ 
 - Dosis por mil Habitantes Día (DHD) se calcula como el $$((\sum(DDD_{ATC}) * 1000_{habitantes})/ (población_{ZBS, sexo, grupo edad} * 365_{días}))$$
@@ -2289,8 +2626,13 @@ df_numerador <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas
                          ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
                          numerador = c('Población residente en la CCAA y asignada a ZBS que tenga al menos una dispensación durante el periodo de estudio','Población residente asignada a ZBS con al menos una dispensación', 'Cualquier persona con tarjeta sanitaria que recibe una dispensación en la CCAA independientemente de que esté adscrita a una ZBS de otra CCAA (i.e., interoperabilidad SNS)','Persona con tarjeta sanitaria CCAA con CIPAUT adscrita a una ZBS de la CCAA (independientemente si es HABITUAL, DESPLAZADO o RESIDENTE)', 'Población residente asignada a ZBS con al menos una dispensación', 'Población residente asignada a ZBS con al menos una dispensación', 'Solo se incluyen recetas de pacientes de Castilla y León (tanto dentro como fuera de la CCAA si están prescritas en la CCAA)', 'Población residente asignada a ZBS con al menos una dispensación', 'Población residente asignada a ZBS con al menos una dispensación', 'Residentes en la CCAA adscritas a la ZBS (independientemente del profesional del SNS-O que la realiza)', 'Población TIS con tarjeta sanitaria adscrita a un ZBS de la CCAA','Sólo residentes en la CCAA con tarjeta sanitaria adscrita a una ZBS de la CCAA','Población residente asignada a ZBS con al menos una dispensación'),
                          fuente = c('Receta electrónica','Receta electrónica', 'Facturación farmacia ambulatoria','Facturación farmacia ambulatoria', 'Receta electrónica', 'Receta electrónica', 'Facturación farmacia ambulatoria', 'Receta electrónica', 'Receta electrónica', 'Receta electrónica', 'Receta electrónica','Receta electrónica','Receta electrónica'),
-                         Logo = c('aragon.png','asturias.png','baleares.png','cantabria.png','cataluña.png','canarias.png','castilla_leon.png',
-                                   'valencia.png','madrid.png','navarra.png','pais_vasco.png','rioja.png','murcia.png'))
+                         Logo = c('../../aux_files/aragon.png','../../aux_files/asturias.png',
+                                  '../../aux_files/baleares.png','../../aux_files/cantabria.png',
+                                  '../../aux_files/cataluña.png','../../aux_files/canarias.png',
+                                  '../../aux_files/castilla_leon.png','../../aux_files/valencia.png',
+                                  '../../aux_files/madrid.png','../../aux_files/navarra.png',
+                                  '../../aux_files/pais_vasco.png','../../aux_files/rioja.png',
+                                  '../../aux_files/murcia.png'))
 
 df_numerador_ <- df_numerador %>% filter(ccaa_cd %in% df_participantes_$ccaa_cd) %>%
   dplyr::select(!Logo)
@@ -2342,8 +2684,13 @@ df_autores <- data.frame(ccaa_st = c('Aragón','Principado de Asturias','Islas B
                                      'Región de Murcia'),
                          ccaa_cd = c('ES24','ES12','ES53','ES13','ES51','ES70','ES41','ES52','ES30','ES22','ES21','ES23','ES62'),
                          autores_st = c('Francisco Estupiñán Romero, Javier González Galindo, Santiago Royo Sierra, Natalia Martínez Lizaga, Miriam Seral Rodríguez, Ramón Launa Garcés, Ester Angulo Pueyo, Manolo Ridao López, Enrique Bernal Delgado','Gracia M Modroño Riaño', 'Eusebi Castaño Riera, María Zaforteza Dezcallar, María Vega Martín Martín','María Ángeles Lumbreras, Flora Pérez Hernández, Óscar Valcuende Mantilla', 'Cristina Colls Guerra, Mireia Espallargues Carreras, Érica Martínez Solanas, Manuel Medina Peralta, Andrea Molina Nadal, Pere Carbonell Puigdollers, Montserrat Vicente Belis', 'Jose Miguel Rodríguez Lugo, Sara Trujillo Alemán', 'Alejandra García Ortíz, Judith Ceruelo Bermejo, Nieves Martín Sobrino, Juan Carlos Solsona Perea', 'Julia Calabuig', 'José Manuel Izquierdo Palomares, Ángel Luis Mataix Sanjuan, María Isabel del Cura González, Tamara Alonso Safont', 'Maite Almirantearena Legaz, Anabel Zaborras Aguado, Javier Gorricho Mendívil', 'Eduardo Millán Ortuondo, Ricardo Samper Ochotorena','Felix Rivera Sanz, Pilar Sáenz Ortiz, Jose María Rodríguez Corral','Carlos Arenas Díaz, Víctor Rausell, José Eduardo Calle Urra, Amaya Jimeno Almazán, Rafael Herrero Delicado, Mariana Tobaruela Soto, María Onteniente Candela'),
-                         afiliacion_st = c('Instituto Aragonés de Ciencias de Salud', 'Servicio de Salud del Principado de Asturias','Consejería de Salud y Consumo','Dirección General de Ordenación Sanitaria, Farmacia e Inspección','Agència de Qualitat i Avaluació Sanitàries de Catalunya (AQUAS). Servei Català de la Salut. Consorci Sanitari de Barcelona', 'Servicio de Evaluación de la Calidad Asistencial y Sistemas de Información de la Dirección General de Programas Asistenciales', 'Dirección Técnica de Farmacia. Gerencia Regional de Salud de Castilla y León', 'Conselleria de Sanitat','Gerencia Asistencial de Atención Primaria','Servicio Navarro de Salud - Osasunbidea (SNS-O)','Osakidetza','Rioja Salud','Servicio Murciano de Salud'), Logo = c('aragon.png','asturias.png','baleares.png','cantabria.png','cataluña.png','canarias.png','castilla_leon.png',
-                                   'valencia.png','madrid.png','navarra.png','pais_vasco.png','rioja.png','murcia.png'))
+                         afiliacion_st = c('Instituto Aragonés de Ciencias de Salud', 'Servicio de Salud del Principado de Asturias','Consejería de Salud y Consumo','Dirección General de Ordenación Sanitaria, Farmacia e Inspección','Agència de Qualitat i Avaluació Sanitàries de Catalunya (AQUAS). Servei Català de la Salut. Consorci Sanitari de Barcelona', 'Servicio de Evaluación de la Calidad Asistencial y Sistemas de Información de la Dirección General de Programas Asistenciales', 'Dirección Técnica de Farmacia. Gerencia Regional de Salud de Castilla y León', 'Conselleria de Sanitat','Gerencia Asistencial de Atención Primaria','Servicio Navarro de Salud - Osasunbidea (SNS-O)','Osakidetza','Rioja Salud','Servicio Murciano de Salud'), Logo = c('../../aux_files/aragon.png','../../aux_files/asturias.png',
+                                              '../../aux_files/baleares.png','../../aux_files/cantabria.png',
+                                              '../../aux_files/cataluña.png','../../aux_files/canarias.png',
+                                              '../../aux_files/castilla_leon.png', '../../aux_files/valencia.png',
+                                              '../../aux_files/madrid.png','../../aux_files/navarra.png',
+                                              '../../aux_files/pais_vasco.png','../../aux_files/rioja.png',
+                                              '../../aux_files/murcia.png'))
 
 #df_autores_ <- df_autores %>% filter(ccaa_cd %in% df_participantes_$ccaa_cd)
 df_autores_ <- df_autores
@@ -2367,6 +2714,10 @@ dplyr::tibble(
 
 :::
 
+# Apoyo institucional y Financiación
+
+La actualización del estudio de cohorte sobre antibióticos se lleva a cabo mediante un contrato de colaboración con la Agencia Española de Medicamentos y Productos Sanitarios ([AEMPS](https://www.aemps.gob.es/)), en el marco de la Acción Estratégica del [Plan Nacional contra la Resistencia a los Antibióticos (PRAN) 2025-2027](https://www.resistenciaantibioticos.es/es/publicaciones/plan-nacional-frente-la-resistencia-los-antibioticos-pran-2025-2027).
+
 # Referencias
 
  - [Atlas de variaciones injustificadas de la práctica médica (Atlas VPM)](https://cienciadedatosysalud.org/)
@@ -2376,3 +2727,43 @@ dplyr::tibble(
  - [Red de Investigación en Cronicidad, Atención Primaria y Prevención y Promoción de la Salud (RICAPPS)](https://www.ricapps.es/)
  
  - [Programa de Optimización de Uso de Antibióticos (PROA)](https://www.resistenciaantibioticos.es/es/publicaciones/indicadores-de-uso-de-antibioticos-en-atencion-primaria)
+
+
+
+```{=html}
+
+<div style="
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    
+
+    width: auto;
+    margin-left: -20%; 
+    margin-right: -20%; 
+    padding-right: 5%;
+    
+
+    margin-top: 60px; 
+    padding-top: 30px; 
+    padding-bottom: 0px; 
+    margin-bottom: -40px;
+    border-top: 1px solid #e2e8f0; 
+    clear: both;
+">
+    
+    <div style="margin-left: 35px;">
+        <img src="logo_aemps_color.png" style="height: 55px; width: auto; display: block;">
+    </div>
+
+    <div style="margin-left: 35px;">
+        <img src="logo_pram_color.png" style="height: 55px; width: auto; display: block;">
+    </div>
+
+    <div style="margin-left: 35px;">
+        <img src="../../aux_files/logo_ciencia_atlas.png" style="height: 55px; width: auto; display: block;">
+    </div>
+
+</div>
+
+```
